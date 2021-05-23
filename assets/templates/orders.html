@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <script id="font_awesome" src="https://kit.fontawesome.com/02f9ec51a7.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap');
+
+        :root {
+            --primary-color: #0cb50c;
+            --light-primary-color: #cdfdce;
+            --font-color: #333;
+        }
+
+        * {
+            position: relative;
+            font-family: "Roboto", sans-serif;
+            outline: none;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            box-sizing: border-box;
+        }
+
+        a {
+            cursor: pointer;
+            text-decoration: none;
+            color: #000;
+        }
+
+        body {
+            color: var(--font-color);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #img {
+            width: 60px;
+            height: 60px;
+            margin-right: 15px;
+            border-radius: 15px;
+            object-fit: contain;
+        }
+
+        body>main {
+            padding: 20px;
+            max-width: 1080px;
+            margin: 20px auto;
+            width: 100%;
+        }
+
+        main>header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        main>header>.presentation {
+            display: flex;
+            justify-content: center;
+        }
+
+        main>header>.presentation>.infos {
+            display: flex;
+            flex-direction: column;
+        }
+
+        main>header>.presentation>.infos>h2 {
+            margin: 0 0 10px 0;
+        }
+
+        main>header>.presentation>.infos>h2 {
+            margin: 0 0 10px 0;
+        }
+
+        main>header>.period {
+            display: flex;
+            align-items: center;
+            margin: 10px 0 25px;
+        }
+
+        main>header>.period>div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        main>header>.period>div>.title {
+            font-size: 15px;
+            color: #ababab;
+        }
+
+        main>header>.period>div>.date {
+            font-size: 19px;
+            font-weight: bold;
+        }
+
+        main>header>.period>i {
+            margin: 5px 20px;
+            font-size: 21px;
+            color: #ababab;
+        }
+
+        .order-infos {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background: rgba(148, 148, 148, 0.1);
+            margin-bottom: 40px;
+            border-radius: 10px;
+        }
+
+        .order-infos .list-items {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 6px;
+            background: rgba(148, 148, 148, 0.1);
+        }
+
+        .order-infos .list-items>.multiplication-alert {
+            background: rgba(148, 148, 148, 0.1);
+            border-radius: 6px;
+            border: none !important;
+            display: flex;
+            align-items: center;
+            padding: 7px 10px !important;
+            color: #0cb50c;
+        }
+
+        .order-infos .list-items>.multiplication-alert>i {
+            margin-right: 8px;
+            font-size: 14px;
+        }
+
+        .order-infos .list-items>div>header,
+        .order-infos .list-items>div>main>div {
+            display: flex;
+            align-items: center;
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+        }
+
+        .order-infos .list-items>div>main {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .order-infos .list-items>div:not(:last-child) {
+            border-bottom: 1px solid rgba(162, 162, 162, 0.2);
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+        }
+
+        .order-infos .list-items>div>.observation {
+            margin-left: 35px;
+            font-size: 11px;
+            color: goldenrod;
+            position: relative;
+            top: -7px;
+            margin-bottom: 5px;
+            margin-right: 15%;
+            max-height: 40px;
+            overflow-y: auto;
+        }
+
+        .order-infos .list-items>div>header {
+            padding: 5px 0;
+            font-size: 14px;
+        }
+
+        .order-infos .list-items>div>header>.quantity {
+            min-width: 30px;
+            margin-right: 5px;
+            text-align: center;
+        }
+
+        .order-infos .list-items>div>header>.price,
+        .order-infos .list-items>div>main>div>.price {
+            min-width: 40px;
+            margin-left: 10px;
+        }
+
+        .order-infos .list-items>div>header>.name,
+        .order-infos .list-items>div>main>div>.name {
+            flex: 1;
+        }
+
+        .order-infos .list-items>div>main>div {
+            margin-left: 35px;
+            border-bottom: 1px solid rgba(162, 162, 162, 0.2);
+        }
+
+        .order-infos .list-items>div>main>div:last-child {
+            border-bottom: 0;
+        }
+
+        .order-infos .list-items>div>main>div>.quantity {
+            min-width: 25px;
+            margin-right: 10px;
+        }
+
+        .order-infos .list-items.is_multiplication>div>main>div>.quantity {
+            color: #0cb50c;
+        }
+
+        .order-infos .list-items>div>header>.name {
+            font-weight: bold;
+        }
+
+
+        .order-infos>.infos {
+            flex: 1;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .order-infos>.bottom {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .order-infos>.bottom>.left {
+            margin-right: 20%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .order-infos>.bottom>.left>div {
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+        }
+
+        .order-infos>.bottom>.left>div>span {
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .order-infos>.bottom>.left>div>div {
+            max-height: 100px;
+            overflow: auto;
+        }
+
+        .order-infos>.bottom>.price {
+            display: flex;
+            flex-direction: column;
+            color: #1d1d1d;
+            text-transform: uppercase;
+            white-space: nowrap;
+            justify-content: flex-end;
+            transform: translateY(5px);
+        }
+
+        .order-infos>.bottom>.price>span.skeleton {
+            width: 150px;
+            margin-bottom: 4px;
+        }
+
+        .order-infos>.bottom>.price>div {
+            display: flex;
+        }
+
+        .order-infos>.bottom>.price th {
+            text-align: right;
+        }
+
+        .order-infos>.bottom>.price tr {
+            line-height: 13px;
+        }
+
+        .order-infos>.bottom>.price td {
+            padding-left: 20px;
+            text-align: right;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .order-infos>.bottom>.price tr:last-child {
+            line-height: 25px;
+            font-size: 15px;
+            color: #0cb50c;
+            text-shadow: #96c63d 0 0 10px;
+        }
+
+        .order-infos>.bottom>.price tr:last-child>td {
+            font-weight: bold !important;
+        }
+
+        .order-infos>.infos>.info {
+            display: flex;
+        }
+
+        .order-infos>.infos .client_info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-right: 20px;
+        }
+
+        .order-infos>.infos .client_info>.name {
+            margin-bottom: 3px;
+        }
+
+        .order-infos>.infos .client_info>.client_name {
+            display: flex;
+            font-size: 14px;
+            padding: 5px 0;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .order-infos>.infos .client_info>.infos-icon {
+            display: flex;
+            align-items: center;
+            color: black;
+            margin-bottom: 3px;
+            max-width: fit-content;
+        }
+
+        .order-infos>.infos .client_info>.infos-icon>i {
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .order-infos>.infos .client_info>.address>a,
+        .order-infos>.infos .client_info>.tell>a {
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .order-infos>.infos .client_info>.address>a:hover,
+        .order-infos>.infos .client_info>.tell>a:hover {
+            color: #96c63d !important;
+            text-shadow: #96c63d 0 0 1px;
+        }
+
+        .order-infos>.infos .client_info>.delivery_type_warning {
+            color: gold;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .order-infos>.infos .actions {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .order-infos>.infos .actions>span {
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .order-infos>.infos .actions>div {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .order-infos>.infos .actions>div>button {
+            margin: 0 5px;
+        }
+
+        .order-infos>.infos>.history {
+            display: flex;
+            margin: 30px 0 20px;
+            padding: 2px;
+        }
+
+        .order-infos>.infos>.history>.step {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            position: relative;
+            padding: 0 10px;
+        }
+
+        .order-infos>.infos>.history>.step.active>.icon {
+            background-color: #1b1b1b;
+        }
+
+        .order-infos>.infos>.history>.step>.trace-line {
+            background-color: #a7a7a7;
+            height: 4px;
+            position: absolute;
+            top: 14px;
+            left: 0;
+            right: 0;
+        }
+
+        .order-infos>.infos>.history>.step:first-child>.trace-line {
+            left: 50%;
+        }
+
+        .order-infos>.infos>.history>.step:last-child>.trace-line {
+            right: 50%;
+        }
+
+        .order-infos>.infos>.history>.step>.icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            padding: 7px;
+            font-size: 17px;
+            background-color: #686868;
+            border-radius: 50px;
+            width: fit-content;
+            margin: 0 auto;
+            z-index: 1;
+        }
+
+        .order-infos>.infos>.history>.step.active>.icon {
+            background-color: #1b1b1b;
+            font-size: 20px;
+        }
+
+        .order-infos>.infos>.history>.step.success>.icon {
+            background-color: #96c63d;
+            box-shadow: #96c63d 0 0 10px;
+        }
+
+        .order-infos>.infos>.history>.step.refused>.icon {
+            background-color: #c63d3d;
+            box-shadow: #c63d3d 0 0 10px;
+        }
+
+        .order-infos>.infos>.history>.step.success+.step.active>.trace-line {
+            background: linear-gradient(to right, #96c63d, #a7a7a7);
+        }
+
+        .order-infos>.infos>.history>.step.refused>.icon {
+            font-size: 20px;
+        }
+
+        .order-infos>.infos>.history>.step.refused>.trace-line {
+            background: linear-gradient(to right, #c63d3d, #a7a7a7 50%);
+        }
+
+        .order-infos>.infos>.history>.step.refused>.trace-line::before {
+            box-shadow: #ecb0b0 0 0 4px !important;
+        }
+
+        .order-infos>.infos>.history>.step.success+.step.refused>.trace-line {
+            background: linear-gradient(to right, #96c63d, #a7a7a7 50%) !important
+        }
+
+        .order-infos>.infos>.history>.step.success+.step.refused>.trace-line::before {
+            box-shadow: #96c63d 0 0 2px !important;
+        }
+
+        .order-infos>.infos>.history>.step.refused>.trace-line::before {
+            position: absolute;
+            content: "";
+            display: block;
+            height: 4px;
+            left: 0;
+            right: 50%;
+            box-shadow: #96c63d 0 0 4px;
+        }
+
+        .order-infos>.infos>.history>.step.success+.step.active>.trace-line::before {
+            position: absolute;
+            content: "";
+            display: block;
+            height: 4px;
+            left: 0;
+            right: 50%;
+            background: #96c63d;
+            box-shadow: #96c63d 0 0 5px;
+        }
+
+        .order-infos>.infos>.history>.step.success+.step.active:last-child>.trace-line::before {
+            background: transparent !important;
+            box-shadow: #96c63d 0 0 2px;
+        }
+
+        .order-infos>.infos>.history>.step.success>.trace-line {
+            background-color: #96c63d;
+            box-shadow: #96c63d 0 0 5px;
+        }
+
+        .order-infos>.infos>.history>.step>.infos {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 3px;
+            text-align: center;
+        }
+
+        .order-infos>.infos>.history>.step>.infos>.title {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .order-infos>.infos>.history>.step>.infos>.date {
+            font-size: 10px;
+            color: gray;
+            margin-top: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <header>
+            <div class="presentation">
+                <img id="img" src="https://cdn.poppedidos.com.br/company/0c1e83ac-76ab-474a-a02f-30a079ec1a21_small.png">
+                <div class="infos">
+                    <h2>Relatório de pedidos</h2>
+                    <span><b id="orders_count">0</b> pedidos</span>
+                </div>
+            </div>
+            <div class="period">
+                <div class="from">
+                    <span class="title">De</span>
+                    <span class="date"></span>
+                </div>
+                <i class="fas fa-arrow-right"></i>
+                <div class="to">
+                    <span class="title">Até</span>
+                    <span class="date"></span>
+                </div>
+            </div>
+        </header>
+        <div id="list-orders"></div>
+    </main>
+    <script>
+        function loadedChecker() {
+            const imagesHaveLoaded = () => { return Array.from(document.images).every((i) => i.complete); }
+
+            const interval = setInterval(() => {
+                if (imagesHaveLoaded()) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        window.finished = true;
+                    }, 50);
+                }
+            }, 10);
+        }
+
+        function Init() {
+            $("#img").attr("src", company.image.medium || `${api_url}/static/img/no-image.svg`);
+            $("#orders_count").text(orders.length);
+
+            const start_date = new Date(range_dates.start);
+            const end_date = new Date(range_dates.end);
+
+            $(".period .from>.date").text(`${start_date.getDate()} de ${start_date.toLocaleDateString("pt-BR", { month: "short" })}`);
+            $(".period .to>.date").text(`${end_date.getDate()} de ${end_date.toLocaleDateString("pt-BR", { month: "short" })}`);
+
+            for (const order of orders) {
+                const $element = $("<div>");
+                LoadOrderOnElement($element, order, false);
+                $("#list-orders").append($element);
+                $element.find(".info").append(`<span class="created_date">${new Date(order.createdAt).toLocaleString("pt-BR")}</span>`);
+            }
+
+            loadedChecker();
+        }
+
+        function MoneyFormat(money, is_currency = true, fractionDigits = 2) {
+            let money_str = new Intl.NumberFormat("pt-BR", {
+                style: is_currency ? "currency" : "decimal",
+                currency: 'BRL',
+                minimumFractionDigits: fractionDigits,
+                maximumFractionDigits: fractionDigits
+            }).format(money);
+
+            return money_str;
+        }
+
+        function LoadOrderOnElement($element, order, actions = true) {
+            const $order_infos = $(`<div class="infos">
+                <div class="info">
+                    <div class="client_info">
+                        <a class="indicator" target="_blank"></a>
+                        <span class="client_name"></span>
+                        <div class="address infos-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <a target="_blank"></a>
+                        </div>
+                        <span class="delivery_type_warning"></span>
+                        <div class="tell infos-icon">
+                            <i class="fas fa-phone-alt"></i>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <span>Aceitar pedido?</span>
+                        <div>
+                            <button type="button" class="btn btn-success accept">
+                                <span>Aceitar</span>
+                                <div class="spinner-border"></div>
+                            </button>
+                            <button type="button" class="btn btn-danger refuse">
+                                <span>Recusar</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="history">
+                    <div class="step accept">
+                        <div class="trace-line"></div>
+                        <div class="icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="infos">
+                            <span class="title"></span>
+                            <span class="date"></span>
+                        </div>
+                    </div>
+                    <div class="step production">
+                        <div class="trace-line"></div>
+                        <div class="icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="infos">
+                            <span class="title"></span>
+                            <span class="date"></span>
+                        </div>
+                    </div>
+                    <div class="step delivery">
+                        <div class="trace-line"></div>
+                        <div class="icon">
+                            <i class="fas fa-forward"></i>
+                        </div>
+                        <div class="infos">
+                            <span class="title"></span>
+                            <span class="date"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-items"></div>
+            </div>
+            <div class="bottom">
+                <div class="left">
+                    <div class="payment-method">
+                        <span><i class="far fa-credit-card"></i> Método de pagamento</span>
+                        <div></div>
+                    </div>
+                    <div class="cash-change">
+                        <span><i class="fas fa-wallet"></i> Troco para</span>
+                        <div></div>
+                    </div>
+                    <div class="discount-coupon">
+                        <span><i class="fas fa-tag"></i> Cupom de desconto</span>
+                        <div></div>
+                    </div>
+                    <div class="observations">
+                        <span><i class="fas fa-info-circle"></i> Observações</span>
+                        <div></div>
+                    </div>
+                </div>
+                <div class="price">
+                    <table>
+                        <tr>
+                            <th>Subtotal</th>
+                            <td class="subtotal"></td>
+                        </tr>
+                        <tr class="discount">
+                            <th>Desconto</th>
+                            <td class="discount"></td>
+                        </tr>
+                        <tr>
+                            <th>Taxa de entrega</th>
+                            <td class="frete"></td>
+                        </tr>
+                        <tr class="coupon_discount">
+                            <th>Cupom de desconto</th>
+                            <td class="coupon_discount"></td>
+                        </tr>
+                        <tr>
+                            <th>Total</th>
+                            <td class="total"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>`);
+
+            $element.addClass("order-infos");
+
+            $element.html($order_infos);
+
+            order.address = order.delivery_type !== "withdrawal" ? `${order.street_name}, ${order.street_number} - ${order.neighborhood}, ${order.city} - ${order.state}` : null;
+
+            $element.find(".indicator").text(`#${order.order_company_sequence}`)
+                .attr("href", `https://${company.subdomain}.${domain}/pedido/${order.secret_id_order}`);
+            $element.find(".client_name").text(order.name_client);
+
+            $element.find(".address>a").text(`${order.address} ${order.suplier || ""}`)
+                .attr("href", `https://maps.google.com/maps?q=${order.location}&hl=pt-BR;z=14&amp;output=embed`);
+            $element.find(".address").toggle(order.delivery_type != "withdrawal");
+
+            $element.find(".delivery_type_warning").toggle(order.delivery_type !== "delivery");
+
+            if (order.delivery_type == "withdrawal") {
+                $element.find(".delivery_type_warning").html(`<i class="fas fa-map-marker-alt"></i> Retirada!`);
+            }
+
+            $element.find(".tell>span").text(order.phone_client);
+
+            const $list_items = $element.find(".list-items");
+
+            $list_items.empty();
+
+            $list_items.toggleClass("is_multiplication", company.multiply_complements);
+
+            if (company.multiply_complements) {
+                $list_items.append(`<div class="multiplication-alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Os sabores e complementos estão sendo multiplicados!</span>
+                </div>`);
+            }
+
+            for (const item of order.items || []) {
+                const {
+                    product,
+                    complements,
+                    pizza_flavors,
+                } = item;
+
+                if (!product) continue;
+
+                const $product = $(`
+                    <div>
+                        <header>
+                            <span class="quantity"></span>
+                            <span class="name">
+                                <span></span>
+                                <small></small>
+                            </span>
+                            <span class="price"></span>
+                        </header>
+                    </div>
+                `);
+
+                if (item.observation) {
+                    const $observation = $(`<div class="observation">
+                        <span class="title">Observação:</span>
+                        <span class="text">Nenhum</span>
+                    </div>`);
+
+                    $observation.find(".text").text(item.observation);
+
+                    $product.append($observation);
+                }
+
+                const $main = $("<main>");
+
+                for (const flavor of pizza_flavors || []) {
+                    const $optional = $(`<div>
+                        <span class="quantity"></span>
+                        <span class="name"></span>
+                        <span class="price"></span>
+                    </div>`);
+
+                    $optional.find(".quantity").text(`${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1}x`);
+
+                    $optional.find(".name").text(`Sabor ${flavor.name}`);
+                    $optional.find(".price").text(MoneyFormat(flavor.price));
+
+                    $main.append($optional);
+                }
+
+                for (const complement of complements || []) {
+                    for (const complement_item of complement.items || []) {
+                        const $optional = $(`<div>
+                            <span class="quantity"></span>
+                            <span class="name"></span>
+                            <span class="price"></span>
+                        </div>`);
+
+                        $optional.find(".quantity").text(`${(company.multiply_complements ? complement_item.quantity * item.quantity : complement_item.quantity) || 1}x`);
+
+                        $optional.find(".name").text(`${complement.name} ${complement_item.name}`);
+                        $optional.find(".price").text(MoneyFormat(complement_item.price));
+
+                        $main.append($optional);
+                    }
+                }
+
+                $product.find(".quantity").text(`${item.quantity || 1}x`);
+
+                $product.find(".name>span").text(product.name);
+
+                if (product.is_pizza) {
+                    let pizza_price_rule = "?";
+
+                    if (product.pizza_price_rule === "average") pizza_price_rule = "Média dos sabores";
+                    if (product.pizza_price_rule === "biggest_price") pizza_price_rule = "Sabor mais caro";
+
+                    $product.find(".name>small").text(`(${pizza_price_rule})`);
+                    $product.find(".price").text(product.price > 0 ? MoneyFormat(product.price) : "");
+                } else {
+                    $product.find(".name>small").text("");
+                    $product.find(".price").text(MoneyFormat(product.price));
+                }
+
+                $product.append($main);
+
+                $list_items.append($product);
+            }
+
+            $element.find(".price .subtotal").text(MoneyFormat(order.subtotal));
+            $element.find(".price .frete").text(MoneyFormat(order.delivery_cost));
+
+            $element.find(".price tr.discount").toggle(order.discount > 0);
+            $element.find(".price td.discount").text(MoneyFormat(order.discount));
+
+            $element.find(".price tr.coupon_discount").toggle(order.coupon_discount > 0);
+            $element.find(".price td.coupon_discount").text(MoneyFormat(order.coupon_discount));
+
+            $element.find(".price .total").text(MoneyFormat(order.total));
+
+            $element.find(".bottom .observations").toggle(!!order.observation);
+            $element.find(".bottom .observations>div").text(order.observation);
+
+            let text_payment_method = "Dinheiro"
+            if (order.payment_method == "credit") text_payment_method = "Cartão de crédito";
+            if (order.payment_method == "debit") text_payment_method = "Débito";
+            $element.find(".bottom .payment-method>div").text(text_payment_method);
+
+            $element.find(".bottom .cash-change").toggle(!!order.cash_change);
+            $element.find(".bottom .cash-change>div").text(MoneyFormat(order.cash_change));
+
+            $element.find(".bottom .discount-coupon").toggle(!!order.discount_coupon);
+            if (!!order.discount_coupon) {
+                $element.find(".bottom .discount-coupon>div").text(`${order.discount_coupon.coupon} (${order.discount_coupon.is_percentual ? `${order.discount_coupon.discount}%` : MoneyFormat(order.discount_coupon.discount)} OFF)`);
+            }
+
+            $element.find(".history>.step").removeClass("active").removeClass("success").removeClass("refused");
+            $element.find(".history>.step .title").text("");
+            $element.find(".history>.step .date").text("");
+            $element.find(">.infos .actions").show();
+            $element.find(">.infos .actions>div>button").removeClass("loading").show();
+
+            const status = order.status > -1 ? order.status : Math.abs(order.status + 1);
+
+            if (status == 0) {
+                $element.find(">.infos .actions>span").text("Aceitar pedido?");
+                $element.find(">.infos .actions .accept>span").text("Aceitar");
+                $element.find(">.right>.infos .actions .refuse>span").text("Recusar");
+
+                $element.find(".history>.step.accept").addClass("active");
+
+                $element.find(".history>.step.accept .title").text("Aguardando aceite");
+                $element.find(".history>.step.production .title").text("Aguardando produção");
+                $element.find(".history>.step.delivery .title").text("Aguardando entrega");
+            } else if (status == 1) {
+                $element.find(">.infos .actions>span").text("Foi produzido?");
+                $element.find(">.infos .actions .accept>span").text("Sim");
+                $element.find(">.infos .actions .refuse>span").text("Cancelar pedido");
+
+                $element.find(".history>.step.accept").addClass("success");
+                $element.find(".history>.step.production").addClass("active");
+
+                $element.find(".history>.step.accept .title").text("Aceito");
+                $element.find(".history>.step.production .title").text("Aguardando produção");
+                $element.find(".history>.step.delivery .title").text("Aguardando entrega");
+
+                $element.find(".history>.step.accept .date").text(DateTimeFormat(order.status_times.find(status => status.status == 1)?.createdAt));
+            } else if (status == 2) {
+                $element.find(">.infos .actions>span").text(order.delivery_type == "withdrawal" ? "Foi retirado?" : "Saiu para a entrega?");
+                $element.find(">.infos .actions .accept>span").text("Sim");
+                $element.find(">.infos .actions .refuse>span").text("Cancelar pedido");
+
+                $element.find(".history>.step.accept").addClass("success");
+                $element.find(".history>.step.production").addClass("success");
+                $element.find(".history>.step.delivery").addClass("active");
+
+                $element.find(".history>.step.accept .title").text("Aceito");
+                $element.find(".history>.step.production .title").text("Produzido");
+                $element.find(".history>.step.delivery .title").text("Aguardando entrega");
+
+                $element.find(".history>.step.accept .date").text(DateTimeFormat(order.status_times.find(status => status.status == 1)?.createdAt));
+                $element.find(".history>.step.production .date").text(DateTimeFormat(order.status_times.find(status => status.status == 2)?.createdAt));
+            } else if (status == 3) {
+                $element.find(">.infos .actions>span").text("Foi entregue?");
+                $element.find(">.infos .actions .accept>span").text("Sim");
+                $element.find(">.infos .actions .refuse>span").text("Cancelar pedido");
+
+                $element.find(".history>.step.accept").addClass("success");
+                $element.find(".history>.step.production").addClass("success");
+                $element.find(".history>.step.delivery").addClass("active");
+
+                $element.find(".history>.step.accept .title").text("Aceito");
+                $element.find(".history>.step.production .title").text("Produzido");
+                $element.find(".history>.step.delivery .title").text("Saiu para entrega");
+
+                $element.find(".history>.step.accept .date").text(DateTimeFormat(order.status_times.find(status => status.status == 1)?.createdAt));
+                $element.find(".history>.step.production .date").text(DateTimeFormat(order.status_times.find(status => status.status == 3)?.createdAt));
+            } else if (status == 10) {
+                $element.find(">.infos .actions").hide();
+
+                $element.find(".history>.step.accept").addClass("success");
+                $element.find(".history>.step.production").addClass("success");
+                $element.find(".history>.step.delivery").addClass("success");
+
+                $element.find(".history>.step.accept .title").text("Aceito");
+                $element.find(".history>.step.production .title").text("Produzido");
+                $element.find(".history>.step.delivery .title").text("Entregue");
+
+                $element.find(".history>.step.accept .date").text(DateTimeFormat(order.status_times.find(status => status.status == 1)?.createdAt));
+                $element.find(".history>.step.production .date").text(DateTimeFormat(order.status_times.find(status => status.status == 3)?.createdAt));
+                $element.find(".history>.step.delivery .date").text(DateTimeFormat(order.status_times.find(status => status.status == 10)?.createdAt));
+            }
+
+            if (order.status < 0) {
+                $element.find(".history>.step.active .title").text("Recusado");
+                $element.find(".history>.step.active .date").text(DateTimeFormat(order.dt_refuse));
+                $element.find(".history>.step.active").removeClass("active").addClass("refused");
+
+                $element.find(">.infos .actions>span").text("Aceitar pedido?");
+                $element.find(">.infos .actions .accept>span").text("Aceitar");
+                $element.find(">.infos .actions .refuse").hide();
+            }
+
+            if (!actions) $element.find(">.infos .actions").hide();
+        }
+
+        function DateTimeFormat(date) {
+            if (!date) return "";
+
+            return new Date(date).toLocaleString();
+        }
+
+        document.currentScript.remove();
+        document.getElementById("font_awesome").remove();
+    </script>
+</body>
+
+</html>

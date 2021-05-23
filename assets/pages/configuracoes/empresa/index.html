@@ -1,0 +1,80 @@
+<!-- Page header start -->
+<div class="page-header">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Configurações</li>
+        <li class="breadcrumb-item active">Empresa</li>
+    </ol>
+</div>
+<!-- Page header end -->
+
+<!-- Main container start -->
+<div class="main-container">
+
+    <!-- Row starts -->
+    <div class="row gutters">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <form id="configuracoes_empresa">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <label>Nome da empresa</label>
+                            <input type="text" class="form-control name" name="name" placeholder="Especifique um nome para sua empresa" required>
+                        </div>
+                        <!-- <div class="col">
+                            <label>Endereço</label>
+                            <input type="text" class="form-control address" placeholder="Digite um endereço e número" required>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <label>Telefone</label>
+                            <input type="text" class="form-control phone" name="phone" placeholder="Digite um numero de telefone ou celular" required>
+                        </div>
+                        <div class="col">
+                            <label>CPF ou CNPJ</label>
+                            <input type="text" class="form-control cpf-cnpj" name="cpf-cnpj" placeholder="Digite um CPF ou um CNPJ" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <label>Trabalha com cupom de desconto?</label>
+                            <div class="custom-switch">
+                                <input type="checkbox" id="switch_coupon" name="use_discount_coupon" />
+                                <label for="switch_coupon">Toggle</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label>Abro o estabelecimento pelo gestor?</label>
+                            <div class="custom-switch">
+                                <input type="checkbox" id="switch_gestor" name="online_check" />
+                                <label for="switch_gestor">Toggle</label>
+                            </div>
+                        </div>
+                        <div class="col d-flex flex-column">
+                            <label>Multiplicar sabores e complementos?</label>
+                            <small class="mb-1">Multiplica a listagem de complementos na listagem de pedidos e impressão</small>
+                            <div class="custom-switch">
+                                <input type="checkbox" id="switch_multiply" name="multiply_complements" />
+                                <label for="switch_multiply">Toggle</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" hidden>Salvar</button>
+                <button class="btn btn-secondary reset" hidden>Restaurar</button>
+            </form>
+        </div>
+    </div>
+    <!-- Main container end -->
+
+</div>
+<!-- Page content end -->
+
+<script src="../configuracoes/empresa/index.js"></script>
+<script src="../configuracoes/empresa/address.js"></script>
