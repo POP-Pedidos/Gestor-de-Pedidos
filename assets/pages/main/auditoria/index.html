@@ -1,0 +1,120 @@
+<div class="audit-results-container">
+    <div class="page-header">
+        <div class="audit-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active skeleton">Registro de auditoria</li>
+            </ol>
+            <div class="d-flex">
+                <div class="filter-options actions skeleton">
+                    <span class="title">Filtrar por ação</span>
+                    <span class="option"><span>Todos</span><i class="fas fa-sort-down"></i></span>
+                    <div class="options">
+                        <span value="ALL" class="selected"><i class="fas fa-bars"></i>Todas</span>
+                        <span value="UPDATE"><i class="fas fa-stopwatch"></i>Modificados</span>
+                        <span value="CREATE"><i class="fas fa-plus"></i>Criados</span>
+                        <span value="DELETE"><i class="fas fa-trash"></i>Excluídos</span>
+                        <span value="LOGIN"><i class="fas fa-key"></i>Autenticação</span>
+                    </div>
+                </div>
+
+                <div class="filter-options target skeleton">
+                    <span class="title">Filtrar por categoria</span>
+                    <span class="option"><span>Todos</span><i class="fas fa-sort-down"></i></span>
+                    <div class="options">
+                        <span value="all" class="selected"><i class="fas fa-bars"></i>Todas</span>
+                        <span value="company">Empresa</span> <!-- horários -->
+                        <span value="product">Produtos</span> <!-- imagens, sabores de pizza, complementos grupos/itens -->
+                        <span value="user">Usuários</span>
+                        <span value="category">Categorias</span>
+                        <span value="discount_coupon">Cupons de desconto</span>
+                        <span value="order">Pedidos</span>
+                        <span value="printer">Impressoras</span>
+                        <span value="regions_blacklist">Exclusão de Regiões</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="date-filters">
+            <label class="filter-date form-control start skeleton">
+                <span class="title">Inicio</span>
+                <input type="date" />
+            </label>
+
+            <label class="filter-date form-control end skeleton">
+                <span class="title">Final</span>
+                <input type="date" />
+            </label>
+        </div>
+    </div>
+
+    <div class="header-infos">
+        <span class="max-results skeleton">0 resultados</span>
+        <button id="export_orders" class="btn btn-success export disabled">Exportar pedidos</button>
+    </div>
+
+    <div class="audit-export-modal">
+        <div class="selector">
+            <header>
+                <h3>Exportar <span class="total_export"></span> pedidos</h3>
+                <div>
+                    <div class="from">
+                        <span class="title">De</span>
+                        <span class="date"></span>
+                    </div>
+                    <i class="fas fa-arrow-right"></i>
+                    <div class="to">
+                        <span class="title">Até</span>
+                        <span class="date"></span>
+                    </div>
+                </div>
+                <span class="warning"><i class="fas fa-exclamation-triangle"></i>O período filtrado de <span>X</span> dias é superior ao limite disponível de 31 dias</span>
+                <p>Escolha o tipo do arquivo final:</p>
+            </header>
+            <main>
+                <div file-type="xls" data-toggle="tooltip" title="Excel">
+                    <img src="../../../images/file-xls.svg" />
+                </div>
+                <div file-type="html" data-toggle="tooltip" title="HTML">
+                    <img src="../../../images/file-html.svg" />
+                </div>
+            </main>
+        </div>
+        <div class="loading">
+            <header>
+                <h3>Exportando <span class="total_export"></span> pedidos</h3>
+                <div>
+                    <div class="from">
+                        <span class="title">De</span>
+                        <span class="date"></span>
+                    </div>
+                    <i class="fas fa-arrow-right"></i>
+                    <div class="to">
+                        <span class="title">Até</span>
+                        <span class="date"></span>
+                    </div>
+                </div>
+                <p>Tipo do arquivo final: <b class="file-type"></b></p>
+            </header>
+            <div>
+                <div class="spinner-border"></div>
+                <div class="progress">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+        </div>
+        <div class="success">
+            <i class="fas fa-check-circle"></i>
+            <div>
+                <h3>Prontinho!</h3>
+                <span class="total_text">Foi exportado <span class="total_export"></span> pedidos</span>
+                <span class="file_output">Clique <b>aqui</b> para abrir o arquivo final.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="audit-results"></div>
+</div>
+
+<script src="../auditoria/index.js"></script>
+<script src="../../../scripts/sheet.js"></script>
+<script src="../auditoria/export.js"></script>

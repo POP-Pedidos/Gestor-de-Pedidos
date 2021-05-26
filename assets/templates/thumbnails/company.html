@@ -74,7 +74,7 @@
         <h1 id="name"></h1>
     </main>
 
-    <img id="logo-pop" src="https://poppedidos.com.br/shared/img/logo.svg">
+    <img id="logo-pop" src="https://poppedidos.com.br/shared/images/logo.svg">
     <script>
         function loadedChecker() {
             const imagesHaveLoaded = () => { return Array.from(document.images).every((i) => i.complete); }
@@ -90,8 +90,8 @@
         }
 
         function Init() {
-            document.getElementById("bg-img").src = `${api_url}/static/img/bg1.jpg`;
-            document.getElementById("img").src = company.image || `${api_url}/static/img/no-image.svg`;
+            document.getElementById("bg-img").src = `${api_url}/static/images/bg1.jpg`;
+            document.getElementById("img").src = company.image || `${api_url}/static/images/no-image.svg`;
             document.getElementById("name").innerText = company.name || "Minha empresa";
 
             loadedChecker();

@@ -1,0 +1,36 @@
+const { autoUpdater } = require("electron-updater");
+
+autoUpdater.logger = require("electron-log");
+autoUpdater.logger.transports.file.level = "info";
+
+module.exports = (win) => {
+    if (process.env.NODE_ENV === "development") return;
+
+    autoUpdater.on("checking-for-update", () => {
+        win.webContents.send("updater:checking-for-update");
+    });
+
+    autoUpdater.on("update-available", (info) => {
+        win.webContents.send("updater:update-available", info);
+    });
+
+    autoUpdater.on("update-not-available", (info) => {
+        win.webContents.send("updater:update-not-available", info);
+    });
+
+    autoUpdater.on("error", (err) => {
+        win.webContents.send("updater:error");
+    });
+
+    autoUpdater.on("download-progress", (progressObj) => {
+        win.webContents.send("updater:checking-for-update", progressObj);
+    });
+
+    autoUpdater.on("update-downloaded", (event, info) => {
+        win.webContents.send("updater:checking-for-update", info);
+
+        autoUpdater.quitAndInstall();
+    });
+
+    autoUpdater.checkForUpdates();
+}

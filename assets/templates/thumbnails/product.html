@@ -135,8 +135,8 @@
         }
 
         function Init() {
-            document.getElementById("bg-img").src = `${api_url}/static/img/bg1.jpg`;
-            document.getElementById("img").src = product.image || `${api_url}/static/img/no-image.svg`;
+            document.getElementById("bg-img").src = `${api_url}/static/images/bg1.jpg`;
+            document.getElementById("img").src = product.image || `${api_url}/static/images/no-image.svg`;
             document.getElementById("name").innerText = product.name || "Novo produto";
             document.getElementById("description").innerText = product.description || "Aqui ficará a descrição do seu novo produto! 🥰";
             document.querySelector("#price-container>.old-price").innerText = product.old_price ? MoneyFormat(product.old_price) : "";

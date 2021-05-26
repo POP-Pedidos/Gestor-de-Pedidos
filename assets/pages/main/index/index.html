@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    <link rel="stylesheet" href="../../../styles/bootstrap.css">
+    <link rel="stylesheet" href="../../../styles/main.css">
+    <link rel="stylesheet" href="../../../styles/dataTables.css">
+    <script src="../../../scripts/jquery.js"></script>
+    <script src="../../../scripts/warning.js"></script>
+    <script src="../../../scripts/sweetalert2.js"></script>
+    <script src="../../../scripts/jquery.inputmask.js"></script>
+    <script src="../../../scripts/bootstrap.bundle.js"></script>
+    <script src="../../../scripts/dataTables.js"></script>
+    <script src="../../../scripts/dataTables.bootstrap.js"></script>
+    <script src="../../../scripts/utils.js"></script>
+    <script src="../../../scripts/main.js"></script>
+    <script src="../../../scripts/image-selector-modal.js"></script>
+    <link href="../../../styles/bootstrap-select.css" rel="stylesheet">
+    <script src="../../../scripts/bootstrap-select.js"></script>
+    <link href="../../../styles/bootstrap-tagsinput.css" rel="stylesheet">
+    <script src="../../../scripts/bootstrap-tagsinput.js"></script>
+    <script src="../../../scripts/socket.io.js"></script>
+    <script src="../../../scripts/sortable.js"></script>
+    <script src="../../../scripts/gender-detection.js"></script>
+    <script src="../../../scripts/highcharts.js"></script>
+    <script src="../../../scripts/jquery.easypiechart.js"></script>
+    <script src="https://kit.fontawesome.com/02f9ec51a7.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <div id="loading-wrapper" style="display: flex;">
+            <div class="spinner-border" role="status"></div>
+        </div>
+        <div id="loading-wrapper-content">
+            <div class="spinner-border" role="status"></div>
+        </div>
+        <nav id="sidebar" class="sidebar-wrapper">
+            <div class="sidebar-brand">
+                <div class="logo">
+                    <div>
+                        <p class="title">POP</p>
+                        <p class="subtitle">Pedidos</p>
+                    </div>
+                    <img src="../../../images/logo.svg" alt="Logo">
+                </div>
+            </div>
+            <div class="sidebar-content">
+                <div class="sidebar-menu">
+                    <ul>
+                        <li class="active">
+                            <a for_panel="dashboard" class="current-page">
+                                <i class="fas fa-chart-line"></i>
+                                <span class="menu-text">Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a for_panel="pedidos">
+                                <i class="fas fa-boxes"></i>
+                                <span class="menu-text">Pedidos</span>
+                                <i class="fas fa-exclamation-triangle alert"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a for_panel="auditoria">
+                                <i class="fas fa-search"></i>
+                                <span class="menu-text">Auditoria</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a>
+                                <i class="fas fa-folder-plus"></i>
+                                <span class="menu-text">Cadastros</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li><a for_panel="cadastros_produtos">Produtos</a></li>
+                                    <li><a for_panel="editar_complementos">Complementos</a></li>
+                                    <li><a for_panel="cadastros_categorias">Categorias</a></li>
+                                    <li><a for_panel="cadastros_discount_cupom">Cupom de desconto</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a>
+                                <i class="fas fa-cog"></i>
+                                <span class="menu-text">Configurações</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li><a for_panel="configuracoes_empresa">Empresa</a></li>
+                                    <li><a for_panel="configuracoes_site">Site</a></li>
+                                    <li><a for_panel="configuracoes_horarios">Horários</a></li>
+                                    <li><a for_panel="configuracoes_entrega">Entrega</a></li>
+                                    <li><a for_panel="configuracoes_impressoras">Impressoras</a></li>
+                                    <!-- <li><a for_panel="configuracoes_whatsapp">WhatsApp</a></li> -->
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a for_panel="whatsapp">
+                                <i class="fab fa-whatsapp"></i>
+                                <span class="menu-text">WhatsApp</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div id="body">
+            <header class="header">
+                <div class="toggle-btns">
+                    <a id="toggle-sidebar"><i class="fas fa-bars"></i></a>
+                    <!-- <a id="pin-sidebar"><i class="fas fa-bars"></i></a> -->
+                </div>
+                <div class="header-items">
+                    <ul class="header-actions">
+                        <div class="connection">
+                            <i class="fas fa-wifi"></i>
+                            <span>Conectando</span>
+                        </div>
+                        <li class="dropdown update-available" onclick="internal.restart()">
+                            <i class="fas fa-cloud-download-alt"></i>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                Nova atualização disponível. <b>Clique para baixar.</b>
+                            </div>
+                        </li>
+                        <a class="company-website-link">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Cardápio</span>
+                        </a>
+                        <li class="dropdown">
+                            <a id="userSettings" class="user-settings" data-toggle="dropdown" aria-haspopup="true">
+                                <span class="user-name"></span>
+                                <span class="avatar">
+                                    <img src="../../../images/pop-black-icon.jpg" alt="avatar">
+                                    <span class="status"></span>
+                                </span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <div class="header-profile-actions">
+                                    <div class="header-user-profile">
+                                        <div class="header-user"><img src="../../../images/pop-black-icon.jpg" alt="Logo User"></div>
+                                        <div>
+                                            <span class="user-id"></span>
+                                            <span class="user-name"></span>
+                                        </div>
+                                    </div>
+                                    <a for_panel="configuracoes_empresa"><i class="fas fa-cogs"></i>Configurações</a>
+                                    <a id="change_password"><i class="fas fa-unlock"></i> Alterar senha</a>
+                                    <a id="change_theme" onclick="toggleDarkTheme()"><i class="fas fa-brush"></i> <span>Alterar tema</span></a>
+                                    <a onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <div class="content-page"></div>
+            <webview id="whatsappWebView"></webview>
+        </div>
+    </div>
+    <script src="../../../scripts/TitleBar.js"></script>
+    <script src="./index.js"></script>
+    <script src="../../../scripts/socket.js"></script>
+    <script src="../../../scripts/whatsapp/index.js"></script>
+    <script>
+        LoadHeaderUserProfile();
+
+        loadFile("../dashboard/index.html");
+        $("#loading-wrapper").fadeOut(300);
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCc5e2geOImokWUXwPtOUNX9JiaVWMMy2s&libraries=places" defer></script>
+</body>
+
+</html>
