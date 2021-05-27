@@ -3609,7 +3609,10 @@ figure.user-card .list-group {
 @media (max-width: 1000px) {
   #product_editor>main>form.details>div {
     grid-template-columns: 1fr !important;
-    gap: 0px !important;
+  }
+
+  #product_editor>main>form.details>div>div {
+    padding: 0 !important;
   }
 }
 
@@ -7902,7 +7905,12 @@ button:focus {
 }
 
 .dropdown-menu .dropdown-item:hover {
-  background: #96c63d
+  background: #96c63d;
+}
+
+.dropdown-item:focus,
+.dropdown-item:hover {
+  background-color: #f8f9fa1f;
 }
 
 .dropdown-menu .dropdown-item:first-child {
@@ -10773,7 +10781,6 @@ table .badge {
 #product_editor>main>form.details>div {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
   max-width: 1200px;
 }
 
@@ -10781,6 +10788,14 @@ table .badge {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+#product_editor>main>form.details>div>div:first-child {
+  padding-right: 20px;
+}
+
+#product_editor>main>form.details>div>div:last-child {
+  padding-left: 20px;
 }
 
 #product_editor label {

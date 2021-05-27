@@ -30,7 +30,7 @@ $("form").on("submit", function (e) {
     FetchAPI(`/user/login`, {
         body: form_data,
         method: "POST",
-        headers: { username: encodeURIComponent(window.hostname) },
+        headers: { Hostname: window.hostname },
         raw_error: true,
     }).then(AuthSuccessfully).catch(error => {
         ShowError(error);

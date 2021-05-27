@@ -1,7 +1,7 @@
 const socket = io(api_url, {
     path: "/socket/company",
     query: {
-        hostname: window.username,
+        hostname: window.hostname,
         token: sessionStorage.token || localStorage.token,
     },
     transports: ['websocket', 'polling', 'flashsocket'],
@@ -19,7 +19,6 @@ socket.on('connect', function () {
 socket.on("reconnect", () => {
     console.log("Reconnected to (" + api_url + ")! Checking for new updates...");
     $(".user-settings .avatar .status").removeClass("offline online away").addClass("online");
-    setTimeout(CheckForNewUpdate, 5000);
 });
 
 socket.on('connect_failed', function () {
@@ -32,7 +31,6 @@ socket.on('error', function (error) {
     console.log("Socket error:", error);
     $(".header-actions>.connection>span").text("ERRO").parent().addClass("down");
     $(".user-settings .avatar .status").removeClass("offline online away").addClass("offline");
-    setTimeout(CheckForNewUpdate, 5000);
 });
 
 socket.on('disconnect', function () {
@@ -61,20 +59,6 @@ socket.on("new_order", (order) => {
 socket.on("status_updated", (online) => {
     if (company.online_check && online == false) SetStatus(true);
 });
-
-socket.on("check_update", CheckForNewUpdate);
-
-let last_update_check;
-
-async function CheckForNewUpdate() {
-    console.log("Check update");
-    if (!last_update_check || (Date.now() - last_update_check) > 10000) {
-        last_update_check = Date.now();
-
-        const new_update = await internalAsync.checkForNewUpdate();
-        if (new_update) $(".header-actions .update-available").fadeIn(300);
-    }
-}
 
 function GetLatency(callback) {
     if (socket.disconnected) return null;

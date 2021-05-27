@@ -45,7 +45,7 @@
             height: 500px;
             margin-right: 40px;
             border-radius: 10px;
-            object-fit: contain;
+            object-fit: cover;
         }
 
         main {
@@ -58,7 +58,6 @@
         main h1 {
             font-size: 50px;
             margin: 10px 0 20px;
-            text-shadow: rgba(255, 255, 255, 0.2) 0 2px 40px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -107,55 +106,21 @@
 </head>
 
 <body>
-    <img id="bg-img">
+    <img id="bg-img" src="<%- background %>">
     <div id="bg"></div>
     <main>
-        <img id="img">
+        <img id="img" src="<%- icon %>">
         <div>
-            <h1 id="name"></h1>
-            <span id="description"></span>
-            <div id="price-container">
-                <span class="old-price"></span>
-                <span class="price"></span>
-            </div>
+            <h1 id="name"><%= name %></h1>
+            <span id="description"><%= description %></span>
+            <!-- <div id="price-container">
+                <% if(discount > 0) { %>
+                    <span class="old-price"><%= MoneyFormat(price); %></span>
+                <% } %>
+                <span class="price"><%= MoneyFormat(price - (discount || 0)); %></span>
+            </div> -->
         </div>
     </main>
-    <script>
-        function loadedChecker() {
-            const imagesHaveLoaded = () => { return Array.from(document.images).every((i) => i.complete); }
-
-            const interval = setInterval(() => {
-                if (imagesHaveLoaded()) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        window.finished = true;
-                    }, 50);
-                }
-            }, 10);
-        }
-
-        function Init() {
-            document.getElementById("bg-img").src = `${api_url}/static/images/bg1.jpg`;
-            document.getElementById("img").src = product.image || `${api_url}/static/images/no-image.svg`;
-            document.getElementById("name").innerText = product.name || "Novo produto";
-            document.getElementById("description").innerText = product.description || "Aqui ficará a descrição do seu novo produto! 🥰";
-            document.querySelector("#price-container>.old-price").innerText = product.old_price ? MoneyFormat(product.old_price) : "";
-            document.querySelector("#price-container>.price").innerText = MoneyFormat(product.price || 0);
-
-            loadedChecker();
-        }
-
-        function MoneyFormat(money, is_currency = true, fractionDigits = 2) {
-            let money_str = new Intl.NumberFormat("pt-BR", {
-                style: is_currency ? "currency" : "decimal",
-                currency: 'BRL',
-                minimumFractionDigits: fractionDigits,
-                maximumFractionDigits: fractionDigits
-            }).format(money);
-
-            return money_str;
-        }
-    </script>
 </body>
 
 </html>

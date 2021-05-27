@@ -13,7 +13,7 @@ if (localStorage.token) {
     FetchAPI(`/user/token`, {
         method: "POST",
         body: { token: localStorage.token },
-        headers: { username: encodeURIComponent(window.hostname) },
+        headers: { Hostname: window.hostname },
         raw_error: true,
     }).then(AuthSuccessfully).catch(error => {
         ShowError(error);

@@ -19,10 +19,6 @@ const $title_bar = $(`<div id="title-bar">
 
 $(`<style type="text/css">
     @media (prefers-color-scheme: dark) {
-        body {
-            border-color: black !important;
-        }
-
         #title-bar {
             color: white;
             background-color: #1a1a1a;
@@ -63,7 +59,6 @@ $(`<style type="text/css">
         right: 0;
         height: 30px;
         padding: 0 2px 1px 7px;
-        border: 1px solid white;
         border-bottom: none;
         user-select: none;
         -webkit-app-region: drag;
@@ -72,8 +67,6 @@ $(`<style type="text/css">
 
     body {
         margin-top: 29px !important;
-        border: 1px solid white;
-        border-top: none;
         height: calc(100vh - 29px) !important;
         min-height: calc(100vh - 29px) !important;
     }

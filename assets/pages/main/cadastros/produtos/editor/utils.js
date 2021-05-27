@@ -195,15 +195,14 @@ function GenerateThumbnail(image) {
         const details = $("#product_editor>main .details").serializeFormJSON();
         const seo = $("#product_editor>main .seo").serializeFormJSON();
 
-        const thumb_data = {
-            name: seo.title || details.name,
-            description: seo.description || details.description || company.address,
-            price: details.is_pizza ? null : Number(details.discount) > 0 ? details.price - ((details.price) * details.discount / 100) : details.price,
-            old_price: details.is_pizza ? null : Number(details.discount) > 0 ? details.price : undefined,
-            image: image || selected_images[0],
-        };
-
-        const promise = internalAsync.generateProductThumbnail(thumb_data);
+        const promise = offscreen.generateProductThumbnail({
+            background: `${api_url}/static/images/bg1.jpg`,
+            icon: image || selected_images[0] || `${api_url}/static/images/no-image.svg`,
+            name: details.name || "Novo produto",
+            description: seo.description || details.description || "Aqui ficará a descrição do seu novo produto! 🥰",
+            price: 0,
+            discount: 0,
+        });
 
         const timeout = setTimeout(() => {
             if (window.seo_thumb_id != seo_thumb_id) return;
@@ -215,7 +214,7 @@ function GenerateThumbnail(image) {
 
             clearTimeout(timeout);
 
-            seo_thumbnail = `data:image/png;base64,${base64}`;
+            seo_thumbnail = base64;
             LoadThumbnail(seo_thumbnail);
         }).catch(error => {
             if (window.seo_thumb_id != seo_thumb_id) return;

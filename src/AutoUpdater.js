@@ -1,10 +1,21 @@
 const { autoUpdater } = require("electron-updater");
+const { BrowserWindow, dialog } = require("electron");
 
 autoUpdater.logger = require("electron-log");
 autoUpdater.logger.transports.file.level = "info";
 
 module.exports = (win) => {
     if (process.env.NODE_ENV === "development") return;
+
+    autoUpdater.on("error", (error) => {
+        const win = BrowserWindow.getFocusedWindow();
+
+        dialog.showMessageBox(win, {
+            title: "Updater Error",
+            type: 'error',
+            message: error.toString(),
+        });
+    });
 
     autoUpdater.on("checking-for-update", () => {
         win.webContents.send("updater:checking-for-update");
@@ -27,10 +38,8 @@ module.exports = (win) => {
     });
 
     autoUpdater.on("update-downloaded", (event, info) => {
-        win.webContents.send("updater:checking-for-update", info);
-
-        autoUpdater.quitAndInstall();
+        win.webContents.send("updater:update-downloaded", info);
     });
-
+    win.webContents.send("updater:update-downloaded", {});
     autoUpdater.checkForUpdates();
 }

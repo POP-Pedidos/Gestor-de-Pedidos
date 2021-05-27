@@ -29,6 +29,7 @@ module.exports = function CreateWindow() {
             contextIsolation: true,
             enableRemoteModule: false,
             webviewTag: true,
+            nativeWindowOpen: true,
         }
     });
 
@@ -42,8 +43,11 @@ module.exports = function CreateWindow() {
     });
 
     win.webContents.setWindowOpenHandler(({ url }) => {
-        setImmediate(() => shell.openExternal(url));
-        return { action: "deny" }
+        try {
+            setImmediate(() => shell.openExternal(url));
+        } catch { }
+
+        return { action: "deny" };
     })
 
     win.on('close', function (e) {

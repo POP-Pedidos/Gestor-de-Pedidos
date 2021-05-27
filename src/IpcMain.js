@@ -1,6 +1,9 @@
-const { app, ipcMain, BrowserWindow, nativeTheme } = require("electron");
-const { domain, api_url, places_url, icon } = require("../config");
 const os = require("os");
+const fs = require("fs");
+const { app, ipcMain, BrowserWindow, nativeTheme, dialog } = require("electron");
+const { autoUpdater } = require("electron-updater");
+const { domain, api_url, places_url, icon } = require("../config");
+const offscreen = require("./Offscreen");
 const Store = require("./Store");
 const theme_store = new Store("dark-mode", { themeSource: "system" });
 
@@ -41,6 +44,10 @@ ipcMain.on("controls:state", (event) => {
     else if (win.isNormal()) event.returnValue = "normal";
 });
 
+ipcMain.on("updater:install", (event) => {
+    autoUpdater.quitAndInstall(false, true);
+});
+
 ipcMain.on("controls:minimize", (event) => {
     const win = BrowserWindow.getFocusedWindow();
 
@@ -64,6 +71,33 @@ ipcMain.on("controls:close", (event) => {
 
     win.hide();
     app.exit(0);
+});
+
+ipcMain.handle("dialog:showSaveDialog", (event, ...args) => {
+    const win = BrowserWindow.getFocusedWindow();
+
+    return dialog.showSaveDialog(win, ...args);
+});
+
+ipcMain.on("fs:writeFile", (event, ...args) => {
+    try {
+        fs.writeFileSync(...args);
+        event.returnValue = true;
+    } catch {
+        event.returnValue = false;
+    }
+});
+
+ipcMain.handle("offscreen:generateProductThumbnail", (event, data) => {
+    return offscreen.generateProductThumbnail(data);
+});
+
+ipcMain.handle("offscreen:generateCompanyThumbnail", (event, company) => {
+    return offscreen.generateCompanyThumbnail(company);
+});
+
+ipcMain.handle("offscreen:generateOrdersHTMLReport", (event, file_path, data) => {
+    return offscreen.generateOrdersHTMLReport(file_path, data);
 });
 
 module.exports = ipcMain;

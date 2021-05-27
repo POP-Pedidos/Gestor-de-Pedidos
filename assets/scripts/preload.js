@@ -32,3 +32,22 @@ contextBridge.exposeInMainWorld("printService", {
     printDeliveryCopy: (...args) => ipcRenderer.send("printService:printDeliveryCopy", ...args),
     printProductionCopy: (...args) => ipcRenderer.send("printService:printProductionCopy", ...args),
 });
+
+contextBridge.exposeInMainWorld("dialog", {
+    showSaveDialog: (...args) => ipcRenderer.invoke("dialog:showSaveDialog", ...args),
+});
+
+contextBridge.exposeInMainWorld("updater", {
+    on: (event_name, ...args) => ipcRenderer.on(`updater:${event_name}`, ...args),
+    installUpdate: (...args) => ipcRenderer.send("updater:install", ...args),
+});
+
+contextBridge.exposeInMainWorld("filesystem", {
+    writeFile: (...args) => ipcRenderer.sendSync("fs:writeFile", ...args),
+});
+
+contextBridge.exposeInMainWorld("offscreen", {
+    generateProductThumbnail: (product) => ipcRenderer.invoke("offscreen:generateProductThumbnail", product),
+    generateCompanyThumbnail: (company) => ipcRenderer.invoke("offscreen:generateCompanyThumbnail", company),
+    generateOrdersHTMLReport: (file_path, data) => ipcRenderer.invoke("offscreen:generateOrdersHTMLReport", file_path, data),
+});

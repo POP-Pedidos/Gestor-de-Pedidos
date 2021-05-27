@@ -535,6 +535,12 @@
         <div id="list-orders"></div>
     </main>
     <script>
+        const orders = JSON.parse(decodeURIComponent(`<%- encodeURIComponent(JSON.stringify(orders)) %>`));
+        const company = JSON.parse(decodeURIComponent(`<%- encodeURIComponent(JSON.stringify(company)) %>`));
+        const range_dates = JSON.parse(decodeURIComponent(`<%- encodeURIComponent(JSON.stringify(range_dates)) %>`));
+        const domain = JSON.parse(decodeURIComponent(`<%- encodeURIComponent(JSON.stringify(domain)) %>`));
+        const api_url = JSON.parse(decodeURIComponent(`<%- encodeURIComponent(JSON.stringify(api_url)) %>`));
+
         function loadedChecker() {
             const imagesHaveLoaded = () => { return Array.from(document.images).every((i) => i.complete); }
 
@@ -546,26 +552,6 @@
                     }, 50);
                 }
             }, 10);
-        }
-
-        function Init() {
-            $("#img").attr("src", company.image.medium || `${api_url}/static/images/no-image.svg`);
-            $("#orders_count").text(orders.length);
-
-            const start_date = new Date(range_dates.start);
-            const end_date = new Date(range_dates.end);
-
-            $(".period .from>.date").text(`${start_date.getDate()} de ${start_date.toLocaleDateString("pt-BR", { month: "short" })}`);
-            $(".period .to>.date").text(`${end_date.getDate()} de ${end_date.toLocaleDateString("pt-BR", { month: "short" })}`);
-
-            for (const order of orders) {
-                const $element = $("<div>");
-                LoadOrderOnElement($element, order, false);
-                $("#list-orders").append($element);
-                $element.find(".info").append(`<span class="created_date">${new Date(order.createdAt).toLocaleString("pt-BR")}</span>`);
-            }
-
-            loadedChecker();
         }
 
         function MoneyFormat(money, is_currency = true, fractionDigits = 2) {
@@ -581,115 +567,213 @@
 
         function LoadOrderOnElement($element, order, actions = true) {
             const $order_infos = $(`<div class="infos">
-                <div class="info">
-                    <div class="client_info">
-                        <a class="indicator" target="_blank"></a>
-                        <span class="client_name"></span>
-                        <div class="address infos-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <a target="_blank"></a>
-                        </div>
-                        <span class="delivery_type_warning"></span>
-                        <div class="tell infos-icon">
-                            <i class="fas fa-phone-alt"></i>
-                            <span></span>
-                        </div>
-                    </div>
-                    <div class="actions">
-                        <span>Aceitar pedido?</span>
-                        <div>
-                            <button type="button" class="btn btn-success accept">
-                                <span>Aceitar</span>
-                                <div class="spinner-border"></div>
-                            </button>
-                            <button type="button" class="btn btn-danger refuse">
-                                <span>Recusar</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="history">
-                    <div class="step accept">
-                        <div class="trace-line"></div>
-                        <div class="icon">
-                            <i class="fas fa-check"></i>
-                        </div>
-                        <div class="infos">
-                            <span class="title"></span>
-                            <span class="date"></span>
-                        </div>
-                    </div>
-                    <div class="step production">
-                        <div class="trace-line"></div>
-                        <div class="icon">
-                            <i class="fas fa-box"></i>
-                        </div>
-                        <div class="infos">
-                            <span class="title"></span>
-                            <span class="date"></span>
-                        </div>
-                    </div>
-                    <div class="step delivery">
-                        <div class="trace-line"></div>
-                        <div class="icon">
-                            <i class="fas fa-forward"></i>
-                        </div>
-                        <div class="infos">
-                            <span class="title"></span>
-                            <span class="date"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-items"></div>
-            </div>
-            <div class="bottom">
-                <div class="left">
-                    <div class="payment-method">
-                        <span><i class="far fa-credit-card"></i> Método de pagamento</span>
-                        <div></div>
-                    </div>
-                    <div class="cash-change">
-                        <span><i class="fas fa-wallet"></i> Troco para</span>
-                        <div></div>
-                    </div>
-                    <div class="discount-coupon">
-                        <span><i class="fas fa-tag"></i> Cupom de desconto</span>
-                        <div></div>
-                    </div>
-                    <div class="observations">
-                        <span><i class="fas fa-info-circle"></i> Observações</span>
-                        <div></div>
-                    </div>
-                </div>
-                <div class="price">
-                    <table>
-                        <tr>
-                            <th>Subtotal</th>
-                            <td class="subtotal"></td>
-                        </tr>
-                        <tr class="discount">
-                            <th>Desconto</th>
-                            <td class="discount"></td>
-                        </tr>
-                        <tr>
-                            <th>Taxa de entrega</th>
-                            <td class="frete"></td>
-                        </tr>
-                        <tr class="coupon_discount">
-                            <th>Cupom de desconto</th>
-                            <td class="coupon_discount"></td>
-                        </tr>
-                        <tr>
-                            <th>Total</th>
-                            <td class="total"></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>`);
+		<div class="info">
+			<div class="client_info">
+				<a class="indicator" target="_blank"></a>
+				<span class="client_name"></span>
+				<div class="address infos-icon">
+					<i class="fas fa-map-marker-alt"></i>
+					<a target="_blank"></a>
+				</div>
+				<span class="delivery_type_warning"></span>
+				<div class="tell infos-icon">
+					<i class="fas fa-phone-alt"></i>
+					<span></span>
+				</div>
+			</div>
+			<div class="actions">
+				<div>
+					<button type="button" class="btn btn-success accept">
+						<span>Aceitar</span>
+						<div class="spinner-border"></div>
+					</button>
+					<button type="button" class="btn btn-danger refuse">
+						<span>Recusar</span>
+					</button>
+					<button type="button" class="btn btn-secondary print">
+						<span>Impressão</span>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="history">
+			<div class="step accept">
+				<div class="trace-line"></div>
+				<div class="icon">
+					<i class="fas fa-check"></i>
+				</div>
+				<div class="infos">
+					<span class="title"></span>
+					<span class="date"></span>
+				</div>
+			</div>
+			<div class="step production">
+				<div class="trace-line"></div>
+				<div class="icon">
+					<i class="fas fa-box"></i>
+				</div>
+				<div class="infos">
+					<span class="title"></span>
+					<span class="date"></span>
+				</div>
+			</div>
+			<div class="step delivery">
+				<div class="trace-line"></div>
+				<div class="icon">
+					<i class="fas fa-forward"></i>
+				</div>
+				<div class="infos">
+					<span class="title"></span>
+					<span class="date"></span>
+				</div>
+			</div>
+		</div>
+		<div class="list-items"></div>
+	</div>
+	<div class="bottom">
+		<div class="left">
+			<div class="payment-method">
+				<span><i class="far fa-credit-card"></i> Método de pagamento</span>
+				<div></div>
+			</div>
+			<div class="cash-change">
+				<span><i class="fas fa-wallet"></i> Troco para</span>
+				<div></div>
+			</div>
+			<div class="discount-coupon">
+				<span><i class="fas fa-tag"></i> Cupom de desconto</span>
+				<div></div>
+			</div>
+			<div class="observations">
+				<span><i class="fas fa-info-circle"></i> Observações</span>
+				<div></div>
+			</div>
+			<div class="complement">
+				<span><i class="fas fa-info-circle"></i> Complemento do endereço</span>
+				<div></div>
+			</div>
+			<div class="reference">
+				<span><i class="fas fa-info-circle"></i> Referencia</span>
+				<div></div>
+			</div>
+		</div>
+		<div class="price">
+			<table>
+				<tr>
+					<th>Subtotal</th>
+					<td class="subtotal"></td>
+				</tr>
+				<tr class="discount">
+					<th>Desconto</th>
+					<td class="discount"></td>
+				</tr>
+				<tr>
+					<th>Taxa de entrega</th>
+					<td class="frete"></td>
+				</tr>
+				<tr class="coupon_discount">
+					<th>Cupom de desconto</th>
+					<td class="coupon_discount"></td>
+				</tr>
+				<tr>
+					<th>Total</th>
+					<td class="total"></td>
+				</tr>
+			</table>
+		</div>
+	</div>`);
+
+            let $print_options = $("body>.order-print-options");
 
             $element.addClass("order-infos");
 
             $element.html($order_infos);
+
+            $print_options.remove();
+            $print_options = $(`<div class="order-print-options">
+		<div>
+			<header>
+				<h4>Impressão</h4>
+				<button class="close btn btn-danger"><i class="fas fa-times"></i></button>
+			</header>
+			<main>
+				<div value="control">
+					<img src="../../../images/box-analytics.png" />
+					<span>Controle</span>
+				</div>
+				<div value="production">
+					<img src="../../../images/box-todo.png" />
+					<span>Produção</span>
+				</div>
+				<div value="delivery">
+					<img src="../../../images/box-delivery.png" />
+					<span>Entrega</span>
+				</div>
+			</main>
+		</div>
+	</div>`);
+
+            if (order.items.every(item => !item.product.id_printer)) $print_options.find(`[value="production"]`).addClass("disabled");
+
+            $print_options.find(".close").on("click", function () {
+                $print_options.fadeOut(300);
+            });
+
+            $print_options.on("mousedown", function () {
+                $print_options.fadeOut(300);
+            });
+
+            $print_options.find(">div").on("mousedown", function (e) {
+                e.stopPropagation();
+            });
+
+            $print_options.find("main>div").on("click", function () {
+                const value = $(this).attr("value");
+
+                const order_data = { ...order };
+                order_data.address = order.delivery_type !== "withdrawal" ? `${order.street_name}, ${order.street_number} - ${order.neighborhood}, ${order.city} - ${order.state}` : null;
+                order_data.dt_accept = new Date(order.dt_accept).toISOString();
+
+                const primary_printer_device = {
+                    ...primary_printer,
+                    device: GetLocalPrinter(primary_printer?.id_printer) || primary_printer?.device,
+                };
+
+                if (value === "control") {
+                    printService.printControlCopy(primary_printer_device, order_data, company);
+                } else if (value === "delivery") {
+                    printService.printDeliveryCopy(primary_printer_device, order_data, company);
+                } else if (value === "production") {
+                    const printer_items = [];
+
+                    for (const item of order_data.items || []) {
+                        if (!item.product.id_printer) continue;
+
+                        if (printer_items[item.product.id_printer]) printer_items[item.product.id_printer].push(item);
+                        else printer_items[item.product.id_printer] = [item];
+                    }
+
+                    for (const id_printer in printer_items) {
+                        const printer = {
+                            ...primary_printer_device,
+                            ...printers.find(printer => printer.id_printer == id_printer),
+                        };
+
+                        printer.device = GetLocalPrinter(id_printer) || printer.device;
+                        order_data.items = printer_items[id_printer];
+
+                        printService.printProductionCopy(printer, order_data, company);
+                    }
+                }
+
+                $print_options.fadeOut(200);
+            });
+
+            $order_infos.find(".actions>div>.print").on("click", function () {
+                $print_options.fadeIn(300).css("display", "flex");
+            });
+
+            $("body").append($print_options);
 
             order.address = order.delivery_type !== "withdrawal" ? `${order.street_name}, ${order.street_number} - ${order.neighborhood}, ${order.city} - ${order.state}` : null;
 
@@ -698,7 +782,7 @@
             $element.find(".client_name").text(order.name_client);
 
             $element.find(".address>a").text(`${order.address} ${order.suplier || ""}`)
-                .attr("href", `https://maps.google.com/maps?q=${order.location}&hl=pt-BR;z=14&amp;output=embed`);
+                .attr("href", `https://maps.google.com/maps?q=${order.address}&hl=pt-BR;z=14&amp;output=embed`);
             $element.find(".address").toggle(order.delivery_type != "withdrawal");
 
             $element.find(".delivery_type_warning").toggle(order.delivery_type !== "delivery");
@@ -715,11 +799,11 @@
 
             $list_items.toggleClass("is_multiplication", company.multiply_complements);
 
-            if (company.multiply_complements) {
+            if (company.multiply_complements && (order.items.some(item => item.complements?.length > 0) || order.items.some(item => item.pizza_flavors?.length > 1))) {
                 $list_items.append(`<div class="multiplication-alert">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <span>Os sabores e complementos estão sendo multiplicados!</span>
-                </div>`);
+			<i class="fas fa-exclamation-triangle"></i>
+			<span>Os sabores e complementos estão sendo multiplicados!</span>
+		</div>`);
             }
 
             for (const item of order.items || []) {
@@ -732,23 +816,23 @@
                 if (!product) continue;
 
                 const $product = $(`
-                    <div>
-                        <header>
-                            <span class="quantity"></span>
-                            <span class="name">
-                                <span></span>
-                                <small></small>
-                            </span>
-                            <span class="price"></span>
-                        </header>
-                    </div>
-                `);
+            <div>
+                <header>
+                    <span class="quantity"></span>
+                    <span class="name">
+                        <span></span>
+                        <small></small>
+                    </span>
+                    <span class="price"></span>
+                </header>
+            </div>
+        `);
 
                 if (item.observation) {
                     const $observation = $(`<div class="observation">
-                        <span class="title">Observação:</span>
-                        <span class="text">Nenhum</span>
-                    </div>`);
+                <span class="title">Observação:</span>
+                <span class="text">Nenhum</span>
+            </div>`);
 
                     $observation.find(".text").text(item.observation);
 
@@ -757,14 +841,16 @@
 
                 const $main = $("<main>");
 
+                const total_flavors = item.pizza_flavors.reduce((accumulator, flavor) => accumulator + flavor.quantity, 0);
+
                 for (const flavor of pizza_flavors || []) {
                     const $optional = $(`<div>
-                        <span class="quantity"></span>
-                        <span class="name"></span>
-                        <span class="price"></span>
-                    </div>`);
+                <span class="quantity"></span>
+                <span class="name"></span>
+                <span class="price"></span>
+            </div>`);
 
-                    $optional.find(".quantity").text(`${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1}x`);
+                    $optional.find(".quantity").text(pizza_flavors.length > 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1}x`);
 
                     $optional.find(".name").text(`Sabor ${flavor.name}`);
                     $optional.find(".price").text(MoneyFormat(flavor.price));
@@ -775,10 +861,10 @@
                 for (const complement of complements || []) {
                     for (const complement_item of complement.items || []) {
                         const $optional = $(`<div>
-                            <span class="quantity"></span>
-                            <span class="name"></span>
-                            <span class="price"></span>
-                        </div>`);
+                    <span class="quantity"></span>
+                    <span class="name"></span>
+                    <span class="price"></span>
+                </div>`);
 
                         $optional.find(".quantity").text(`${(company.multiply_complements ? complement_item.quantity * item.quantity : complement_item.quantity) || 1}x`);
 
@@ -825,6 +911,12 @@
             $element.find(".bottom .observations").toggle(!!order.observation);
             $element.find(".bottom .observations>div").text(order.observation);
 
+            $element.find(".bottom .complement").toggle(!!order.complement);
+            $element.find(".bottom .complement>div").text(order.complement);
+
+            $element.find(".bottom .reference").toggle(!!order.reference);
+            $element.find(".bottom .reference>div").text(order.reference);
+
             let text_payment_method = "Dinheiro"
             if (order.payment_method == "credit") text_payment_method = "Cartão de crédito";
             if (order.payment_method == "debit") text_payment_method = "Débito";
@@ -847,7 +939,6 @@
             const status = order.status > -1 ? order.status : Math.abs(order.status + 1);
 
             if (status == 0) {
-                $element.find(">.infos .actions>span").text("Aceitar pedido?");
                 $element.find(">.infos .actions .accept>span").text("Aceitar");
                 $element.find(">.right>.infos .actions .refuse>span").text("Recusar");
 
@@ -857,9 +948,8 @@
                 $element.find(".history>.step.production .title").text("Aguardando produção");
                 $element.find(".history>.step.delivery .title").text("Aguardando entrega");
             } else if (status == 1) {
-                $element.find(">.infos .actions>span").text("Foi produzido?");
-                $element.find(">.infos .actions .accept>span").text("Sim");
-                $element.find(">.infos .actions .refuse>span").text("Cancelar pedido");
+                $element.find(">.infos .actions .accept>span").text("Foi produzido");
+                $element.find(">.infos .actions .refuse>span").text("Cancelar");
 
                 $element.find(".history>.step.accept").addClass("success");
                 $element.find(".history>.step.production").addClass("active");
@@ -870,9 +960,8 @@
 
                 $element.find(".history>.step.accept .date").text(DateTimeFormat(order.status_times.find(status => status.status == 1)?.createdAt));
             } else if (status == 2) {
-                $element.find(">.infos .actions>span").text(order.delivery_type == "withdrawal" ? "Foi retirado?" : "Saiu para a entrega?");
-                $element.find(">.infos .actions .accept>span").text("Sim");
-                $element.find(">.infos .actions .refuse>span").text("Cancelar pedido");
+                $element.find(">.infos .actions .accept>span").text(order.delivery_type == "withdrawal" ? "Foi retirado" : "Saiu para a entrega");
+                $element.find(">.infos .actions .refuse>span").text("Cancelar");
 
                 $element.find(".history>.step.accept").addClass("success");
                 $element.find(".history>.step.production").addClass("success");
@@ -885,9 +974,8 @@
                 $element.find(".history>.step.accept .date").text(DateTimeFormat(order.status_times.find(status => status.status == 1)?.createdAt));
                 $element.find(".history>.step.production .date").text(DateTimeFormat(order.status_times.find(status => status.status == 2)?.createdAt));
             } else if (status == 3) {
-                $element.find(">.infos .actions>span").text("Foi entregue?");
-                $element.find(">.infos .actions .accept>span").text("Sim");
-                $element.find(">.infos .actions .refuse>span").text("Cancelar pedido");
+                $element.find(">.infos .actions .accept>span").text("Foi entregue");
+                $element.find(">.infos .actions .refuse>span").text("Cancelar");
 
                 $element.find(".history>.step.accept").addClass("success");
                 $element.find(".history>.step.production").addClass("success");
@@ -920,19 +1008,37 @@
                 $element.find(".history>.step.active .date").text(DateTimeFormat(order.dt_refuse));
                 $element.find(".history>.step.active").removeClass("active").addClass("refused");
 
-                $element.find(">.infos .actions>span").text("Aceitar pedido?");
-                $element.find(">.infos .actions .accept>span").text("Aceitar");
+                $element.find(">.infos .actions .accept>span").text("Aceitar pedido");
                 $element.find(">.infos .actions .refuse").hide();
             }
 
             if (!actions) $element.find(">.infos .actions").hide();
         }
 
+
         function DateTimeFormat(date) {
             if (!date) return "";
 
             return new Date(date).toLocaleString();
         }
+
+        $("#img").attr("src", company.image.medium || `${api_url}/static/images/no-image.svg`);
+        $("#orders_count").text(orders.length);
+
+        const start_date = new Date(range_dates.start);
+        const end_date = new Date(range_dates.end);
+
+        $(".period .from>.date").text(`${start_date.getDate()} de ${start_date.toLocaleDateString("pt-BR", { month: "short" })}`);
+        $(".period .to>.date").text(`${end_date.getDate()} de ${end_date.toLocaleDateString("pt-BR", { month: "short" })}`);
+
+        for (const order of orders) {
+            const $element = $("<div>");
+            LoadOrderOnElement($element, order, false);
+            $("#list-orders").append($element);
+            $element.find(".info").append(`<span class="created_date">${new Date(order.createdAt).toLocaleString("pt-BR")}</span>`);
+        }
+
+        loadedChecker();
 
         document.currentScript.remove();
         document.getElementById("font_awesome").remove();

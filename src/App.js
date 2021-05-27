@@ -2,7 +2,6 @@ const CreateWindow = require("./CreateWindow");
 const RegisterShortcuts = require("./RegisterShortcuts");
 const IpcMain = require("./IpcMain");
 const AutoUpdater = require("./AutoUpdater");
-const { setTimeout } = require("globalthis/implementation");
 
 module.exports = function App() {
     const win = CreateWindow();

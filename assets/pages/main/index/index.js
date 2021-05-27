@@ -99,3 +99,7 @@ $(document).on("click", "#change_password", function () {
         });
     })
 });
+
+updater.on("update-downloaded", () => {
+    $(".header-actions .update-available").fadeIn(300);
+});

@@ -211,7 +211,7 @@ function AddProduct($section, product, $skeleton) {
 
     $product.find(".switch_enable").initSwitchEnable();
 
-    $product.find(".image").attr("src", !!product.images?.length ? product.images[0].small : `${api_url}/static/img/no-image.svg`);
+    $product.find(".image").attr("src", !!product.images?.length ? product.images[0].small : `${api_url}/static/images/no-image.svg`);
     $product.find(".name").text(product.name);
     $product.find(".labelled_input>input").val(Number(product.price).toFixed(2));
 

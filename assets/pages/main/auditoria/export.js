@@ -52,17 +52,17 @@ $(".audit-export-modal>div>main>div").click(async function () {
     const start_date = new Date(start[0], start[1] - 1, start[2]);
     const end_date = new Date(end[0], end[1] - 1, end[2]);
 
-    let out_dir;
     let file_type_text = "Indefinido";
+
+    const dialog_result = await dialog.showSaveDialog({ title: "Salvar exportação", filters: [{ name: file_type, extensions: [file_type] }] });
+    if (dialog_result.canceled || !dialog_result.filePath) return false;
 
     switch (file_type) {
         case "xls":
             file_type_text = "XLS (Excel)";
-            out_dir = await internalAsync.showSaveDialog({ title: "Salvar exportação", filter: ".xls Files (*.xls)|*.xls", default_ext: ".xls" });
             break;
         case "html":
             file_type_text = "HTML";
-            out_dir = await internalAsync.showSaveDialog({ title: "Salvar exportação", filter: ".html Files (*.html)|*.html", default_ext: ".html" });
             break;
     }
 
@@ -75,7 +75,6 @@ $(".audit-export-modal>div>main>div").click(async function () {
     const results = [];
 
     while (!metadata.max || results.length < metadata.max) {
-        console.log("loop");
         await FetchAPI(`/order`, {
             params: {
                 offset: results.length,
@@ -84,7 +83,6 @@ $(".audit-export-modal>div>main>div").click(async function () {
                 end_date: $(".filter-date.end>input").val(),
             }
         }).then(data => {
-            console.log("data", data);
             metadata.max = data.metadata.max;
 
             for (const order of data.results) results.push(order);
@@ -94,12 +92,12 @@ $(".audit-export-modal>div>main>div").click(async function () {
             Swal.fire("Opss...", "Ocorreu um erro ao tentar listar os pedidos!", "error");
             Swal.showValidationMessage(error);
         });
-        console.log("sleep");
+
         await Sleep(100);
     }
 
     $(".audit-export-modal>.success .file_output").show();
-    console.log("1111");
+
     switch (file_type) {
         case "xls":
             const orders_data = XLSX.utils.json_to_sheet(results.map(order => {
@@ -144,11 +142,11 @@ $(".audit-export-modal>div>main>div").click(async function () {
 
             const file_content = XLSX.write(workbook, { type: 'base64', bookType: "xls" });
 
-            await internalAsync.writeFile(out_dir, file_content);
+            await filesystem.writeFile(dialog_result.filePath, file_content);
 
             break;
         case "html":
-            await internalAsync.generateOrdersHTMLReport(out_dir, {
+            await offscreen.generateOrdersHTMLReport(dialog_result.filePath, {
                 orders: results,
                 company,
                 range_dates: {
@@ -163,6 +161,6 @@ $(".audit-export-modal>div>main>div").click(async function () {
     $(".audit-export-modal").addClass("success");
 
     $(".audit-export-modal>.success .file_output").on("click", function () {
-        window.open(out_dir, "_blank");
+        window.open(dialog_result.filePath, "_blank");
     });
 });
