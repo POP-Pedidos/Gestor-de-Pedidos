@@ -9,6 +9,15 @@ function MoneyFormat(money, is_currency = true, fractionDigits = 2) {
     return money_str;
 }
 
+function TranslatePaymentMethod(payment_method) {
+    return {
+        "money": "Dinheiro",
+        "credit": "Crédito",
+        "debit": "Débito",
+    }[payment_method];
+}
+
 module.exports = {
     MoneyFormat,
+    TranslatePaymentMethod,
 }

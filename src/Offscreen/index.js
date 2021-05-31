@@ -109,8 +109,43 @@ function generateOrdersHTMLReport(file_path, data) {
     });
 }
 
+function printControlCopy(printer, order, company) {
+    return new Promise(async (resolve, reject) => {
+        let win = GetWindow({
+            show: true,
+            javascript: false,
+            webPreferences: {
+                offscreen: false,
+                webSecurity: false,
+            },
+        });
+
+        let html = templates.Render("printing:control", { printer, order, company });
+
+        win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
+
+        // win.webContents.openDevTools({ mode: "detach" });
+
+        if (true) win.webContents.on("did-stop-loading", async () => {
+            win.webContents.print({
+                // deviceName: "",
+                printBackground: true,
+                color: false,
+                landscape: false,
+                pagesPerSheet: 1,
+                collate: false,
+                copies: 1,
+            }, (success, failureReason) => {
+                if (success) resolve();
+                else reject(failureReason);
+            });
+        });
+    });
+}
+
 module.exports = {
     GetWindow,
     generateProductThumbnail,
     generateOrdersHTMLReport,
+    printControlCopy,
 }

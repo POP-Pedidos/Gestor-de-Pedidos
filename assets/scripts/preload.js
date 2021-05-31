@@ -28,9 +28,9 @@ contextBridge.exposeInMainWorld("darkMode", {
 });
 
 contextBridge.exposeInMainWorld("printService", {
-    printControlCopy: (...args) => ipcRenderer.send("printService:printControlCopy", ...args),
-    printDeliveryCopy: (...args) => ipcRenderer.send("printService:printDeliveryCopy", ...args),
-    printProductionCopy: (...args) => ipcRenderer.send("printService:printProductionCopy", ...args),
+    printControlCopy: (...args) => ipcRenderer.invoke("printService:printControlCopy", ...args),
+    printDeliveryCopy: (...args) => ipcRenderer.invoke("printService:printDeliveryCopy", ...args),
+    printProductionCopy: (...args) => ipcRenderer.invoke("printService:printProductionCopy", ...args),
 });
 
 contextBridge.exposeInMainWorld("dialog", {

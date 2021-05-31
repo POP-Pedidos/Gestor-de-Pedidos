@@ -88,6 +88,18 @@ ipcMain.on("fs:writeFile", (event, ...args) => {
     }
 });
 
+ipcMain.handle("printService:printControlCopy", (event, printer, order, company) => {
+    return offscreen.printControlCopy(printer, order, company);
+});
+
+ipcMain.on("printService:printDeliveryCopy", (event, printer, order, company) => {
+    return offscreen.printDeliveryCopy(printer, order, company);
+});
+
+ipcMain.on("printService:printProductionCopy", (event, printer, order, company) => {
+    return offscreen.printProductionCopy(printer, order, company);
+});
+
 ipcMain.handle("offscreen:generateProductThumbnail", (event, data) => {
     return offscreen.generateProductThumbnail(data);
 });

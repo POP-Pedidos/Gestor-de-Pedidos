@@ -376,16 +376,34 @@ function LoadOrderOnElement($element, order, actions = true) {
 	const $order_infos = $(`<div class="infos">
 		<div class="info">
 			<div class="client_info">
-				<a class="indicator" target="_blank"></a>
-				<span class="client_name"></span>
-				<div class="address infos-icon">
-					<i class="fas fa-map-marker-alt"></i>
-					<a target="_blank"></a>
+				<div class="icon-key-value vertical order-identifier">
+					<div class="rounded-icon"><i class="fas fa-pizza-slice"></i></div>
+					<div class="infos">
+						<a class="value" target="_blank"></a>
+					</div>
 				</div>
-				<span class="delivery_type_warning"></span>
-				<div class="tell infos-icon">
-					<i class="fas fa-phone-alt"></i>
-					<span></span>
+				<div class="icon-key-value client-info">
+					<div class="rounded-icon"><i class="fas fa-user"></i></div>
+					<div class="infos">
+						<span class="name"></span>
+						<span class="phone"></span>
+					</div>
+				</div>
+				<div class="icon-key-value client-address">
+					<div class="rounded-icon"><i class="fas fa-motorcycle"></i></div>
+					<div class="infos">
+						<span class="title">Endereço</span>
+						<a class="address" target="_blank"></a>
+						<span class="complement"></span>
+						<span class="reference"></span>
+					</div>
+				</div>
+				<div class="icon-key-value delivery-type">
+					<div class="rounded-icon"><i class="fas fa-motorcycle"></i></div>
+					<div class="infos">
+						<span class="title">Tipo</span>
+						<span class="value">Retirada</span>
+					</div>
 				</div>
 			</div>
 			<div class="actions">
@@ -439,29 +457,33 @@ function LoadOrderOnElement($element, order, actions = true) {
 	</div>
 	<div class="bottom">
 		<div class="left">
-			<div class="payment-method">
-				<span><i class="far fa-credit-card"></i> Método de pagamento</span>
-				<div></div>
+			<div class="icon-key-value payment-method">
+				<div class="rounded-icon"><i class="far fa-credit-card"></i></div>
+				<div class="infos">
+					<span class="title">Pagamento</span>
+					<span class="value"></span>
+				</div>
 			</div>
-			<div class="cash-change">
-				<span><i class="fas fa-wallet"></i> Troco para</span>
-				<div></div>
+			<div class="icon-key-value cash-change">
+				<div class="rounded-icon"><i class="fas fa-dollar-sign"></i></div>
+				<div class="infos">
+					<span class="title">Troco para</span>
+					<span class="value"></span>
+				</div>
 			</div>
-			<div class="discount-coupon">
-				<span><i class="fas fa-tag"></i> Cupom de desconto</span>
-				<div></div>
+			<div class="icon-key-value discount-coupon">
+				<div class="rounded-icon"><i class="fas fa-tag"></i></div>
+				<div class="infos">
+					<span class="title">Cupom de desconto</span>
+					<span class="value"></span>
+				</div>
 			</div>
-			<div class="observations">
-				<span><i class="fas fa-info-circle"></i> Observações</span>
-				<div></div>
-			</div>
-			<div class="complement">
-				<span><i class="fas fa-info-circle"></i> Complemento do endereço</span>
-				<div></div>
-			</div>
-			<div class="reference">
-				<span><i class="fas fa-info-circle"></i> Referencia</span>
-				<div></div>
+			<div class="icon-key-value observations">
+				<div class="rounded-icon"><i class="fas fa-info-circle"></i></div>
+				<div class="infos">
+					<span class="title">Observações</span>
+					<span class="value"></span>
+				</div>
 			</div>
 		</div>
 		<div class="price">
@@ -584,27 +606,32 @@ function LoadOrderOnElement($element, order, actions = true) {
 
 	order.address = order.delivery_type !== "withdrawal" ? `${order.street_name}, ${order.street_number} - ${order.neighborhood}, ${order.city} - ${order.state}` : null;
 
-	$element.find(".indicator").text(`#${order.order_company_sequence}`)
+	$element.find(".order-identifier .value").text(`#${order.order_company_sequence}`)
 		.attr("href", `https://${company.subdomain}.${domain}/pedido/${order.secret_id_order}`);
-	$element.find(".client_name").text(order.name_client);
 
-	$element.find(".address>a").text(`${order.address} ${order.suplier || ""}`)
+	$element.find(".client-info .name").text(order.name_client);
+	$element.find(".client-info .phone").text(order.phone_client);
+
+	$element.find(".client-address").toggle(order.delivery_type !== "withdrawal");
+	$element.find(".client-address .address").text(`${order.address} ${order.suplier || ""}`)
 		.attr("href", `https://maps.google.com/maps?q=${order.address}&hl=pt-BR;z=14&amp;output=embed`);
-	$element.find(".address").toggle(order.delivery_type != "withdrawal");
 
-	$element.find(".delivery_type_warning").toggle(order.delivery_type !== "delivery");
+	$element.find(".client-address .complement").text(order.complement)
+	$element.find(".client-address .reference").text(order.reference)
 
-	if (order.delivery_type == "withdrawal") {
-		$element.find(".delivery_type_warning").html(`<i class="fas fa-map-marker-alt"></i> Retirada!`);
-	}
-
-	$element.find(".tell>span").text(order.phone_client);
+	$element.find(".delivery-type").toggle(order.delivery_type === "withdrawal");
 
 	const $list_items = $element.find(".list-items");
 
 	$list_items.empty();
 
 	$list_items.toggleClass("is_multiplication", company.multiply_complements);
+
+	$list_items.append(`<header class="list-title">
+		<span class="quantity">QNT</span>
+		<span class="name">Produto</span>
+		<span class="total">Total (R$)</span>
+	</header>`);
 
 	if (company.multiply_complements && (order.items.some(item => item.complements?.length > 0) || order.items.some(item => item.pizza_flavors?.length > 1))) {
 		$list_items.append(`<div class="multiplication-alert">
@@ -657,10 +684,12 @@ function LoadOrderOnElement($element, order, actions = true) {
                 <span class="price"></span>
             </div>`);
 
-			$optional.find(".quantity").text(pizza_flavors.length > 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1}x`);
+			$optional.find(".quantity").text(pizza_flavors.length > 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1} x`);
 
 			$optional.find(".name").text(`Sabor ${flavor.name}`);
-			$optional.find(".price").text(MoneyFormat(flavor.price));
+			$optional.find(".price")
+				.text(MoneyFormat(flavor.price * flavor.quantity, false))
+				.attr("title", `Valor unitário: ${MoneyFormat(flavor.price)}\nValor total: ${MoneyFormat(flavor.price * flavor.quantity)}`);
 
 			$main.append($optional);
 		}
@@ -673,16 +702,18 @@ function LoadOrderOnElement($element, order, actions = true) {
                     <span class="price"></span>
                 </div>`);
 
-				$optional.find(".quantity").text(`${(company.multiply_complements ? complement_item.quantity * item.quantity : complement_item.quantity) || 1}x`);
+				$optional.find(".quantity").text(`${complement.required === false ? "+ " : ""}${(company.multiply_complements ? complement_item.quantity * item.quantity : complement_item.quantity) || 1} x`);
 
-				$optional.find(".name").text(`${complement.name} ${complement_item.name}`);
-				$optional.find(".price").text(MoneyFormat(complement_item.price));
+				$optional.find(".name").text(complement_item.name);
+				$optional.find(".price")
+					.text(MoneyFormat(complement_item.price * complement_item.quantity, false))
+					.attr("title", `Valor unitário: ${MoneyFormat(complement_item.price)}\nValor total: ${MoneyFormat(complement_item.price * complement_item.quantity)}`);
 
 				$main.append($optional);
 			}
 		}
 
-		$product.find(".quantity").text(`${item.quantity || 1}x`);
+		$product.find(".quantity").text(`${item.quantity || 1} x`);
 
 		$product.find(".name>span").text(product.name);
 
@@ -693,11 +724,12 @@ function LoadOrderOnElement($element, order, actions = true) {
 			if (product.pizza_price_rule === "biggest_price") pizza_price_rule = "Sabor mais caro";
 
 			$product.find(".name>small").text(`(${pizza_price_rule})`);
-			$product.find(".price").text(product.price > 0 ? MoneyFormat(product.price) : "");
-		} else {
-			$product.find(".name>small").text("");
-			$product.find(".price").text(MoneyFormat(product.price));
 		}
+
+		$product.find(".name>small").text("");
+		$product.find(".price")
+			.text(MoneyFormat(item.price * item.quantity, false))
+			.attr("title", `Valor unitário: ${MoneyFormat(product.price)}\nValor total: ${MoneyFormat(item.price * item.quantity)}`);
 
 		$product.append($main);
 
@@ -716,25 +748,19 @@ function LoadOrderOnElement($element, order, actions = true) {
 	$element.find(".price .total").text(MoneyFormat(order.total));
 
 	$element.find(".bottom .observations").toggle(!!order.observation);
-	$element.find(".bottom .observations>div").text(order.observation);
-
-	$element.find(".bottom .complement").toggle(!!order.complement);
-	$element.find(".bottom .complement>div").text(order.complement);
-
-	$element.find(".bottom .reference").toggle(!!order.reference);
-	$element.find(".bottom .reference>div").text(order.reference);
+	$element.find(".bottom .observations .value").text(order.observation);
 
 	let text_payment_method = "Dinheiro"
 	if (order.payment_method == "credit") text_payment_method = "Cartão de crédito";
 	if (order.payment_method == "debit") text_payment_method = "Débito";
-	$element.find(".bottom .payment-method>div").text(text_payment_method);
+	$element.find(".bottom .payment-method .value").text(text_payment_method);
 
 	$element.find(".bottom .cash-change").toggle(!!order.cash_change);
-	$element.find(".bottom .cash-change>div").text(MoneyFormat(order.cash_change));
+	$element.find(".bottom .cash-change .value").text(MoneyFormat(order.cash_change));
 
 	$element.find(".bottom .discount-coupon").toggle(!!order.discount_coupon);
 	if (!!order.discount_coupon) {
-		$element.find(".bottom .discount-coupon>div").text(`${order.discount_coupon.coupon} (${order.discount_coupon.is_percentual ? `${order.discount_coupon.discount}%` : MoneyFormat(order.discount_coupon.discount)} OFF)`);
+		$element.find(".bottom .discount-coupon .value").text(`${order.discount_coupon.coupon} (${order.discount_coupon.is_percentual ? `${order.discount_coupon.discount}%` : MoneyFormat(order.discount_coupon.discount)} OFF)`);
 	}
 
 	$element.find(".history>.step").removeClass("active").removeClass("success").removeClass("refused");
