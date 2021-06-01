@@ -50,7 +50,7 @@ $(".neighborhood.frete>.table-header button").on("click", function (e) {
     if (!selected_place) return;
 
     const price = Number($(".neighborhood.frete>.table-header>.price").val());
-    if (!price || price < 0 || price > 1000) return;
+    if (isNaN(price) || price < 0 || price > 1000) return;
 
     $(this).addClass("loading");
 
@@ -299,7 +299,7 @@ $("#frete-search").on("blur_place", function () {
 $(".neighborhood.frete>.table-header>.price").keyup(function () {
     const price = Number($(".neighborhood.frete>.table-header>.price").val());
 
-    $(".neighborhood.frete>.table-header").toggleClass("none_selected", !price || !$("#frete-search").data("place"));
+    $(".neighborhood.frete>.table-header").toggleClass("none_selected", price < 0 || !$("#frete-search").data("place"));
 });
 
 $("#blacklist-search").on("blur_place", function () {
@@ -307,14 +307,12 @@ $("#blacklist-search").on("blur_place", function () {
 });
 
 $("#frete-search").on("place", function (e, place) {
-    console.log("place", place);
     const price = Number($(".neighborhood.frete>.table-header>.price").val());
 
-    $(".neighborhood.frete>.table-header").toggleClass("none_selected", !price);
+    $(".neighborhood.frete>.table-header").toggleClass("none_selected", price < 0);
 });
 
 $("#blacklist-search").on("place", function (e, place) {
-    console.log("place", place);
     $(".neighborhood.blacklist>.table-header").removeClass("none_selected");
 });
 
