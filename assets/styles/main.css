@@ -10067,17 +10067,6 @@ table .badge {
   padding: 10px 15px 10px;
 }
 
-.icon-key-value.vertical {
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.icon-key-value.vertical>.infos {
-  margin-left: 0;
-  margin-top: 8px;
-}
-
 .icon-key-value>.rounded-icon {
   width: 30px;
   height: 30px;

@@ -73,6 +73,11 @@
             font-size: var(--font-size1);
         }
 
+        header>.subtitle {
+            text-transform: uppercase;
+            font-size: var(--font-size5);
+        }
+
         header>.type {
             font-size: var(--font-size3);
             margin-bottom: 2px;
@@ -195,14 +200,15 @@
             margin: 15px 5px 5px 5px;
         }
     </style>
-    <title>Via de controle (<%= order.order_company_sequence %>)</title>
+    <title>Via de entrega (<%= order.order_company_sequence %>)</title>
 </head>
 
 <body>
 
     <header>
         <span class="title">Renato</span>
-        <span class="type">Via de Controle</span>
+        <span class="subtitle"><%= company["cpf-cnpj"] %> — <%= company.phone %></span>
+        <span class="type">Via de Entrega</span>
         <span class="others">NÃO É DOCUMENTO FISCAL</span>
         <span class="order">Pedido: <span><%= order.order_company_sequence %></span></span>
     </header>

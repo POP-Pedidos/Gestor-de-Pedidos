@@ -376,9 +376,10 @@ function LoadOrderOnElement($element, order, actions = true) {
 	const $order_infos = $(`<div class="infos">
 		<div class="info">
 			<div class="client_info">
-				<div class="icon-key-value vertical order-identifier">
+				<div class="icon-key-value order-identifier">
 					<div class="rounded-icon"><i class="fas fa-pizza-slice"></i></div>
 					<div class="infos">
+						<span class="title">Pedido</span>
 						<a class="value" target="_blank"></a>
 					</div>
 				</div>

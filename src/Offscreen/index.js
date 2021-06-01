@@ -112,23 +112,94 @@ function generateOrdersHTMLReport(file_path, data) {
 function printControlCopy(printer, order, company) {
     return new Promise(async (resolve, reject) => {
         let win = GetWindow({
-            show: true,
+            show: process.env.NODE_ENV === "development",
             javascript: false,
             webPreferences: {
-                offscreen: false,
+                offscreen: process.env.NODE_ENV !== "development",
                 webSecurity: false,
             },
+            width: (printer?.size || 58) * 5,
         });
 
         let html = templates.Render("printing:control", { printer, order, company });
 
         win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
 
-        // win.webContents.openDevTools({ mode: "detach" });
+        if (true) win.webContents.on("did-stop-loading", async () => {
+            const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.name);
+
+            win.webContents.print({
+                deviceName: printerDevice ? printer?.name : undefined,
+                printBackground: true,
+                color: false,
+                landscape: false,
+                pagesPerSheet: 1,
+                collate: false,
+                copies: 1,
+            }, (success, failureReason) => {
+                if (success) resolve();
+                else reject(failureReason);
+            });
+        });
+    });
+}
+
+function printDeliveryCopy(printer, order, company) {
+    return new Promise(async (resolve, reject) => {
+        let win = GetWindow({
+            show: process.env.NODE_ENV === "development",
+            javascript: false,
+            webPreferences: {
+                offscreen: process.env.NODE_ENV !== "development",
+                webSecurity: false,
+            },
+            width: (printer?.size || 58) * 5,
+        });
+
+        let html = templates.Render("printing:delivery", { printer, order, company });
+
+        win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
 
         if (true) win.webContents.on("did-stop-loading", async () => {
+            const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.name);
+
             win.webContents.print({
-                // deviceName: "",
+                deviceName: printerDevice ? printer?.name : undefined,
+                printBackground: true,
+                color: false,
+                landscape: false,
+                pagesPerSheet: 1,
+                collate: false,
+                copies: 1,
+            }, (success, failureReason) => {
+                if (success) resolve();
+                else reject(failureReason);
+            });
+        });
+    });
+}
+
+function printProductionCopy(printer, order, company) {
+    return new Promise(async (resolve, reject) => {
+        let win = GetWindow({
+            show: process.env.NODE_ENV === "development",
+            javascript: false,
+            webPreferences: {
+                offscreen: process.env.NODE_ENV !== "development",
+                webSecurity: false,
+            },
+            width: (printer?.size || 58) * 5,
+        });
+
+        let html = templates.Render("printing:production", { printer, order, company });
+
+        win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
+
+        if (true) win.webContents.on("did-stop-loading", async () => {
+            const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.name);
+
+            win.webContents.print({
+                deviceName: printerDevice ? printer?.name : undefined,
                 printBackground: true,
                 color: false,
                 landscape: false,
@@ -148,4 +219,6 @@ module.exports = {
     generateProductThumbnail,
     generateOrdersHTMLReport,
     printControlCopy,
+    printDeliveryCopy,
+    printProductionCopy,
 }

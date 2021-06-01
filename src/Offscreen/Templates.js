@@ -8,6 +8,8 @@ const templates = {
     "company": "assets/templates/thumbnails/company.ejs",
     "orders": "assets/templates/orders.ejs",
     "printing:control": "assets/templates/printing/control.ejs",
+    "printing:delivery": "assets/templates/printing/delivery.ejs",
+    "printing:production": "assets/templates/printing/production.ejs",
 }
 
 const templates_html_cache = {};

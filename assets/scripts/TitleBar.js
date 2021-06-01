@@ -58,7 +58,7 @@ $(`<style type="text/css">
         left: 0;
         right: 0;
         height: 30px;
-        padding: 0 2px 1px 7px;
+        padding: 0 0 1px 7px;
         border-bottom: none;
         user-select: none;
         -webkit-app-region: drag;
