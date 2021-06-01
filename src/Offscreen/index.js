@@ -125,11 +125,12 @@ function printControlCopy(printer, order, company) {
 
         win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
 
-        if (true) win.webContents.on("did-stop-loading", async () => {
-            const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.name);
+        win.webContents.on("did-stop-loading", async () => {
+            const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.device);
 
             win.webContents.print({
-                deviceName: printerDevice ? printer?.name : undefined,
+                deviceName: printerDevice ? printer?.device : undefined,
+                silent: !!printerDevice,
                 printBackground: true,
                 color: false,
                 landscape: false,
@@ -160,11 +161,12 @@ function printDeliveryCopy(printer, order, company) {
 
         win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
 
-        if (true) win.webContents.on("did-stop-loading", async () => {
-            const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.name);
+        win.webContents.on("did-stop-loading", async () => {
+            const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.device);
 
             win.webContents.print({
-                deviceName: printerDevice ? printer?.name : undefined,
+                deviceName: printerDevice ? printer?.device : undefined,
+                silent: !!printerDevice,
                 printBackground: true,
                 color: false,
                 landscape: false,
@@ -195,11 +197,13 @@ function printProductionCopy(printer, order, company) {
 
         win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
 
-        if (true) win.webContents.on("did-stop-loading", async () => {
-            const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.name);
 
+        
+        win.webContents.on("did-stop-loading", async () => {
+            const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.device);
             win.webContents.print({
-                deviceName: printerDevice ? printer?.name : undefined,
+                deviceName: printerDevice ? printer?.device : undefined,
+                silent: !!printerDevice,
                 printBackground: true,
                 color: false,
                 landscape: false,
