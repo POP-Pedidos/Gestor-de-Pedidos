@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.setAppUserModelId("poppedidos.com.br");
-app.userAgentFallback = app.userAgentFallback.replace(/(Electron).+? /g, "");
+app.userAgentFallback = app.userAgentFallback.replace(/(POP|Electron).+? /g, "");
 
 app.whenReady().then(App);
 

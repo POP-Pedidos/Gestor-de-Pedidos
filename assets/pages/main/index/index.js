@@ -102,6 +102,7 @@ $(document).on("click", "#change_password", function () {
 
 updater.on("update-downloaded", () => {
     $(".header-actions .update-available").fadeIn(300);
+    console.log("Update downloaded!");
 });
 
 updater.on("checking-for-update", () => {
