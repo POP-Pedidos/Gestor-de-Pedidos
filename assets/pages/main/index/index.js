@@ -103,3 +103,23 @@ $(document).on("click", "#change_password", function () {
 updater.on("update-downloaded", () => {
     $(".header-actions .update-available").fadeIn(300);
 });
+
+updater.on("checking-for-update", () => {
+    console.log("Checking for update!");
+});
+
+updater.on("update-not-available", () => {
+    console.log("Update not available!");
+});
+
+updater.on("error", (e, error) => {
+    console.error("Update error:", error);
+});
+
+updater.on("download-progress", (e, progressObj) => {
+    console.log("Update download progress:", progressObj);
+});
+
+updater.on("update-downloaded", () => {
+    console.log("Update downloaded!");
+});

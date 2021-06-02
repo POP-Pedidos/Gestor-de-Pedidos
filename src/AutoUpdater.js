@@ -36,7 +36,7 @@ module.exports = (win) => {
     });
 
     autoUpdater.on("download-progress", (progressObj) => {
-        win.webContents.send("updater:checking-for-update", progressObj);
+        win.webContents.send("updater:download-progress", progressObj);
     });
 
     autoUpdater.on("update-downloaded", (event, info) => {
