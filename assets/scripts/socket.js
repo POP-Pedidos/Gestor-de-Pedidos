@@ -1,8 +1,8 @@
 const socket = io(api_url, {
     path: "/socket/company",
     query: {
-        hostname: window.hostname,
-        token: sessionStorage.token || localStorage.token,
+        Hostname: window.hostname,
+        Authorization: `Bearer ${sessionStorage.token || localStorage.token}`
     },
     transports: ['websocket', 'polling', 'flashsocket'],
 });

@@ -40,7 +40,7 @@ const FetchAPI = (uri, config = {}) => {
         config.raw_error = !!config.raw_error ? String(config.raw_error) == "true" : false;
 
         config.headers = Object.assign({
-            "Token": sessionStorage.token || localStorage.token,
+            "Authorization": `Bearer ${sessionStorage.token || localStorage.token}`,
             "Accept": "application/json",
             "Content-Type": "application/json"
         }, config.headers);
