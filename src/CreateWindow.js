@@ -12,7 +12,7 @@ module.exports = function CreateWindow() {
 
     const store = new Store("window", { width, height });
     const theme_store = new Store("dark-mode", { themeSource: "system" });
-
+    
     const win = new BrowserWindow({
         title: "POP Pedidos",
         icon,
@@ -25,12 +25,12 @@ module.exports = function CreateWindow() {
         show: false,
         webPreferences: {
             preload: path.join(__dirname, "../assets/scripts/preload.js"),
-            nodeIntegration: false,
-            contextIsolation: true,
+            nodeIntegration: true,
+            contextIsolation: false,
             enableRemoteModule: false,
             webviewTag: true,
             nativeWindowOpen: true,
-        }
+        },
     });
 
     win.removeMenu();

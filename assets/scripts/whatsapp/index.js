@@ -1,7 +1,8 @@
 const $whatsappWebView = $("#whatsappWebView");
 const message_times = [];
 
-$whatsappWebView.attr("useragent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36");
+$whatsappWebView.attr("partition", "persist:whatsapp");
+$whatsappWebView.attr("webpreferences", "javascript=yes");
 $whatsappWebView.attr("preload", "../../../scripts/whatsapp/preload.js");
 $whatsappWebView.attr("src", "https://web.whatsapp.com/");
 
@@ -10,7 +11,6 @@ whatsappWebView.addEventListener("dom-ready", function (event) {
         whatsappWebView.executeJavaScript(WaitAuth);
     });
 });
-
 whatsappWebView.addEventListener('ipc-message', (event) => {
     console.log("[WHATSAPP-IPC-MESSAGE]", event);
 

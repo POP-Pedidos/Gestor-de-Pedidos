@@ -1,15 +1,15 @@
-const { contextBridge, ipcRenderer } = require("electron");
+let { ipcRenderer } = require("electron");
 
-contextBridge.exposeInMainWorld("api_url", ipcRenderer.sendSync("api_url"));
-contextBridge.exposeInMainWorld("places_url", ipcRenderer.sendSync("places_url"));
-contextBridge.exposeInMainWorld("domain", ipcRenderer.sendSync("domain"));
-contextBridge.exposeInMainWorld("hostname", ipcRenderer.sendSync("hostname"));
-contextBridge.exposeInMainWorld("icon", ipcRenderer.sendSync("icon"));
-contextBridge.exposeInMainWorld("app_name", ipcRenderer.sendSync("app_name"));
+window.api_url = ipcRenderer.sendSync("api_url");
+window.places_url = ipcRenderer.sendSync("places_url");
+window.domain = ipcRenderer.sendSync("domain");
+window.hostname = ipcRenderer.sendSync("hostname");
+window.icon = ipcRenderer.sendSync("icon");
+window.app_name = ipcRenderer.sendSync("app_name");
 
-contextBridge.exposeInMainWorld("GetPrintersList", () => ipcRenderer.sendSync("printers"));
+window.GetPrintersList = () => ipcRenderer.sendSync("printers");
 
-contextBridge.exposeInMainWorld("controls", {
+window.controls = {
     onMaximize: (callback) => ipcRenderer.on("maximize", callback),
     onUnMaximize: (callback) => ipcRenderer.on("unmaximize", callback),
     onTitleChanged: (callback) => ipcRenderer.on("page-title-updated", callback),
@@ -18,36 +18,36 @@ contextBridge.exposeInMainWorld("controls", {
     maximize: () => ipcRenderer.send("controls:maximize"),
     restore: () => ipcRenderer.send("controls:restore"),
     close: () => ipcRenderer.send("controls:close"),
-});
+}
 
-contextBridge.exposeInMainWorld("darkMode", {
+window.darkMode = {
     toggle: () => ipcRenderer.sendSync("dark-mode:toggle"),
     system: () => ipcRenderer.sendSync("dark-mode:system"),
     theme: () => ipcRenderer.sendSync("dark-mode:themeSource"),
     isEnabled: () => ipcRenderer.sendSync("dark-mode:enabled"),
-});
+}
 
-contextBridge.exposeInMainWorld("printService", {
+window.printService = {
     printControlCopy: (...args) => ipcRenderer.invoke("printService:printControlCopy", ...args),
     printDeliveryCopy: (...args) => ipcRenderer.invoke("printService:printDeliveryCopy", ...args),
     printProductionCopy: (...args) => ipcRenderer.invoke("printService:printProductionCopy", ...args),
-});
+}
 
-contextBridge.exposeInMainWorld("dialog", {
+window.dialog = {
     showSaveDialog: (...args) => ipcRenderer.invoke("dialog:showSaveDialog", ...args),
-});
+}
 
-contextBridge.exposeInMainWorld("updater", {
+window.updater = {
     on: (event_name, ...args) => ipcRenderer.on(`updater:${event_name}`, ...args),
     installUpdate: (...args) => ipcRenderer.send("updater:install", ...args),
-});
+}
 
-contextBridge.exposeInMainWorld("filesystem", {
+window.filesystem = {
     writeFile: (...args) => ipcRenderer.sendSync("fs:writeFile", ...args),
-});
+}
 
-contextBridge.exposeInMainWorld("offscreen", {
+window.offscreen = {
     generateProductThumbnail: (product) => ipcRenderer.invoke("offscreen:generateProductThumbnail", product),
     generateCompanyThumbnail: (company) => ipcRenderer.invoke("offscreen:generateCompanyThumbnail", company),
     generateOrdersHTMLReport: (file_path, data) => ipcRenderer.invoke("offscreen:generateOrdersHTMLReport", file_path, data),
-});
+}
