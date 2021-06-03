@@ -39,6 +39,7 @@ window.dialog = {
 
 window.updater = {
     on: (event_name, ...args) => ipcRenderer.on(`updater:${event_name}`, ...args),
+    initialize: () => ipcRenderer.send("updater:initialize"),
     installUpdate: (...args) => ipcRenderer.send("updater:install", ...args),
 }
 

@@ -2,6 +2,8 @@ const os = require("os");
 const fs = require("fs");
 const { app, ipcMain, BrowserWindow, nativeTheme, dialog } = require("electron");
 const { autoUpdater } = require("electron-updater");
+const AutoUpdater = require("./AutoUpdater");
+
 const { domain, api_url, places_url, icon } = require("../config");
 const offscreen = require("./Offscreen");
 const Store = require("./Store");
@@ -66,11 +68,17 @@ ipcMain.on("controls:restore", (event) => {
     win.restore();
 });
 
+ipcMain.on("updater:initialize", (event) => {
+    const win = BrowserWindow.getFocusedWindow();
+
+    AutoUpdater(win)
+});
+
 ipcMain.on("controls:close", (event) => {
     const win = BrowserWindow.getFocusedWindow();
 
     win.hide();
-    app.exit(0);
+    win.close();
 });
 
 ipcMain.handle("dialog:showSaveDialog", (event, ...args) => {

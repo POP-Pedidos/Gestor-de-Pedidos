@@ -1,6 +1,6 @@
-const { app } = require('electron');
-const path = require('path');
-const fs = require('fs');
+const { app } = require("electron");
+const path = require("path");
+const fs = require("fs");
 
 class Store {
     constructor(name, defaults = {}) {

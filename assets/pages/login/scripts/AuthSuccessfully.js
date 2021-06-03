@@ -11,7 +11,7 @@ export default function AuthSuccessfully(user) {
 
         Store.set("user", user);
         Store.set("company", company);
-        
+
         window.user = user;
         window.company = company;
 
@@ -23,5 +23,7 @@ export default function AuthSuccessfully(user) {
 
         $("form").removeClass("disabled");
         $("form button").removeClass("loading");
-    });
+    }).finally(() => {
+        updater.initialize();
+    })
 }

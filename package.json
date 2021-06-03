@@ -9,7 +9,7 @@
   "license": "ISC",
   "description": "",
   "scripts": {
-    "start": "set NODE_ENV=development&&electron .",
+    "start": "set NODE_ENV=development&&electron . --enable-logging",
     "build": "electron-builder build --win --publish never",
     "publish": "electron-builder build --win --publish always"
   },

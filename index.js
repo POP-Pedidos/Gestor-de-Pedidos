@@ -1,5 +1,8 @@
 const { app, BrowserWindow } = require("electron");
-const App = require("./src/App");
+const CreateWindow = require("./src/CreateWindow");
+const IpcMain = require("./src/IpcMain");
+
+let win = null;
 
 if (process.env.NODE_ENV === "development") {
     require('electron-reload')(__dirname, {
@@ -11,10 +14,21 @@ if (process.env.NODE_ENV === "development") {
 app.setAppUserModelId("poppedidos.com.br");
 app.userAgentFallback = app.userAgentFallback.replace(/(POP|Electron).+? /g, "");
 
-app.whenReady().then(App);
+if (!app.requestSingleInstanceLock()) return app.quit();
+
+app.on("second-instance", (event, commandLine, workingDirectory) => {
+    if (!win) return;
+
+    if (win.isMinimized()) win.restore();
+    win.focus();
+})
+
+app.whenReady().then(() => {
+    win = CreateWindow();
+});
 
 app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) App();
+    if (BrowserWindow.getAllWindows().length === 0) win = CreateWindow();
 })
 
 app.on('window-all-closed', () => {

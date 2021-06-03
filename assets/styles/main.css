@@ -12668,7 +12668,7 @@ td>.switch_enable {
   transform: scale(1.1);
 }
 
-#website_config iframe {
+#website_config webview {
   flex: 1;
   border: none;
   transform: scale(0.7);
