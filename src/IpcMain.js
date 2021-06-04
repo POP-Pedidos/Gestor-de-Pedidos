@@ -2,6 +2,7 @@ const os = require("os");
 const fs = require("fs");
 const { app, ipcMain, BrowserWindow, nativeTheme, dialog } = require("electron");
 const { autoUpdater } = require("electron-updater");
+
 const AutoUpdater = require("./AutoUpdater");
 
 const { domain, api_url, places_url, icon } = require("../config");
@@ -17,9 +18,7 @@ ipcMain.on("icon", (event) => event.returnValue = icon);
 ipcMain.on("app_name", (event) => event.returnValue = app.getName());
 
 ipcMain.on("printers", (event) => {
-    const win = BrowserWindow.getFocusedWindow();
-
-    event.returnValue = win.webContents.getPrinters()?.map(printer => printer.name || printer.displayName);
+    event.returnValue = win?.webContents.getPrinters()?.map(printer => printer.name || printer.displayName);
 });
 
 ipcMain.on("dark-mode:themeSource", (event) => event.returnValue = nativeTheme.themeSource);
@@ -38,12 +37,11 @@ ipcMain.on("dark-mode:system", (event) => {
 });
 
 ipcMain.on("controls:state", (event) => {
-    const win = BrowserWindow.getFocusedWindow();
     if (!win) return event.returnValue = null;
 
-    if (win.isMaximized()) event.returnValue = "maximized";
-    else if (win.isMinimized()) event.returnValue = "minimized";
-    else if (win.isNormal()) event.returnValue = "normal";
+    if (win?.isMaximized()) event.returnValue = "maximized";
+    else if (win?.isMinimized()) event.returnValue = "minimized";
+    else if (win?.isNormal()) event.returnValue = "normal";
 });
 
 ipcMain.on("updater:install", (event) => {
@@ -51,39 +49,27 @@ ipcMain.on("updater:install", (event) => {
 });
 
 ipcMain.on("controls:minimize", (event) => {
-    const win = BrowserWindow.getFocusedWindow();
-
-    win.minimize();
+    win?.minimize();
 });
 
 ipcMain.on("controls:maximize", (event) => {
-    const win = BrowserWindow.getFocusedWindow();
-
-    win.maximize();
+    win?.maximize();
 });
 
 ipcMain.on("controls:restore", (event) => {
-    const win = BrowserWindow.getFocusedWindow();
-
-    win.restore();
+    win?.restore();
 });
 
 ipcMain.on("updater:initialize", (event) => {
-    const win = BrowserWindow.getFocusedWindow();
-
     AutoUpdater(win)
 });
 
 ipcMain.on("controls:close", (event) => {
-    const win = BrowserWindow.getFocusedWindow();
-
-    win.hide();
-    win.close();
+    win?.hide();
+    win?.close();
 });
 
 ipcMain.handle("dialog:showSaveDialog", (event, ...args) => {
-    const win = BrowserWindow.getFocusedWindow();
-
     return dialog.showSaveDialog(win, ...args);
 });
 
@@ -119,5 +105,3 @@ ipcMain.handle("offscreen:generateCompanyThumbnail", (event, company) => {
 ipcMain.handle("offscreen:generateOrdersHTMLReport", (event, file_path, data) => {
     return offscreen.generateOrdersHTMLReport(file_path, data);
 });
-
-module.exports = ipcMain;

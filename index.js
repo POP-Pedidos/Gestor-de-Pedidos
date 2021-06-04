@@ -1,8 +1,9 @@
 const { app, BrowserWindow } = require("electron");
 const CreateWindow = require("./src/CreateWindow");
-const IpcMain = require("./src/IpcMain");
 
-let win = null;
+global.win = null;
+
+require("./src/IpcMain");
 
 if (process.env.NODE_ENV === "development") {
     require('electron-reload')(__dirname, {
