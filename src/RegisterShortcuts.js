@@ -6,6 +6,6 @@ module.exports = function CreateShortcuts(win) {
     });
 
     globalShortcut.register("Alt+CommandOrControl+Shift+I", () => {
-        win.webContents.executeJavaScript(`if(whatsappWebView in window) whatsappWebView.isDevToolsOpened() ? whatsappWebView.closeDevTools() : whatsappWebView.openDevTools();`);
+        win.webContents.executeJavaScript(`if(window.whatsappWebView) whatsappWebView.isDevToolsOpened() ? whatsappWebView.closeDevTools() : whatsappWebView.openDevTools();`);
     });
 }

@@ -632,9 +632,9 @@ function LoadOrderOnElement($element, order, actions = true) {
 	$list_items.toggleClass("is_multiplication", company.multiply_complements);
 
 	$list_items.append(`<header class="list-title">
-		<span class="quantity">QNT</span>
+		<span class="quantity">Qtde</span>
 		<span class="name">Produto</span>
-		<span class="total">Total (R$)</span>
+		<span class="total">Subtotal (R$)</span>
 	</header>`);
 
 	if (company.multiply_complements && (order.items.some(item => item.complements?.length > 0) || order.items.some(item => item.pizza_flavors?.length > 1))) {
@@ -691,9 +691,13 @@ function LoadOrderOnElement($element, order, actions = true) {
 			$optional.find(".quantity").text(pizza_flavors.length > 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1} x`);
 
 			$optional.find(".name").text(`Sabor ${flavor.name}`);
-			$optional.find(".price")
-				.text(MoneyFormat(flavor.price / total_flavors * flavor.quantity, false))
-				.attr("title", `Valor unitário: ${MoneyFormat(flavor.price)}\nValor total: ${MoneyFormat(flavor.price * flavor.quantity)}`);
+			$optional.find(".price").attr("title", `Valor unitário: ${MoneyFormat(flavor.price)}\nValor total: ${MoneyFormat(flavor.price * flavor.quantity)}`);
+
+			if (product.pizza_price_rule === "biggest_price") {
+				$optional.find(".price").text(MoneyFormat(flavor.price / total_flavors * flavor.quantity, false))
+			} else {
+				$optional.find(".price").text(MoneyFormat(flavor.price / total_flavors, false))
+			}
 
 			$main.append($optional);
 		}

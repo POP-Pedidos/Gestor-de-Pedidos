@@ -77,17 +77,21 @@ function SendOrderStatusMessage(order) {
     function AppendItems() {
         for (const item of order.items) {
             if (item.product.is_pizza) {
-                message += `\n● *${item.quantity}x* ${item.product.name} ${item.total > 0 ? `_(${MoneyFormat(item.total)})_` : ""}`;
+                message += `\n● *${item.quantity}x* ${item.product.name} ${item.total > 0 ? `_(${MoneyFormat(item.total * item.quantity)})_` : ""}`;
             } else {
-                message += `\n● *${item.quantity}x* ${item.product.name} _(${MoneyFormat(item.total)})_`;
+                message += `\n● *${item.quantity}x* ${item.product.name} _(${MoneyFormat(item.total * item.quantity)})_`;
             }
 
             if (!!item.pizza_flavors.length) {
                 message += `\n↳ Sabores:`;
                 const total_flavors = item.pizza_flavors.reduce((accumulator, flavor) => accumulator + flavor.quantity, 0);
 
-                for (const pizza of item.pizza_flavors) {
-                    message += `\n    ↳ *${pizza.quantity}/${total_flavors}* ${pizza.name}`;
+                for (const flavor of item.pizza_flavors) {
+                    if (item.product.pizza_price_rule === "biggest_price") {
+                        message += `\n    ↳ *${flavor.quantity}/${total_flavors}* ${flavor.name} _(${MoneyFormat(flavor.price / total_flavors * flavor.quantity)})_`;
+                    } else {
+                        message += `\n    ↳ *${flavor.quantity}/${total_flavors}* ${flavor.name} _(${MoneyFormat(flavor.price / total_flavors)})_`;
+                    }
                 }
             }
 
@@ -168,5 +172,7 @@ function SendOrderStatusMessage(order) {
     }
 
     message_times[order.phone_client] = Date.now();
-    whatsappWebView.send("sendMessage", order.phone_client, message);
+    
+    const phone_id = `55${order.phone_client?.replace(/\W/g, "")}`;
+    whatsappWebView.send("sendMessage", phone_id, message);
 }
