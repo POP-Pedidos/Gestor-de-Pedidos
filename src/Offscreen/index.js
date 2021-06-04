@@ -93,6 +93,12 @@ function generateOrdersHTMLReport(file_path, data) {
         let win = GetWindow({ javascript: true, width: 1, height: 1 });
         let html = templates.Render("orders", { ...data });
 
+        if (!html) {
+            win.close();
+            delete win;
+            return reject("cannot render template");
+        }
+
         win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
 
         win.webContents.on("did-stop-loading", async () => {
@@ -128,6 +134,12 @@ function printControlCopy(printer, order, company) {
         });
 
         let html = templates.Render("printing:control", { printer, order, company });
+
+        if (!html) {
+            win.close();
+            delete win;
+            return reject("cannot render template");
+        }
 
         win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
 
@@ -165,6 +177,12 @@ function printDeliveryCopy(printer, order, company) {
 
         let html = templates.Render("printing:delivery", { printer, order, company });
 
+        if (!html) {
+            win.close();
+            delete win;
+            return reject("cannot render template");
+        }
+
         win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
 
         win.webContents.on("did-stop-loading", async () => {
@@ -201,9 +219,13 @@ function printProductionCopy(printer, order, company) {
 
         let html = templates.Render("printing:production", { printer, order, company });
 
+        if (!html) {
+            win.close();
+            delete win;
+            return reject("cannot render template");
+        }
+        
         win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
-
-
 
         win.webContents.on("did-stop-loading", async () => {
             const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.device);
