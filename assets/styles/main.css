@@ -945,6 +945,14 @@ body.dark-mode .icon-key-value {
   background: rgba(148, 148, 148, 0.1);
 }
 
+body.dark-mode a {
+  color: #b9f151;
+}
+
+body.dark-mode .order-infos .list-items>.list-title {
+  color: #b9f151 !important;
+}
+
 @media (max-width: 768px) {
   .header .toggle-btns #pin-sidebar {
     display: none;
@@ -1448,7 +1456,7 @@ ul.header-tasks:last-child {
   padding: 0.5rem 1rem;
   display: flex;
   align-items: center;
-  color: #333;
+  color: #333 !important;
   font-size: 0.8rem;
   cursor: pointer;
   user-select: none;
@@ -12514,7 +12522,7 @@ td>.switch_enable {
   margin-right: 4px;
   border-bottom: 1px solid rgba(162, 162, 162, 0.2);
   padding-bottom: 10px;
-  color: #b9f151;
+  color: #0cb50c;
 }
 
 .order-infos .list-items>.list-title>.name {
@@ -12567,6 +12575,7 @@ td>.switch_enable {
 .order-infos .list-items>div>main>div>.price {
   min-width: 40px;
   margin-left: 10px;
+  text-align: right;
 }
 
 .order-infos .list-items>div>header>.name,

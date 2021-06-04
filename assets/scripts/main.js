@@ -362,8 +362,11 @@ jQuery(function ($) {
 
 		const has_pendent_accept = !!orders?.find(order => order.status === 0);
 
-		if (has_pendent_accept && alert_audio.paused) alert_audio.play();
-		else if (!has_pendent_accept && !alert_audio.paused) {
+		if (has_pendent_accept && alert_audio.paused) {
+			taskbar.flashFrame(true);
+			alert_audio.play();
+		} else if (!has_pendent_accept && !alert_audio.paused) {
+			taskbar.flashFrame(false);
 			alert_audio.pause();
 			alert_audio.currentTime = 0;
 		}
@@ -689,7 +692,7 @@ function LoadOrderOnElement($element, order, actions = true) {
 
 			$optional.find(".name").text(`Sabor ${flavor.name}`);
 			$optional.find(".price")
-				.text(MoneyFormat(flavor.price * flavor.quantity, false))
+				.text(MoneyFormat(flavor.price / total_flavors * flavor.quantity, false))
 				.attr("title", `Valor unitário: ${MoneyFormat(flavor.price)}\nValor total: ${MoneyFormat(flavor.price * flavor.quantity)}`);
 
 			$main.append($optional);
@@ -707,8 +710,8 @@ function LoadOrderOnElement($element, order, actions = true) {
 
 				$optional.find(".name").text(complement_item.name);
 				$optional.find(".price")
-					.text(MoneyFormat(complement_item.price * complement_item.quantity, false))
-					.attr("title", `Valor unitário: ${MoneyFormat(complement_item.price)}\nValor total: ${MoneyFormat(complement_item.price * complement_item.quantity)}`);
+					.text(MoneyFormat(complement_item.price * complement_item.quantity * item.quantity, false))
+					.attr("title", `Valor unitário: ${MoneyFormat(complement_item.price)}\nValor total: ${MoneyFormat(complement_item.price * complement_item.quantity * item.quantity)}`);
 
 				$main.append($optional);
 			}

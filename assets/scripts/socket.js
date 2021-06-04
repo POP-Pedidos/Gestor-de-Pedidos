@@ -53,9 +53,11 @@ socket.on("new_order", (order) => {
     });
 
     if (orders.length == 1 && typeof viewOrder === "function") {
-        addOrder(order)?.click();
+        const $order = addOrder(order);
+        $order.click();
     } else {
-        addOrder(order);
+        const $order = addOrder(order);
+        $order.insertBefore(".container-food_pedidos>.left>.list>div:first-child");
     }
 });
 

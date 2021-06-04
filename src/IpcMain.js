@@ -44,6 +44,14 @@ ipcMain.on("controls:state", (event) => {
     else if (win?.isNormal()) event.returnValue = "normal";
 });
 
+ipcMain.on("taskbar:setProgressBar", (event, ...args) => {
+    win.setProgressBar(...args);
+});
+
+ipcMain.on("taskbar:flashFrame", (event, flag) => {
+    win.flashFrame(flag);
+});
+
 ipcMain.on("updater:install", (event) => {
     autoUpdater.quitAndInstall(false, true);
 });

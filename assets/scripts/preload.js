@@ -9,6 +9,10 @@ window.app_name = ipcRenderer.sendSync("app_name");
 
 window.GetPrintersList = () => ipcRenderer.sendSync("printers");
 
+window.taskbar = {
+    setProgressBar: (...args) => ipcRenderer.send("taskbar:setProgressBar", ...args),
+    flashFrame: (flag = true) => ipcRenderer.send("taskbar:flashFrame", flag),
+}
 window.controls = {
     onMaximize: (callback) => ipcRenderer.on("maximize", callback),
     onUnMaximize: (callback) => ipcRenderer.on("unmaximize", callback),
