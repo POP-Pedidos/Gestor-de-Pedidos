@@ -3,13 +3,14 @@
   "productName": "POP Pedidos",
   "publisherName": "POP Pedidos",
   "appId": "poppedidos.com.br",
-  "version": "1.2.5",
+  "version": "1.2.7",
   "main": "index.js",
   "author": "",
   "license": "ISC",
   "description": "",
   "scripts": {
     "start": "set NODE_ENV=development&&electron . --enable-logging",
+    "start:production": "set NODE_ENV=production&&electron . --enable-logging",
     "build": "electron-builder build --win --publish never",
     "publish": "electron-builder build --win --publish always"
   },

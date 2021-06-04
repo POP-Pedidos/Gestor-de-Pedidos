@@ -64,6 +64,12 @@ function generateProductThumbnail(data) {
         let win = GetWindow({ width: 1200, height: 630 });
         let html = templates.Render("product", { ...data });
 
+        if (!html) {
+            win.close();
+            delete win;
+            return reject("cannot render template");
+        }
+
         win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
 
         win.webContents.on("did-stop-loading", async () => {
@@ -198,7 +204,7 @@ function printProductionCopy(printer, order, company) {
         win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
 
 
-        
+
         win.webContents.on("did-stop-loading", async () => {
             const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.device);
             win.webContents.print({
