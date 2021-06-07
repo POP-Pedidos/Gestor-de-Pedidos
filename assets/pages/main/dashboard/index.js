@@ -262,6 +262,7 @@ function LoadClients(client_data) {
                 <div class="avatar skeleton"></div>
                 <div class="details">
                     <h6>Error</h6>
+                    <span class="phone">Erro</span>
                     <span class="address">Erro</span>
                     <div class="progress">
                         <div class="progress-bar"></div>
@@ -290,6 +291,7 @@ function LoadClients(client_data) {
             });
 
             $client.find(".details>h6").text(client.name_client);
+            $client.find(".details>.phone").text(client.phone_client);
             $client.find(".details>.address").text(client.state ? `${client.street_name}, ${client.street_number} - ${client.neighborhood}, ${client.city} - ${client.state}` : "");
             $client.find(".right>.quantity").animateValue(0, client.total_quantity, 1000, n => `${n} pedido${!!n ? "s" : ""}`);
             $client.find(".right>.total").animateValue(0, client.total_price || 0, 1000, MoneyFormat);

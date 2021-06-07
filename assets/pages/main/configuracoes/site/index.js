@@ -1,10 +1,11 @@
 var url = `https://${company.subdomain}.${domain}/`;
 
 var selected_options = {}
+var website_config_webview = $("#website_config webview")[0];
 
 function LoadConfig() {
     $("#website_config .input>.url").text(url);
-    $("#website_config iframe").attr("src", url);
+    $("#website_config webview").attr("src", url);
     $("#website_config>.configs section.subdomain>div>input").val(company.subdomain);
     $("#website_config>.configs section.primary-color>.color").css("background-color", `#${company.website_primary_color || "0cb50c"}`);
     $("#website_config>.configs section.primary-color>.color>input").val(`#${company.website_primary_color || "0cb50c"}`);
@@ -15,26 +16,22 @@ function LoadConfig() {
 LoadConfig();
 
 $("#website_config>.iframe-window>header>i.back").click(function () {
-    GetIframeWindow().history.back();
+    website_config_webview.goBack();
 });
 
 $("#website_config>.iframe-window>header>i.right").click(function () {
-    GetIframeWindow().history.forward();
+    website_config_webview.goForward();
 });
 
 $("#website_config>.iframe-window>header>i.reload").click(function () {
-    GetIframeWindow().location.reload();
+    website_config_webview.reload();
     LoadConfig();
 });
 
 $("#website_config>.iframe-window>header>i.home").click(function () {
-    GetIframeWindow().location.href = url;
+    website_config_webview.src = url;
     LoadConfig();
 });
-
-function GetIframeWindow() {
-    return $("#website_config iframe")?.[0]?.contentWindow;
-}
 
 $("#website_config>.configs section.primary-color").click(function () {
     $(this).find("input")[0].click();
@@ -45,8 +42,8 @@ $("#website_config>.configs section.primary-color>.color>input").change(function
 
     selected_options.website_primary_color = this.value;
 
-    GetIframeWindow().document.documentElement.style.setProperty("--primary-color", this.value);
-    GetIframeWindow().document.documentElement.style.setProperty("--light-primary-color", hexBrightness(this.value, 75));
+    website_config_webview.send("setStyleProperty", "--primary-color", this.value);
+    website_config_webview.send("setStyleProperty", "--light-primary-color", hexBrightness(this.value, 75));
 
     CheckSave();
 });
@@ -56,8 +53,7 @@ $("#website_config>.configs section.home-bg").click(function () {
         $(this).find("img").attr("src", base64);
 
         selected_options.website_main_bg = base64;
-
-        GetIframeWindow().document.querySelector("body>header>.bg").style.backgroundImage = `url(${base64})`;
+        website_config_webview.send("setBGImage", `url(${base64})`);
 
         CheckSave();
     });
@@ -68,8 +64,7 @@ $("#website_config>.configs section.icon").click(function () {
         $(this).find("img").attr("src", base64);
 
         selected_options.image = base64;
-
-        GetIframeWindow().document.querySelectorAll("img[company-icon]").forEach(elem => elem.src = base64);
+        website_config_webview.send("setCompanyIcon", base64);
 
         CheckSave();
     });
@@ -116,15 +111,26 @@ $("#website_config>.configs button.save").click(function () {
     });
 });
 
-var last_checked_href;
+var last_checked_url;
+
 var url_checker_interval = setInterval(() => {
-    const frame_window = GetIframeWindow();
-    if (!frame_window) return clearInterval(url_checker_interval);
+    let url = website_config_webview.src;
+    url = url.replace(`${company.subdomain}.${domain}`, `${selected_options.subdomain || company.subdomain}.${domain}`);
 
-    let href = frame_window.location.href;
-    if (!!href && !!selected_options.subdomain) href = href.replace(`${company.subdomain}.${domain}`, `${selected_options.subdomain}.${domain}`);
+    if (url != last_checked_url) {
+        $("#website_config .input>.url").text(url);
 
-    if (href != last_checked_href) $("#website_config .input>.url").text(href);
+        if (selected_options.website_primary_color) {
+            website_config_webview.send("setStyleProperty", "--primary-color", selected_options.website_primary_color);
+            website_config_webview.send("setStyleProperty", "--light-primary-color", hexBrightness(selected_options.website_primary_color, 75));
+        }
 
-    last_checked_href = href;
+        if (selected_options.image) {
+            website_config_webview.send("setCompanyIcon", selected_options.image);
+        }
+
+        if (selected_options.website_main_bg) {
+            website_config_webview.send("setBGImage", `url(${selected_options.website_main_bg})`);
+        }
+    }
 }, 100);

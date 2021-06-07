@@ -106,7 +106,9 @@ async function viewOrder(order, transition = true) {
                         orders = orders.filter(_order => _order.id_order !== order.id_order);
 
                         if (!!orders?.length) {
-                            viewOrder(orders[0]);
+                            const $status_message = $(`<div class="order-status-message"><img src="../../../images/attendant.svg"/></div>`);
+
+                            $(".container-food_pedidos>.order-infos").html($status_message);
                         } else {
                             $(".container-food_pedidos>.left>.list").html(`<div class="none-founded">
                                 <img src="../../../images/none-founded.svg"/>
@@ -166,11 +168,11 @@ async function viewOrder(order, transition = true) {
                         orders = orders.filter(_order => _order.id_order !== order.id_order);
 
                         if (!!orders?.length) {
-                            // $(".container-food_pedidos>.order-infos").html(`<div class="order-status-message">
-                            //     <img src="../../images/attendant.svg"/>
-                            //     <span>O pedido agora está aguardando entrega!</span>
-                            // </div>`);
-                            viewOrder(orders[0]);
+                            if (!orderIsOnFilters(new_order)) {
+                                const $status_message = $(`<div class="order-status-message"><img src="../../../images/attendant.svg"/></div>`);
+
+                                $(".container-food_pedidos>.order-infos").html($status_message);
+                            }
                         } else {
                             $(".container-food_pedidos>.left>.list").html(`<div class="none-founded">
                                 <img src="../../../images/none-founded.svg"/>
@@ -216,9 +218,27 @@ function addOrderInfosSkeleton() {
     const $order_infos = $(`<div class="infos">
         <div class="info">
             <div class="client_info">
-                <div class="name skeleton">.</div>
-                <div class="address infos-icon skeleton" style="max-width: 400px;">.</div>
-                <div class="tell infos-icon skeleton" style="max-width: 200px;">.</div>
+                <div class="icon-key-value order-identifier">
+                    <div class="rounded-icon skeleton"></div>
+                    <div class="infos">
+                        <span class="title skeleton">Pedido</span>
+                        <a class="value skeleton" target="_blank">.</a>
+                    </div>
+                </div>
+				<div class="icon-key-value client-info is_skeleton">
+					<div class="rounded-icon skeleton"></div>
+					<div class="infos">
+						<span class="name skeleton">Nome do cliente</span>
+						<span class="phone skeleton">.</span>
+					</div>
+				</div>
+                <div class="icon-key-value client-address is_skeleton">
+                    <div class="rounded-icon skeleton"></div>
+                    <div class="infos">
+                        <span class="title skeleton">Endereço</span>
+                        <a class="address skeleton" target="_blank">.</a>
+                    </div>
+                </div>
             </div>
             <div class="actions">
                 <div>
@@ -299,14 +319,19 @@ function addOrderInfosSkeleton() {
     </div>
     <div class="bottom">
         <div class="left">
-            <div class="payment-method">
-                <span class="skeleton">X Método de pagamento</span>
+            <div class="icon-key-value payment-method is_skeleton">
+                <div class="rounded-icon skeleton"></div>
+                <div class="infos">
+                    <span class="title skeleton">Pagamento</span>
+                    <span class="value skeleton">.</span>
+                </div>
             </div>
-            <div class="discount-coupon">
-                <span class="skeleton">X Cupom de desconto</span>
-            </div>
-            <div class="observations">
-                <span class="skeleton">X Observações</span>
+            <div class="icon-key-value discount-coupon is_skeleton">
+                <div class="rounded-icon skeleton"></div>
+                <div class="infos">
+                    <span class="title skeleton">Cupom de desconto</span>
+                    <span class="value skeleton">.</span>
+                </div>
             </div>
         </div>
         <div class="price">

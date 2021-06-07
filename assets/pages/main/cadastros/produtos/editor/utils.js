@@ -424,6 +424,8 @@ function AddPizzaFlavor(flavor) {
 function DuplicateProduct(product, $section) {
     const $skeleton = AddProductSkeleton($section);
 
+    delete product.order;
+
     FetchAPI(`/product`, {
         method: "POST",
         body: product,

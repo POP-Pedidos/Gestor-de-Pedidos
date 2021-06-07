@@ -95,6 +95,20 @@ const FetchAPI = (uri, config = {}) => {
     return promise
 }
 
+function FormatTell(number) {
+    function pad(count, padRight = 0) {
+        return number.slice(number.length - (count + padRight), number.length - padRight);
+    }
+
+    if (number.length === 13) {
+        return `(${pad(2, 9)}) ${pad(1, 8)} ${pad(4, 4)}-${pad(4)}`;
+    } else if (number.length === 12) {
+        return `(${pad(2, 8)}) ${pad(4, 4)}-${pad(4)}`;
+    } else {
+        return number;
+    }
+}
+
 function nFormatter(num, digits = 2) {
     var si = [
         { value: 1, symbol: "" },

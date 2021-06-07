@@ -853,7 +853,8 @@ body.dark-mode .top-clients-container .top-client>.right>.quantity {
   color: lightgray;
 }
 
-body.dark-mode .order-infos>.infos .client_info>.infos-icon {
+body.dark-mode .order-infos>.infos .client_info>.infos-icon,
+body.dark-mode .top-clients-container .top-client>.details>.phone {
   color: white;
 }
 
@@ -10088,6 +10089,7 @@ table .badge {
 }
 
 .icon-key-value>.infos {
+  flex: 1;
   display: flex;
   flex-direction: column;
   margin-left: 15px;
@@ -10098,11 +10100,13 @@ table .badge {
   font-size: 12px;
   color: #a8a7ad;
   white-space: nowrap;
+  width: fit-content;
 }
 
 .icon-key-value>.infos>.name {
   font-size: 14px;
   font-weight: 700;
+  width: fit-content;
 }
 
 .icon-key-value.delivery-type .value {
@@ -10113,7 +10117,7 @@ table .badge {
   font-weight: bold;
 }
 
-.icon-key-value>div {
+.icon-key-value>.infos {
   max-height: 100px;
   overflow: auto;
 }
@@ -10175,6 +10179,14 @@ table .badge {
   flex-wrap: wrap;
   min-width: 250px;
   gap: 15px;
+}
+
+.order-infos>.infos .client_info>.client-info.is_skeleton {
+  width: 200px;
+}
+
+.order-infos>.infos .client_info>.client-address.is_skeleton {
+  width: 300px;
 }
 
 .order-infos>.infos .actions {
@@ -12607,7 +12619,7 @@ td>.switch_enable {
 
 #website_config {
   display: flex;
-  height: calc(100vh - 56px);
+  height: calc(100vh - 56px - 29px);
 }
 
 #website_config>.iframe-window {
@@ -13487,11 +13499,22 @@ td>.switch_enable {
   flex: 1;
 }
 
+.top-clients-container .top-client>.details>h6 {
+  margin-bottom: 2px;
+}
+
 .top-clients-container .top-client>.details>.address {
   font-size: 12px;
   margin-bottom: 5px;
   display: block;
   color: #5a5a5a;
+}
+
+.top-clients-container .top-client>.details>.phone {
+  font-size: 12px;
+  margin-bottom: 3px;
+  display: block;
+  color: black;
 }
 
 .top-clients-container .top-client>.details>.progress {
