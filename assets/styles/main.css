@@ -954,6 +954,15 @@ body.dark-mode .order-infos .list-items>.list-title {
   color: #b9f151 !important;
 }
 
+body.dark-mode .icon-key-value.delivery-type .value,
+body.dark-mode .container-food_pedidos>.left>.list>div>.infos>div>.info>.withdrawal {
+  color: gold !important;
+}
+
+body.dark-mode .icon-key-value>.infos>.title {
+  color: #a8a7ad !important;
+}
+
 @media (max-width: 768px) {
   .header .toggle-btns #pin-sidebar {
     display: none;
@@ -9891,7 +9900,7 @@ table .badge {
 }
 
 .container-food_pedidos>.left>.list>div>.infos>div>.info>.withdrawal {
-  color: gold;
+  color: black;
   font-weight: bold;
 }
 
@@ -10098,7 +10107,7 @@ table .badge {
 
 .icon-key-value>.infos>.title {
   font-size: 12px;
-  color: #a8a7ad;
+  color: #6b6b6b;
   white-space: nowrap;
   width: fit-content;
 }
@@ -10110,7 +10119,7 @@ table .badge {
 }
 
 .icon-key-value.delivery-type .value {
-  color: gold;
+  color: black;
 }
 
 .icon-key-value>span {

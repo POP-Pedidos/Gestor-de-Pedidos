@@ -19,7 +19,6 @@
     "url": "https://github.com/joaovitmac/pop-client.git"
   },
   "build": {
-    "asar": false,
     "publish": [
       "github"
     ],
