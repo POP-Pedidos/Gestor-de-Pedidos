@@ -7,6 +7,7 @@ import "./LoadArt.js";
 import "./AuthWithToken.js";
 
 $(`form input[name="username"]`).val(Store.get("user")?.username);
+$(`form input[name="remember"]`).prop("checked", !!localStorage.token);
 
 $("label.password>div>i").click(function () {
     const $label = $(this).parent().parent();

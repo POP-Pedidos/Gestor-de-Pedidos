@@ -66,7 +66,7 @@ function addAudit(audit) {
                             else return `<b>${audit.username}</b> alterou o numero de WhatsApp para <b>${FormatTell(change.new_value)}</b>`;
                         },
                         image: change => `<b>${audit.username}</b> alterou o ícone da empresa`,
-                        // address: change => `Endereço foi alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        location: change => `A localização da empresa foi alterada de <b>${change.old_value?.lat},${change.old_value?.lng}</b> para <b>${change.new_value?.lat},${change.new_value?.lng}</b>`,
                         delivery_type: change => `<b>${audit.username}</b> alterou o tipo de cobrança da taxa de entrega de <b>${GetDeliveryTypeName(change.old_value)}</b> para <b>${GetDeliveryTypeName(change.new_value)}</b>`,
                         delivery_cost: change => `<b>${audit.username}</b> alterou o preço de cobrança da taxa de entrega de <b>${change.old_value ? MoneyFormat(change.old_value) : "Indefinido"}</b> para <b>${change.new_value ? MoneyFormat(change.new_value) : "Indefinido"}</b>`,
                         delivery_free_in: change => `<b>${audit.username}</b> alterou o valor mínimo de promoção de taxa de entrega de <b>${change.old_value ? MoneyFormat(change.old_value) : "Indefinido"}</b> para <b>${change.new_value ? MoneyFormat(change.new_value) : "Indefinido"}</b>`,
@@ -90,11 +90,21 @@ function addAudit(audit) {
                         print_production_copy: change => `<b>${audit.username}</b> alterou a impressão da <b>Via de produção</b> de <b>${GetPrintStatusName(change.old_value)}</b> para <b>${GetPrintStatusName(change.new_value)}</b>`,
                     }
 
-                    return {
-                        icon: "list",
-                        title: messages[audit.changes[0].key]?.(audit.changes[0]) || `<b>${audit.username}</b> alterou algum dado da empresa`,
-                        items: []
-                    };
+                    const change = audit.changes[0];
+
+                    if (["street", "street_number", "city", "neighborhood", "state"].includes(change.key)) {
+                        return {
+                            icon: "list",
+                            title: `${audit.username ? `<b>${audit.username}</b> alterou` : "Foi alterado"} o endereço da empresa para <b>${change.key === "street" ? change.new_value : company.street}, ${change.key === "street_number" ? change.new_value : company.street_number} - ${change.key === "neighborhood" ? change.new_value : company.neighborhood}, ${change.key === "city" ? change.new_value : company.city} - ${change.key === "state" ? change.new_value : company.state}</b>`,
+                            items: []
+                        };
+                    } else {
+                        return {
+                            icon: "list",
+                            title: messages[change.key]?.(change) || `<b>${audit.username}</b> alterou algum dado da empresa`,
+                            items: []
+                        };
+                    }
                 } else {
                     const messages = {
                         subdomain: change => {
@@ -109,7 +119,7 @@ function addAudit(audit) {
                             else return `O numero de WhatsApp foi alterado para <b>${FormatTell(change.new_value)}</b>`;
                         },
                         image: change => `O ícone foi alterado`,
-                        // address: change => `Endereço foi alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        location: change => `A localização foi alterada de <b>${change.old_value?.lat},${change.old_value?.lng}</b> para <b>${change.new_value?.lat},${change.new_value?.lng}</b>`,
                         delivery_type: change => `Mudou o tipo de cobrança da taxa de entrega de <b>${GetDeliveryTypeName(change.old_value)}</b> para <b>${GetDeliveryTypeName(change.new_value)}</b>`,
                         delivery_cost: change => `Mudou o preço de cobrança da taxa de entrega de <b>${change.old_value ? MoneyFormat(change.old_value) : "Indefinido"}</b> para <b>${change.new_value ? MoneyFormat(change.new_value) : "Indefinido"}</b>`,
                         delivery_free_in: change => `Mudou o valor mínimo de promoção de taxa de entrega de <b>${change.old_value ? MoneyFormat(change.old_value) : "Indefinido"}</b> para <b>${change.new_value ? MoneyFormat(change.new_value) : "Indefinido"}</b>`,
@@ -133,10 +143,16 @@ function addAudit(audit) {
                         print_production_copy: change => `Mudou a impressão da <b>Via de produção</b> de <b>${GetPrintStatusName(change.old_value)}</b> para <b>${GetPrintStatusName(change.new_value)}</b>`,
                     }
 
+                    const items = audit.changes.map(change => messages[change.key]?.(change));
+
+                    if (audit.changes.some(change => ["street", "street_number", "city", "neighborhood", "state"].includes(change.key))) {
+                        items.push(`${audit.username ? `<b>${audit.username}</b> alterou` : "Foi alterado"} o endereço da empresa para <b>${change.key === "street" ? change.new_value : company.street}, ${change.key === "street_number" ? change.new_value : company.street_number} - ${change.key === "neighborhood" ? change.new_value : company.neighborhood}, ${change.key === "city" ? change.new_value : company.city} - ${change.key === "state" ? change.new_value : company.state}</b>`);
+                    }
+
                     return {
                         icon: "list",
-                        title: `<b>${audit.username}</b> alterou ${audit.changes?.length || ""} dados da empresa`,
-                        items: audit.changes.map(change => messages[change.key]?.(change))
+                        title: `<b>${audit.username}</b> alterou ${audit.changes?.length || ""} dado${audit.changes?.length ? "s" : ""} da empresa`,
+                        items,
                     };
                 }
             },
@@ -156,453 +172,617 @@ function addAudit(audit) {
             }
         },
         user: {
+            UPDATE: audit => {
+                if (audit.changes.length == 1) {
+                    const messages = {
+                        username: change => `O nome de usuário de <b>${change.old_value}</b> foi alterado para <b>${change.new_value}</b>`,
+                        password: change => `A senha do usuário <b>${audit.username}</b> foi alterada`,
+                        email: change => `O email do usuário <b>${audit.username}</b> foi alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        enabled: change => `O usuário <b>${audit.username}</b> foi <b>${change.new_value ? "habilitado" : "desabilitado"}</b>`,
+                        id_company: change => `Agora o usuário <b>${audit.username}</b> faz parte da empresa!`,
+                    }
 
-        }
+                    const change = audit.changes[0];
+
+                    return {
+                        icon: "list",
+                        title: messages[change.key]?.(change) || `<b>${audit.username}</b> alterou algum dado da empresa`,
+                        items: []
+                    };
+                } else {
+                    const messages = {
+                        username: change => `Nome de usuário alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        password: change => `A senha foi alterada`,
+                        email: change => `O email foi alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        enabled: change => `O usuário foi <b>${change.new_value ? "habilitado" : "desabilitado"}</b>`,
+                        id_company: change => `Agora o usuário <b>${audit.username}</b> faz parte da empresa!`,
+                    }
+
+                    return {
+                        icon: "user",
+                        title: `O usuário <b>${audit.username}</b> foi modificado`,
+                        items: audit.changes.map(change => messages[change.key]?.(change))
+                    };
+                }
+            },
+            CREATE: audit => {
+                return {
+                    icon: "list",
+                    title: `O usuário <b>${audit.username}</b> foi criado`,
+                    items: []
+                };
+            },
+            DELETE: audit => {
+                return {
+                    icon: "list",
+                    title: `O usuário <b>${audit.username}</b> foi deletado`,
+                    items: []
+                };
+            },
+            LOGIN: audit => {
+                const items = [];
+
+                if (audit.additional.internal_username) items.push(`Nome de usuário interno é <b>${audit.additional.internal_username}</b>`);
+                if (audit.additional.ip_address) items.push(`Endereço IP externo é <b>${audit.additional.ip_address}</b>`);
+                if (audit.additional.address) items.push(`Endereço do IP é <b>${audit.additional.address}</b>`);
+
+                return {
+                    icon: "user",
+                    title: `O usuário <b>${audit.username}</b>${audit.additional.internal_username ? `(${audit.additional.internal_username})` : (audit.additional.address ? ` de <b>${audit.additional.address}</b>` : "")} se autenticou`,
+                    items,
+                };
+            },
+        },
+        company_time: {
+            UPDATE: audit => {
+                function GetDayOfWeekName(value) {
+                    if (value === "Monday") return "Segunda";
+                    else if (value === "Tuesday") return "Terça";
+                    else if (value === "Wednesday") return "Quarta";
+                    else if (value === "Thursday") return "Quinta";
+                    else if (value === "Friday") return "Sexta";
+                    else if (value === "Saturday") return "Sábado";
+                    else if (value === "Sunday") return "Domingo";
+                    else return "Indefinido";
+                }
+
+                if (audit.changes.length == 1) {
+                    const messages = {
+                        open: change => `O usuário <b>${audit.username}</b> alterou o horário <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> para <b>${change.new_value ? "aberto" : "fechado"}</b>`,
+                        opens: change => `O usuário <b>${audit.username}</b> alterou o horário de abertura <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        closes: change => `O usuário <b>${audit.username}</b> alterou o horário de fechamento <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                    }
+
+                    const change = audit.changes[0];
+
+                    return {
+                        icon: "list",
+                        title: messages[change.key]?.(change) || `O usuário <b>${audit.username}</b> alterou o horário <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b>`,
+                        items: []
+                    };
+                } else {
+                    const messages = {
+                        open: change => `Horário <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> alterado para <b>${change.new_value ? "aberto" : "fechado"}</b>`,
+                        opens: change => `Horário de abertura <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        closes: change => `Horário de fechamento <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                    }
+
+                    return {
+                        icon: "list",
+                        title: `O usuário <b>${audit.username}</b> fez ${audit.changes?.length || ""} alteraç${audit.changes?.length ? "ões" : "ão"} no horário <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b>`,
+                        items: audit.changes.map(change => messages[change.key]?.(change))
+                    };
+                }
+            },
+        },
+        category: {
+            UPDATE: audit => {
+                if (audit.changes.length == 1) {
+                    const messages = {
+                        name: change => `O usuário <b>${audit.username}</b> alterou o nome da categoria <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        image: change => `O usuário <b>${audit.username}</b> alterou a imagem da categoria <b>${audit.additional.name}</b>`,
+                    }
+
+                    const change = audit.changes[0];
+
+                    return {
+                        icon: "list",
+                        title: messages[change.key]?.(change) || `O usuário <b>${audit.username}</b> alterou a categoria <b>${audit.additional.name}</b>`,
+                        items: []
+                    };
+                } else {
+                    const messages = {
+                        name: change => `O nome alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        image: change => `A imagem foi alterada`,
+                    }
+
+                    return {
+                        icon: "list",
+                        title: `O usuário <b>${audit.username}</b> fez ${audit.changes?.length || ""} alteraç${audit.changes?.length ? "ões" : "ão"} na categoria <b>${audit.additional.name}</b>`,
+                        items: audit.changes.map(change => messages[change.key]?.(change))
+                    };
+                }
+            },
+            CREATE: audit => {
+                return {
+                    icon: "list",
+                    title: `O usuário <b>${audit.username}</b> criou a categoria <b>${audit.additional.name}</b>`,
+                    items: []
+                };
+            },
+            DELETE: audit => {
+                return {
+                    icon: "list",
+                    title: `O usuário <b>${audit.username}</b> apagou a categoria <b>${audit.additional.name}</b>`,
+                    items: []
+                };
+            },
+        },
+        discount_coupon: {
+            UPDATE: audit => {
+                if (audit.changes.length == 1) {
+                    const messages = {
+                        coupon: change => `O usuário <b>${audit.username}</b> alterou o nome do cupom de desconto <b>${audit.additional.coupon}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        discount: change => {
+                            const is_percentual_key = audit.changes.find(change => change.key == "is_percentual");
+
+                            return `O usuário <b>${audit.username}</b> alterou o desconto do cupom de desconto <b>${audit.additional.coupon}</b> de <b>${is_percentual_key.old_value ? `${Number(change.old_value)}%` : MoneyFormat(change.old_value)}</b> para <b>${is_percentual_key.new_value ? `${Number(change.new_value)}%` : MoneyFormat(change.new_value)}</b>`
+                        },
+                        is_percentual: change => {
+                            const is_percentual_key = audit.changes.find(change => change.key == "is_percentual");
+
+                            return `O usuário <b>${audit.username}</b> alterou o desconto do cupom de desconto <b>${audit.additional.coupon}</b> de <b>${is_percentual_key.old_value ? `${Number(change.old_value)}%` : MoneyFormat(change.old_value)}</b> para <b>${is_percentual_key.new_value ? `${Number(change.new_value)}%` : MoneyFormat(change.new_value)}</b>`
+                        },
+                        limit: change => `O usuário <b>${audit.username}</b> alterou o limite de usos do cupom de desconto <b>${audit.additional.coupon}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        min_price: change => `O usuário <b>${audit.username}</b> alterou o preço mínimo elegível do cupom de desconto <b>${audit.additional.coupon}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        in_delivery_cost: change => `O usuário <b>${audit.username}</b> configurou o cupom de desconto desconto <b>${audit.additional.coupon}</b> para <b>${change.new_value ? "não ser" : "ser também"}</b> aplicado ao preço do frete`,
+                        enabled: change => `O usuário <b>${audit.username}</b> <b>${change.new_value ? "ativou" : "desativou"}</b> o cupom de desconto <b>${audit.additional.coupon}</b>`,
+                    }
+
+                    const change = audit.changes[0];
+
+                    return {
+                        icon: "list",
+                        title: messages[change.key]?.(change) || `O usuário <b>${audit.username}</b> alterou o cupom de desconto <b>${audit.additional.coupon}</b>`,
+                        items: []
+                    };
+                } else {
+                    const messages = {
+                        coupon: change => `Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        discount: change => {
+                            const is_percentual_key = audit.changes.find(change => change.key == "is_percentual");
+
+                            return `Mudou o desconto de <b>${is_percentual_key.old_value ? `${Number(change.old_value)}%` : MoneyFormat(change.old_value)}</b> para <b>${is_percentual_key.new_value ? `${Number(change.new_value)}%` : MoneyFormat(change.new_value)}</b>`
+                        },
+                        is_percentual: change => {
+                            const is_percentual_key = audit.changes.find(change => change.key == "is_percentual");
+
+                            return `Mudou o desconto de <b>${is_percentual_key.old_value ? `${Number(change.old_value)}%` : MoneyFormat(change.old_value)}</b> para <b>${is_percentual_key.new_value ? `${Number(change.new_value)}%` : MoneyFormat(change.new_value)}</b>`
+                        },
+                        limit: change => `Mudou o limite de usos de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        min_price: change => `Mudou o preço mínimo elegível de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        in_delivery_cost: change => `O desconto <b>${change.new_value ? "não será" : "será também"}</b> aplicado ao preço do frete`,
+                        enabled: change => `Foi <b>${change.new_value ? "ativado" : "desativado"}</b>`,
+                    }
+
+                    return {
+                        icon: "list",
+                        title: `O usuário <b>${audit.username}</b> fez ${audit.changes?.length || ""} alteraç${audit.changes?.length ? "ões" : "ão"} no cupom de desconto <b>${audit.additional.coupon}</b>`,
+                        items: audit.changes.map(change => messages[change.key]?.(change))
+                    };
+                }
+            },
+            CREATE: audit => {
+                return {
+                    icon: "list",
+                    title: `O usuário <b>${audit.username}</b> criou o cupom de desconto <b>${audit.additional.coupon}</b>`,
+                    items: []
+                };
+            },
+            DELETE: audit => {
+                return {
+                    icon: "list",
+                    title: `O usuário <b>${audit.username}</b> apagou o cupom de desconto <b>${audit.additional.coupon}</b>`,
+                    items: []
+                };
+            },
+        },
+        order: {
+            UPDATE: audit => {
+                function GetStatusName(value) {
+                    if (value === 0) return "Aguardando aceite";
+                    else if (value === 1) return "Aguardando produção";
+                    else if (value === 2) return "Aguardando entrega";
+                    else if (value === 3) return "Saiu para entrega";
+                    else if (value === 10) return "Entregue";
+                    else return "Recusado";
+                }
+
+                if (audit.username) {
+                    return {
+                        icon: "sticker",
+                        title: `O usuário <b>${audit.username}</b> alterou o status do pedido <b>${audit.additional.order.order_company_sequence}</b> para <b>${GetStatusName(audit.additional.order.status)}</b>`,
+                        items: []
+                    };
+                } else {
+                    return {
+                        icon: "sticker",
+                        title: `O status do pedido <b>${audit.additional.order.order_company_sequence}</b> foi alterado para <b>${GetStatusName(audit.additional.order.status)}</b>`,
+                        items: []
+                    };
+                }
+            },
+            CREATE: audit => {
+                return {
+                    icon: "list",
+                    title: `O pedido <b>${audit.additional.order.order_company_sequence}</b> do cliente <b>${audit.additional.order.name_client}</b> foi registrado`,
+                    items: []
+                };
+            }
+        },
+        printer: {
+            UPDATE: audit => {
+                function GetPrintTypeName(value) {
+                    if (value === "graphic") return "Gráfica";
+                    else if (value === "text") return "Texto";
+                    else return "Indefinido";
+                }
+
+                if (audit.changes.length == 1) {
+                    const messages = {
+                        name: change => `O usuário <b>${audit.username}</b> alterou o nome da impressora <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        device: change => `O usuário <b>${audit.username}</b> alterou o dispositivo de impressão da impressora <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        is_primary: change => `O usuário <b>${audit.username}</b> ${change.new_value ? `definiu a impressora <b>${audit.additional.name}</b> como dispositivo <b>primário</b>` : `configurou a impressora <b>${audit.additional.name}</b> como não <b>primária</b>`}`,
+                        type: change => `O usuário <b>${audit.username}</b> alterou o tipo de impressão da impressora <b>${audit.additional.name}</b> para ${GetPrintTypeName(change.new_value)}`,
+                        size: change => `O usuário <b>${audit.username}</b> alterou o tamanho da impressão da impressora <b>${audit.additional.name}</b> de ${change.old_value}mm para ${change.new_value}mm`,
+                    }
+
+                    const change = audit.changes[0];
+
+                    return {
+                        icon: "list",
+                        title: messages[change.key]?.(change) || `O usuário <b>${audit.username}</b> alterou a impressora <b>${audit.additional.name}</b>`,
+                        items: []
+                    };
+                } else {
+                    const messages = {
+                        name: change => `Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        device: change => `Mudou o dispositivo de impressão <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        is_primary: change => change.new_value ? `Definiu como dispositivo <b>primário</b>` : `Não é mais um dispositivo <b>primário</b>`,
+                        type: change => `Mudou o tipo de impressão para <b>${GetPrintTypeName(change.new_value)}</b>`,
+                        size: change => `Mudou o tamanho da impressão de <b>${change.old_value}mm</b> para <b>${change.new_value}mm</b>`,
+                    }
+
+                    return {
+                        icon: "list",
+                        title: `O usuário <b>${audit.username}</b> fez ${audit.changes?.length || ""} alteraç${audit.changes?.length ? "ões" : "ão"} na impressora <b>${audit.additional.name}</b>`,
+                        items: audit.changes.map(change => messages[change.key]?.(change))
+                    };
+                }
+            },
+            CREATE: audit => {
+                return {
+                    icon: "list",
+                    title: `O usuário <b>${audit.username}</b> criou a impressora <b>${audit.additional.name}</b>`,
+                    items: []
+                };
+            },
+            DELETE: audit => {
+                return {
+                    icon: "list",
+                    title: `O usuário <b>${audit.username}</b> apagou a impressora <b>${audit.additional.name}</b>`,
+                    items: []
+                };
+            },
+        },
+        neighborhood_blacklist: {
+            CREATE: () => {
+                return {
+                    icon: "list",
+                    title: `<b>${audit.username}</b> adicionou o bairro <b>${audit.additional.name}</b> na blacklist`,
+                    items: []
+                };
+            },
+            DELETE: () => {
+                return {
+                    icon: "list",
+                    title: `<b>${audit.username}</b> removeu o bairro <b>${audit.additional.name}</b> da blacklist`,
+                    items: []
+                };
+            }
+        },
+        neighborhood_delivery_cost: {
+            UPDATE: () => {
+                return {
+                    icon: "list",
+                    title: `<b>${audit.username}</b> configurou a taxa de entrega do bairro <b>${audit.additional.name}</b> para <b>${audit.additional.price}</b>`,
+                    items: []
+                };
+            },
+            CREATE: () => {
+                return {
+                    icon: "list",
+                    title: `<b>${audit.username}</b> configurou a taxa de entrega do bairro <b>${audit.additional.name}</b> para <b>${audit.additional.price}</b>`,
+                    items: []
+                };
+            },
+            DELETE: () => {
+                return {
+                    icon: "list",
+                    title: `<b>${audit.username}</b> removeu a taxa de entrega do bairro <b>${audit.additional.name}</b>`,
+                    items: []
+                };
+            }
+        },
+        product: {
+            UPDATE: audit => {
+                if (audit.changes.length == 1) {
+                    const messages = {
+                        order: change => `O usuário <b>${audit.username}</b> alterou a ordem de listagem do produto <b>${audit.additional.name}</b>`,
+                        name: change => `O usuário <b>${audit.username}</b> alterou o nome do produto <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        description: change => `O usuário <b>${audit.username}</b> alterou a descrição do produto <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        sku: change => `O usuário <b>${audit.username}</b> alterou o SKU do produto <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        enabled: change => `O usuário <b>${audit.username}</b> Foi <b>${change.new_value ? "ativado" : "pausado"}</b>`,
+                        keywords: change => `O usuário <b>${audit.username}</b> alterou as palavras chave do SEO do produto <b>${audit.additional.name}</b> de <b>${change.old_value.split(",").join(", ")}</b> para <b>${change.new_value.split(",").join(", ")}</b>`,
+                        price: change => `O usuário <b>${audit.username}</b> alterou o preço do produto <b>${audit.additional.name}</b> de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`,
+                        is_pizza: change => `O usuário <b>${audit.username}</b> alterou o tipo do produto <b>${audit.additional.name}</b> de <b>${change.old_value ? "pizza" : "comum"}</b> para <b>${change.new_value ? "pizza" : "comum"}</b>`,
+                        pizza_price_rule: change => `O usuário <b>${audit.username}</b> alterou o tipo de precificação da pizza <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        pizza_quantity_flavors: change => `O usuário <b>${audit.username}</b> alterou a quantidade de sabores da pizza <b>${audit.additional.name}</b> ${!!change.old_value ? `de <b>${change.old_value.split(",").join(", ")}</b> ` : ""}para <b>${change.new_value.split(",").join(", ")}</b>`,
+                        seo_title: change => `O usuário <b>${audit.username}</b> alterou o titulo de SEO do produto <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        seo_description: change => `O usuário <b>${audit.username}</b> alterou a descrição de SEO do produto <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        availability_daysOfWeek: change => `O usuário <b>${audit.username}</b> alterou a disponibilidade do produto <b>${audit.additional.name}</b> nos dias da semana de <b>${change.old_value.split(",").join(", ")}</b> para <b>${change.new_value.split(",").join(", ")}</b>`,
+                        availability_dayShifts: change => `O usuário <b>${audit.username}</b> alterou a disponibilidade do produto <b>${audit.additional.name}</b> dos turnos do dia de <b>${change.old_value.split(",").join(", ")}</b> para <b>${change.new_value.split(",").join(", ")}</b>`,
+                    }
+
+                    const change = audit.changes[0];
+
+                    return {
+                        icon: "list",
+                        title: messages[change.key]?.(change) || `<b>${audit.username}</b> alterou algum dado do produto <b>${audit.additional.name}</b>`,
+                        items: []
+                    };
+                } else {
+                    const messages = {
+                        order: change => `Mudou a ordem de listagem`,
+                        name: change => `Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        description: change => `Mudou a descrição de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        sku: change => `Mudou o SKU de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        enabled: change => `Foi <b>${change.new_value ? "ativado" : "pausado"}</b>`,
+                        keywords: change => `Mudou as palavras chave do SEO de <b>${change.old_value.split(",").join(", ")}</b> para <b>${change.new_value.split(",").join(", ")}</b>`,
+                        price: change => `Mudou o preço de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`,
+                        is_pizza: change => `Mudou o tipo do produto de <b>${change.old_value ? "pizza" : "comum"}</b> para <b>${change.new_value ? "pizza" : "comum"}</b>`,
+                        pizza_price_rule: change => `Mudou o tipo de precificação da pizza de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        pizza_quantity_flavors: change => `Mudou a quantidade de sabores da pizza ${!!change.old_value ? `de <b>${change.old_value.split(",").join(", ")}</b> ` : ""}para <b>${change.new_value.split(",").join(", ")}</b>`,
+                        seo_title: change => `Mudou o titulo do SEO de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        seo_description: change => `Mudou a descrição do SEO de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        availability_daysOfWeek: change => `Mudou a disponibilidade nos dias da semana de <b>${change.old_value.split(",").join(", ")}</b> para <b>${change.new_value.split(",").join(", ")}</b>`,
+                        availability_dayShifts: change => `Mudou a disponibilidade dos turnos do dia de <b>${change.old_value.split(",").join(", ")}</b> para <b>${change.new_value.split(",").join(", ")}</b>`,
+                    }
+
+                    return {
+                        icon: "list",
+                        title: `<b>${audit.username}</b> alterou ${audit.changes?.length || ""} dado${audit.changes?.length ? "s" : ""} do produto <b>${audit.additional.name}</b>`,
+                        items: audit.changes.map(change => messages[change.key]?.(change)),
+                    };
+                }
+            },
+            CREATE: () => {
+                return {
+                    icon: "list",
+                    title: `O usuário <b>${audit.username}</b> criou o produto <b>${audit.additional.name}</b>`,
+                    items: []
+                };
+            },
+            DELETE: () => {
+                return {
+                    icon: "list",
+                    title: `O usuário <b>${audit.username}</b> apagou o produto <b>${audit.additional.name}</b>`,
+                    items: []
+                };
+            }
+        },
+        product_image: {
+            CREATE: () => {
+                return {
+                    icon: "list",
+                    title: `<b>${audit.username}</b> adicionou uma imagem no produto <b>${audit.additional.product_name}</b>`,
+                    items: []
+                };
+            },
+            DELETE: () => {
+                return {
+                    icon: "list",
+                    title: `<b>${audit.username}</b> apagou uma imagem do produto <b>${audit.additional.product_name}</b>`,
+                    items: []
+                };
+            }
+        },
+        product_pizza_flavor: {
+            UPDATE: audit => {
+                if (audit.changes.length == 1) {
+                    const messages = {
+                        name: change => `O usuário <b>${audit.username}</b> alterou o nome do sabor de pizza <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        description: change => `O usuário <b>${audit.username}</b> alterou a descrição do sabor de pizza <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        price: change => `O usuário <b>${audit.username}</b> alterou o preço do sabor de pizza <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b> de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`,
+                        order: change => `O usuário <b>${audit.username}</b> alterou a ordem de listagem do sabor de pizza <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                    }
+
+                    const change = audit.changes[0];
+
+                    return {
+                        icon: "list",
+                        title: messages[change.key]?.(change) || `<b>${audit.username}</b> alterou algum dado do sabor de pizza <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b>`,
+                        items: []
+                    };
+                } else {
+                    const messages = {
+                        name: change => `Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        description: change => `Mudou a descrição de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        price: change => `Mudou o preço de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`,
+                        order: change => `Mudou a ordem de listagem de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                    }
+
+                    return {
+                        icon: "list",
+                        title: `<b>${audit.username}</b> alterou ${audit.changes?.length || ""} dado${audit.changes?.length ? "s" : ""} no sabor de pizza <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b>`,
+                        items: audit.changes.map(change => messages[change.key]?.(change)),
+                    };
+                }
+            },
+            CREATE: () => {
+                return {
+                    icon: "list",
+                    title: `O usuário <b>${audit.username}</b> adicionou o sabor de pizza <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b>`,
+                    items: []
+                };
+            },
+            DELETE: () => {
+                return {
+                    icon: "list",
+                    title: `O usuário <b>${audit.username}</b> apagou o sabor de pizza <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b>`,
+                    items: []
+                };
+            }
+        },
+        product_complement_group: {
+            UPDATE: audit => {
+                if (audit.changes.length == 1) {
+                    const messages = {
+                        name: change => `O usuário <b>${audit.username}</b> alterou o nome do grupo de complementos <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        required: change => `O usuário <b>${audit.username}</b> alterou a obrigatoriedade do grupo de complementos <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> para <b>${change.new_value ? "obrigatório" : "opcional"}</b>`,
+                        min: change => `O usuário <b>${audit.username}</b> alterou a quantidade minima do grupo de complementos <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        max: change => `O usuário <b>${audit.username}</b> alterou a quantidade máxima do grupo de complementos <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                    }
+
+                    const change = audit.changes[0];
+
+                    return {
+                        icon: "list",
+                        title: messages[change.key]?.(change) || `<b>${audit.username}</b> fez alterações no grupo de complementos <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b>`,
+                        items: []
+                    };
+                } else {
+                    const messages = {
+                        name: change => `Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        required: change => `Mudou a obrigatoriedade para <b>${change.new_value ? "obrigatório" : "opcional"}</b>`,
+                        min: change => `Mudou a quantidade minima de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        max: change => `Mudou a quantidade máxima de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                    }
+
+                    return {
+                        icon: "list",
+                        title: `<b>${audit.username}</b> alterou ${audit.changes?.length || ""} dado${audit.changes?.length ? "s" : ""} no grupo de complementos <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b>`,
+                        items: audit.changes.map(change => messages[change.key]?.(change)),
+                    };
+                }
+            },
+            CREATE: () => {
+                return {
+                    icon: "list",
+                    title: `O usuário <b>${audit.username}</b> adicionou o grupo de complementos <b>${audit.additional.name}</b> para o produto <b>${audit.additional.product_name}</b>`,
+                    items: []
+                };
+            },
+            DELETE: () => {
+                return {
+                    icon: "list",
+                    title: `O usuário <b>${audit.username}</b> apagou o grupo de complementos <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b>`,
+                    items: []
+                };
+            }
+        },
+        product_complement_item: {
+            UPDATE: audit => {
+                if (audit.changes.length == 1) {
+                    const messages = {
+                        name: change => `O usuário <b>${audit.username}</b> alterou o nome do complemento <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        description: change => `O usuário <b>${audit.username}</b> alterou a descrição do complemento <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        price: change => `O usuário <b>${audit.username}</b> alterou o preço do complemento <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`,
+                        order: change => `O usuário <b>${audit.username}</b> alterou a ordem de listagem do complemento <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                    }
+
+                    const change = audit.changes[0];
+
+                    return {
+                        icon: "list",
+                        title: messages[change.key]?.(change) || `<b>${audit.username}</b> fez alterações no complemento <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b>`,
+                        items: []
+                    };
+                } else {
+                    const messages = {
+                        name: change => `Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        description: change => `Mudou a descrição de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        price: change => `Mudou o preço de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`,
+                        order: change => `Mudou a ordem de listagem de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                    }
+
+                    return {
+                        icon: "list",
+                        title: `<b>${audit.username}</b> alterou ${audit.changes?.length || ""} dado${audit.changes?.length ? "s" : ""} no complemento <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b>`,
+                        items: audit.changes.map(change => messages[change.key]?.(change)),
+                    };
+                }
+            },
+            CREATE: () => {
+                return {
+                    icon: "list",
+                    title: `O usuário <b>${audit.username}</b> adicionou o complemento <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b>`,
+                    items: []
+                };
+            },
+            DELETE: () => {
+                return {
+                    icon: "list",
+                    title: `O usuário <b>${audit.username}</b> apagou o complemento <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b>`,
+                    items: []
+                };
+            }
+        },
+        time: {
+            UPDATE: audit => {
+                function GetDayOfWeekName(value = audit.additional.dayOfWeek) {
+                    if (value === "Sunday") return "Domingo";
+                    else if (value === "Monday") return "Segunda-Feira";
+                    else if (value === "Tuesday") return "Terça-Feira";
+                    else if (value === "Wednesday") return "Quarta-Feira";
+                    else if (value === "Thursday") return "Quinta-Feira";
+                    else if (value === "Friday") return "Sexta-Feira";
+                    else if (value === "Saturday") return "Sábado";
+                    else return "Indefinido";
+                }
+
+                if (audit.changes.length == 1) {
+                    const messages = {
+                        open: change => `O usuário <b>${audit.username}</b> alterou o dia da semana <b>${GetDayOfWeekName()}</b> para <b>${change.new_value ? "aberto" : "fechado"}</b>`,
+                        opens: change => `O usuário <b>${audit.username}</b> alterou o horário de abertura do dia da semana <b>${GetDayOfWeekName()}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        closes: change => `O usuário <b>${audit.username}</b> alterou o horário de fechamento do dia da semana <b>${GetDayOfWeekName()}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                    }
+
+                    const change = audit.changes[0];
+
+                    return {
+                        icon: "list",
+                        title: messages[change.key]?.(change) || `<b>${audit.username}</b> fez alterações no dia da semana <b>${GetDayOfWeekName()}</b>`,
+                        items: []
+                    };
+                } else {
+                    const messages = {
+                        open: change => `Mudou de <b>${change.old_value ? "aberto" : "fechado"}</b> para <b>${change.new_value ? "aberto" : "fechado"}</b>`,
+                        opens: change => `Mudou o horário de abertura de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        closes: change => `Mudou o horário de fechamento de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                    }
+
+                    return {
+                        icon: "clock",
+                        title: `<b>${audit.username}</b> alterou ${audit.changes?.length || ""} dado${audit.changes?.length ? "s" : ""} no dia da semana <b>${GetDayOfWeekName()}</b>`,
+                        items: audit.changes.map(change => messages[change.key]?.(change)),
+                    };
+                }
+            },
+            CREATE: (...args) => audit_targets.time.UPDATE(...args),
+        },
     }
 
-    // switch (audit.target) {
-
-    //     case "user": {
-    //         if (audit.action_type === "UPDATE") {
-    //             type_icon_1 = "user";
-
-    //             if (audit.changes.length == 1 && audit.changes[0] === "password") {
-    //                 info_message = `A senha do usuário <b>${audit.username}</b> foi alterada`;
-    //             } else {
-    //                 info_message = `O usuário <b>${audit.username}</b> foi atualizado`;
-    //             }
-    //         }
-    //         else if (audit.action_type === "CREATE") info_message = `O usuário <b>${audit.username}</b> foi criado`;
-    //         else if (audit.action_type === "DELETE") info_message = `O usuário <b>${audit.username}</b> foi deletado`;
-    //         else if (audit.action_type === "LOGIN") {
-    //             info_message = `O usuário <b>${audit.username}</b> se autenticou`;
-
-    //             if (audit.additional) {
-    //                 if (audit.additional.internal_username) changes_text.push(`Nome de usuário interno é <b>${audit.additional.internal_username}</b>`);
-    //                 if (audit.additional.ip_address) changes_text.push(`Endereço IP externo é <b>${audit.additional.ip_address}</b>`);
-    //                 if (audit.additional.address) changes_text.push(`Endereço do IP é <b>${audit.additional.address}</b>`);
-    //             }
-    //         }
-    //     } break;
-
-    //     case "company_time": {
-    //         const daysOfWeek_translations = {
-    //             "Monday": "Segunda",
-    //             "Tuesday": "Terça",
-    //             "Wednesday": "Quarta",
-    //             "Thursday": "Quinta",
-    //             "Friday": "Sexta",
-    //             "Saturday": "Sábado",
-    //             "Sunday": "Domingo",
-    //         };
-
-    //         info_message = `O usuário <b>${audit.username}</b> atualizou o horário <b>${daysOfWeek_translations[audit.additional.dayOfWeek]}</b>`;
-
-    //         if (audit.action_type === "UPDATE") {
-    //             for (const change of audit.changes) {
-    //                 switch (change.key) {
-    //                     case "open":
-    //                         changes_text.push(`Mudou para <b>${change.new_value ? "aberto" : "fechado"}</b>`);
-    //                         break;
-
-    //                     case "opens":
-    //                         changes_text.push(`Mudou o horário de abertura de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "closes":
-    //                         changes_text.push(`Mudou o horário de fechamento de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-    //                     default:
-    //                         changes_text.push(`<font color="gray">Mudou a chave <b>${change.key}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b></font>`);
-    //                         break;
-    //                 }
-    //             }
-    //         }
-    //     } break;
-
-    //     case "category": {
-
-    //         if (audit.action_type === "UPDATE") {
-    //             if (audit.changes.length == 1 && audit.changes[0].key === "image") {
-    //                 info_message = `<b>${audit.username}</b> alterou a imagem da categoria <b>${audit.additional.name}</b>`;
-    //             } else {
-    //                 info_message = `<b>${audit.username}</b> alterou a categoria <b>${audit.additional.name}</b>`;
-
-    //                 for (const change of audit.changes) {
-    //                     switch (change.key) {
-    //                         case "name":
-    //                             changes_text.push(`Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                             break;
-
-    //                         case "image":
-    //                             changes_text.push(`Alterou o ícone`);
-    //                             break;
-    //                         default:
-    //                             changes_text.push(`<font color="gray">Mudou a chave <b>${change.key}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b></font>`);
-    //                             break;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //         else if (audit.action_type === "CREATE") info_message = `<b>${audit.username}</b> criou a categoria <b>${audit.additional.name}</b>`;
-    //         else if (audit.action_type === "DELETE") info_message = `<b>${audit.username}</b> apagou a categoria <b>${audit.additional.name}</b>`;
-    //     } break;
-
-    //     case "discount_coupon": {
-
-    //         if (audit.action_type === "UPDATE") {
-    //             info_message = `<b>${audit.username}</b> alterou o cupom de desconto <b>${audit.additional.coupon}</b>`;
-
-    //             for (const change of audit.changes) {
-    //                 switch (change.key) {
-    //                     case "coupon":
-    //                         changes_text.push(`Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "discount", "is_percentual":
-    //                         const is_percentual_key = audit.changes.find(change => change.key == "is_percentual");
-
-    //                         if (!!is_percentual_key) {
-    //                             changes_text.push(`Mudou o desconto de <b>${is_percentual_key.old_value ? `${Number(change.old_value)}%` : MoneyFormat(change.old_value)}</b> para <b>${is_percentual_key.new_value ? `${Number(change.new_value)}%` : MoneyFormat(change.new_value)}</b>`);
-    //                         } else {
-    //                             changes_text.push(`Mudou o desconto de <b>${audit.additional.is_percentual ? `${Number(change.old_value)}%` : MoneyFormat(change.old_value)}</b> para <b>${audit.additional.is_percentual ? `${Number(change.new_value)}%` : MoneyFormat(change.new_value)}</b>`);
-    //                         }
-    //                         break;
-
-    //                     case "limit":
-    //                         changes_text.push(`Mudou o limite de usos de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "min_price":
-    //                         changes_text.push(`Mudou o preço mínimo elegível de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "in_delivery_cost":
-    //                         changes_text.push(`O desconto <b>${change.new_value ? "não será" : "será também"}</b> aplicado ao preço do frete`);
-    //                         break;
-
-    //                     case "enabled":
-    //                         changes_text.push(`Foi <b>${change.new_value ? "ativado" : "desativado"}</b>`);
-    //                         break;
-    //                     default:
-    //                         changes_text.push(`<font color="gray">Mudou a chave <b>${change.key}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b></font>`);
-    //                         break;
-    //                 }
-    //             }
-    //         }
-    //         else if (audit.action_type === "CREATE") info_message = `<b>${audit.username}</b> criou o cupom de desconto <b>${audit.additional.coupon}</b>`;
-    //         else if (audit.action_type === "DELETE") info_message = `<b>${audit.username}</b> apagou o cupom de desconto <b>${audit.additional.coupon}</b>`;
-    //     } break;
-
-    //     case "order": {
-
-    //         type_icon_1 = "sticker";
-
-    //         order_to_load = audit.additional.order;
-
-    //         if (audit.action_type === "UPDATE") {
-    //             if (audit.changes.length == 1) {
-    //                 const change = audit.changes[0];
-
-    //                 if (change.key === "status") {
-    //                     order_to_load.status = change.new_value;
-
-    //                     let status = "Recusado";
-    //                     if (change.new_value == 0) status = "Aguardando aceite";
-    //                     else if (change.new_value == 1) status = "Aguardando produção";
-    //                     else if (change.new_value == 2) status = "Aguardando entrega";
-    //                     else if (change.new_value == 3) status = "Saiu para entrega";
-    //                     else if (change.new_value == 10) status = "Entregue";
-
-    //                     info_message = `<b>${audit.username}</b> alterou o status do pedido <b>${order_to_load.order_company_sequence}</b> do cliente <b>${order_to_load.name_client}</b> para <b>${status}</b>`;
-    //                 }
-    //             } else {
-    //                 info_message = `<b>${audit.username}</b> atualizou o pedido <b>${order_to_load.order_company_sequence}</b> do cliente <b>${order_to_load.name_client}</b>`;
-    //             }
-    //         }
-    //         else if (audit.action_type === "CREATE") {
-    //             info_message = `O pedido <b>${order_to_load.order_company_sequence}</b> do cliente <b>${order_to_load.name_client}</b> foi registrado`;
-    //         }
-
-    //     } break;
-
-    //     case "printer": {
-
-    //         if (audit.action_type === "UPDATE") {
-    //             info_message = `<b>${audit.username}</b> modificou a impressora <b>${audit.additional.name}</b>`;
-
-    //             for (const change of audit.changes) {
-    //                 switch (change.key) {
-    //                     case "name":
-    //                         changes_text.push(`Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "device":
-    //                         changes_text.push(`Mudou o dispositivo de impressão <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "is_primary":
-    //                         if (change.new_value) changes_text.push(`Definiu como dispositivo <b>primário</b>`);
-    //                         else changes_text.push(`Não é mais um dispositivo <b>primário</b>`);
-    //                         break;
-    //                     default:
-    //                         changes_text.push(`<font color="gray">Mudou a chave <b>${change.key}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b></font>`);
-    //                         break;
-    //                 }
-    //             }
-    //         }
-    //         else if (audit.action_type === "CREATE") info_message = `<b>${audit.username}</b> criou a impressora <b>${audit.additional.name}</b>`;
-    //         else if (audit.action_type === "DELETE") info_message = `<b>${audit.username}</b> apagou a impressora <b>${audit.additional.name}</b>`;
-    //     } break;
-
-    //     case "product": {
-
-    //         if (audit.action_type === "UPDATE") {
-    //             info_message = `<b>${audit.username}</b> alterou o produto <b>${audit.additional.name}</b>`;
-
-    //             for (const change of audit.changes) {
-    //                 switch (change.key) {
-    //                     case "order":
-    //                         changes_text.push(`Mudou a ordem de listagem de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "name":
-    //                         changes_text.push(`Mudou o nome <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "description":
-    //                         changes_text.push(`Mudou a descrição de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "sku":
-    //                         changes_text.push(`Mudou o sku de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "enabled":
-    //                         changes_text.push(`Foi <b>${change.new_value ? "ativado" : "pausado"}</b>`);
-    //                         break;
-
-    //                     case "keywords":
-    //                         changes_text.push(`Mudou as palavras chave do SEO de <b>${change.old_value.split(",").join(", ")}</b> para <b>${change.new_value.split(",").join(", ")}</b>`);
-    //                         break;
-
-    //                     case "price":
-    //                         changes_text.push(`Mudou o preço de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`);
-    //                         break;
-
-    //                     case "is_pizza":
-    //                         changes_text.push(`Mudou o tipo do produto de <b>${change.old_value ? "pizza" : "comum"}</b> para <b>${change.new_value ? "pizza" : "comum"}</b>`);
-    //                         break;
-
-    //                     case "pizza_price_rule":
-    //                         changes_text.push(`Mudou o tipo de precificação da pizza de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "pizza_quantity_flavors":
-    //                         changes_text.push(`Mudou a quantidade de sabores da pizza ${!!change.old_value ? `de <b>${change.old_value.split(",").join(", ")}</b> ` : ""}para <b>${change.new_value.split(",").join(", ")}</b>`);
-    //                         break;
-
-    //                     case "seo_title":
-    //                         changes_text.push(`Mudou o titulo do SEO de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "seo_description":
-    //                         changes_text.push(`Mudou a descrição do SEO de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "availability_daysOfWeek":
-    //                         changes_text.push(`Mudou a disponibilidade nos dias da semana de <b>${change.old_value.split(",").join(", ")}</b> para <b>${change.new_value.split(",").join(", ")}</b>`);
-    //                         break;
-
-    //                     case "availability_dayShifts":
-    //                         changes_text.push(`Mudou a disponibilidade dos turnos do dia de <b>${change.old_value.split(",").join(", ")}</b> para <b>${change.new_value.split(",").join(", ")}</b>`);
-    //                         break;
-    //                     default:
-    //                         changes_text.push(`<font color="gray">Mudou a chave <b>${change.key}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b></font>`);
-    //                         break;
-    //                 }
-    //             }
-    //         }
-    //         else if (audit.action_type === "CREATE") info_message = `<b>${audit.username}</b> criou o produto <b>${audit.additional.name}</b>`;
-    //         else if (audit.action_type === "DELETE") info_message = `<b>${audit.username}</b> apagou o produto <b>${audit.additional.name}</b>`;
-    //     } break;
-
-    //     case "regions_blacklist": {
-    //         if (audit.action_type === "CREATE") info_message = `<b>${audit.username}</b> adicionou o endereço <b>${audit.additional.address}</b> na blacklist`;
-    //         else if (audit.action_type === "DELETE") info_message = `<b>${audit.username}</b> removeu o endereço <b>${audit.additional.address}</b> da blacklist`;
-    //     } break;
-
-    //     case "neighborhood_blacklist": {
-    //         if (audit.action_type === "CREATE") info_message = `<b>${audit.username}</b> adicionou o bairro <b>${audit.additional.name}</b> na blacklist`;
-    //         else if (audit.action_type === "DELETE") info_message = `<b>${audit.username}</b> removeu o bairro <b>${audit.additional.name}</b> da blacklist`;
-    //     } break;
-
-    //     case "time": {
-
-    //         type_icon_1 = "clock";
-
-    //         let time_day_name = "";
-
-    //         if (audit.additional.dayOfWeek == "Sunday") time_day_name = "Domingo";
-    //         else if (audit.additional.dayOfWeek == "Monday") time_day_name = "Segunda-Feira";
-    //         else if (audit.additional.dayOfWeek == "Tuesday") time_day_name = "Terça-Feira";
-    //         else if (audit.additional.dayOfWeek == "Wednesday") time_day_name = "Quarta-Feira";
-    //         else if (audit.additional.dayOfWeek == "Thursday") time_day_name = "Quinta-Feira";
-    //         else if (audit.additional.dayOfWeek == "Friday") time_day_name = "Sexta-Feira";
-    //         else if (audit.additional.dayOfWeek == "Saturday") time_day_name = "Sábado";
-
-    //         if (audit.action_type === "UPDATE" || audit.action_type === "CREATE") {
-    //             info_message = `<b>${audit.username}</b> fez alterações no dia da semana <b>${time_day_name}</b>`;
-
-    //             for (const change of audit.changes) {
-    //                 switch (change.key) {
-    //                     case "open":
-    //                         changes_text.push(`Mudou de <b>${change.old_value ? "aberto" : "fechado"}</b> para <b>${change.new_value ? "aberto" : "fechado"}</b>`);
-    //                         break;
-
-    //                     case "opens":
-    //                         changes_text.push(`Mudou o horário de abertura de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "closes":
-    //                         changes_text.push(`Mudou o horário de fechamento de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     default:
-    //                         changes_text.push(`<font color="gray">Mudou a chave <b>${change.key}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b></font>`);
-    //                         break;
-    //                 }
-    //             }
-    //         }
-    //     } break;
-
-    //     case "product_image": {
-    //         if (audit.action_type === "CREATE") info_message = `<b>${audit.username}</b> adicionou uma imagem no produto <b>${audit.additional.product_name}</b>`;
-    //         else if (audit.action_type === "DELETE") info_message = `<b>${audit.username}</b> apagou uma imagem do produto <b>${audit.additional.product_name}</b>`;
-    //     } break;
-
-    //     case "product_pizza_flavor": {
-
-    //         if (audit.action_type === "UPDATE") {
-    //             info_message = `<b>${audit.username}</b> fez alterações no sabor de pizza <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b>`;
-
-    //             for (const change of audit.changes) {
-    //                 switch (change.key) {
-    //                     case "name":
-    //                         changes_text.push(`Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "description":
-    //                         changes_text.push(`Mudou a descrição de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "price":
-    //                         changes_text.push(`Mudou o preço de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`);
-    //                         break;
-
-    //                     case "order":
-    //                         changes_text.push(`Mudou a ordem de listagem de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     default:
-    //                         changes_text.push(`<font color="gray">Mudou a chave <b>${change.key}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b></font>`);
-    //                         break;
-    //                 }
-    //             }
-    //         }
-    //         else if (audit.action_type === "CREATE") info_message = `<b>${audit.username}</b> adicionou o sabor <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b>`;
-    //         else if (audit.action_type === "DELETE") info_message = `<b>${audit.username}</b> apagou o sabor de pizza <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b>`;
-    //     } break;
-
-    //     case "product_complement_group": {
-
-    //         if (audit.action_type === "UPDATE") {
-    //             info_message = `<b>${audit.username}</b> fez alterações no grupo de complementos <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b>`;
-
-    //             for (const change of audit.changes) {
-    //                 switch (change.key) {
-    //                     case "name":
-    //                         changes_text.push(`Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "required":
-    //                         changes_text.push(`Mudou a obrigatoriedade para <b>${change.new_value ? "obrigatório" : "opcional"}</b>`);
-    //                         break;
-
-    //                     case "min":
-    //                         changes_text.push(`Mudou a quantidade minima de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "max":
-    //                         changes_text.push(`Mudou a quantidade máxima de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     default:
-    //                         changes_text.push(`<font color="gray">Mudou a chave <b>${change.key}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b></font>`);
-    //                         break;
-    //                 }
-    //             }
-    //         }
-    //         else if (audit.action_type === "CREATE") info_message = `<b>${audit.username}</b> adicionou o grupo de complementos <b>${audit.additional.name}</b> para o produto <b>${audit.additional.product_name}</b>`;
-    //         else if (audit.action_type === "DELETE") info_message = `<b>${audit.username}</b> apagou o grupo de complementos <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b>`;
-    //     } break;
-
-    //     case "product_complement_item": {
-
-    //         if (audit.action_type === "UPDATE") {
-    //             console.log(audit)
-    //             if (!!audit.additional?.name) {
-    //                 info_message = `<b>${audit.username}</b> ${audit.additional.enabled ? "ativou" : "desativou"} todos os complementos <b>${audit.additional.name}</b>`;
-    //             } else {
-    //                 info_message = `<b>${audit.username}</b> fez alterações no complemento <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b>`;
-    //             }
-
-    //             for (const change of audit.changes) {
-    //                 switch (change.key) {
-    //                     case "name":
-    //                         changes_text.push(`Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "description":
-    //                         changes_text.push(`Mudou a descrição de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     case "price":
-    //                         changes_text.push(`Mudou o preço de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`);
-    //                         break;
-
-    //                     case "order":
-    //                         changes_text.push(`Mudou a ordem de listagem de <b>${change.old_value}</b> para <b>${change.new_value}</b>`);
-    //                         break;
-
-    //                     default:
-    //                         changes_text.push(`<font color="gray">Mudou a chave <b>${change.key}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b></font>`);
-    //                         break;
-    //                 }
-    //             }
-    //         }
-    //         else if (audit.action_type === "CREATE") info_message = `<b>${audit.username}</b> adicionou o complemento <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b>`;
-    //         else if (audit.action_type === "DELETE") info_message = `<b>${audit.username}</b> apagou o complemento <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b>`;
-    //     } break;
-
-    //     case "regions_delivery_cost": {
-
-    //         if (audit.action_type === "UPDATE" || audit.action_type === "CREATE") {
-    //             info_message = `<b>${audit.username}</b> configurou o frete por localidade do endereço <b>${audit.additional.address}</b> para <b>${audit.additional.price}</b>`;
-    //         }
-    //         else if (audit.action_type === "DELETE") info_message = `<b>${audit.username}</b> removeu o endereço <b>${audit.additional.address}</b> da lista de fete por localidade`;
-    //     } break;
-
-    //     case "neighborhood_delivery_cost": {
-
-    //         if (audit.action_type === "UPDATE" || audit.action_type === "CREATE") {
-    //             info_message = `<b>${audit.username}</b> configurou a taxa de entrega do bairro <b>${audit.additional.name}</b> para <b>${audit.additional.price}</b>`;
-    //         }
-    //         else if (audit.action_type === "DELETE") info_message = `<b>${audit.username}</b> removeu a taxa de entrega do bairro <b>${audit.additional.name}</b>`;
-    //     } break;
-    // }
-
-    if(audit.id === 70282) console.log(audit)
     const audit_target_data = audit_targets[audit.target]?.[audit.action_type]?.(audit);
 
     if (!!audit_target_data) {
