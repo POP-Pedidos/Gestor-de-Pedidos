@@ -1,4 +1,4 @@
-const { BrowserWindow, screen, shell, nativeTheme } = require("electron");
+const { app, BrowserWindow, screen, shell, nativeTheme } = require("electron");
 const path = require("path");
 
 const Store = require("./Store");
@@ -53,7 +53,7 @@ module.exports = function CreateWindow() {
 
         if (store.get("maximized") === true) win.maximize();
         else win.setSize(store.get("width"), store.get("height"));
-        
+
         win.show();
     });
 
@@ -75,6 +75,8 @@ module.exports = function CreateWindow() {
         store.set("maximized", win.isMaximized());
         store.set("width", bounds.width);
         store.set("height", bounds.height);
+
+        app.exit();
     });
 
     win.loadFile("assets/pages/login/index.html");

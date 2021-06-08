@@ -22,7 +22,7 @@ app.on("second-instance", (event, commandLine, workingDirectory) => {
 
     if (win.isMinimized()) win.restore();
     win.focus();
-})
+});
 
 app.whenReady().then(() => {
     win = CreateWindow();
@@ -30,8 +30,8 @@ app.whenReady().then(() => {
 
 app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) win = CreateWindow();
-})
+});
 
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit();
-})
+    app.quit();
+});
