@@ -27,8 +27,6 @@ module.exports = (win) => {
 
     autoUpdater.on("update-not-available", (info) => {
         win.webContents.send("updater:update-not-available", info);
-
-        setTimeout(() => autoUpdater.checkForUpdates(), 60000);
     });
 
     autoUpdater.on("error", (err) => {
@@ -44,4 +42,5 @@ module.exports = (win) => {
     });
 
     autoUpdater.checkForUpdates();
+    setInterval(() => autoUpdater.checkForUpdates(), 60000);
 }

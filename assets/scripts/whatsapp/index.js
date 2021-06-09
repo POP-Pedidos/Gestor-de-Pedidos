@@ -11,6 +11,7 @@ whatsappWebView.addEventListener("dom-ready", function (event) {
         whatsappWebView.executeJavaScript(WaitAuth);
     });
 });
+
 whatsappWebView.addEventListener('ipc-message', (event) => {
     console.log("[WHATSAPP-IPC-MESSAGE]", event);
 
@@ -58,8 +59,15 @@ whatsappWebView.addEventListener('ipc-message', (event) => {
             setTimeout(() => delete message_times[number], 6 * 60 * 60 * 1000); // 6h
         }
     }
-})
+});
 
+whatsappWebView.addEventListener('crashed', function () {
+    dialog.showMessageBox({
+        title: "Erro no WhatsApp",
+        type: 'error',
+        message: 'A janela do WhatsApp foi terminada inesperadamente!',
+    });
+});
 
 function SendOrderStatusMessage(order) {
     const payment_name_translations = {
@@ -172,7 +180,7 @@ function SendOrderStatusMessage(order) {
     }
 
     message_times[order.phone_client] = Date.now();
-    
+
     const phone_id = `55${order.phone_client?.replace(/\W/g, "")}`;
     whatsappWebView.send("sendMessage", phone_id, message);
 }

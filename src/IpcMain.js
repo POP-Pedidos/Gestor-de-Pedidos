@@ -81,6 +81,10 @@ ipcMain.handle("dialog:showSaveDialog", (event, ...args) => {
     return dialog.showSaveDialog(win, ...args);
 });
 
+ipcMain.handle("dialog:showMessageBox", (event, ...args) => {
+    return dialog.showMessageBox(win, ...args);
+});
+
 ipcMain.on("fs:writeFile", (event, ...args) => {
     try {
         fs.writeFileSync(...args);

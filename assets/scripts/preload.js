@@ -39,6 +39,7 @@ window.printService = {
 
 window.dialog = {
     showSaveDialog: (...args) => ipcRenderer.invoke("dialog:showSaveDialog", ...args),
+    showMessageBox: (...args) => ipcRenderer.invoke("dialog:showMessageBox", ...args),
 }
 
 window.updater = {

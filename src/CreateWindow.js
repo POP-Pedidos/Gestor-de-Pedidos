@@ -1,4 +1,4 @@
-const { app, BrowserWindow, screen, shell, nativeTheme } = require("electron");
+const { app, BrowserWindow, screen, shell, nativeTheme, dialog } = require("electron");
 const path = require("path");
 
 const Store = require("./Store");
@@ -67,6 +67,14 @@ module.exports = function CreateWindow() {
 
     win.on("page-title-updated", function (e, title) {
         win.webContents.send("page-title-updated", title);
+    });
+
+    win.on("crashed", function (e) {
+        dialog.showMessageBox({
+            title: "Erro",
+            type: "error",
+            message: "A janela foi terminada inesperadamente!",
+        });
     });
 
     win.on("close", function (e) {

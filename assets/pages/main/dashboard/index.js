@@ -1,5 +1,7 @@
 function LoadDashboard() {
     $(".dashboard-results-container .breadcrumb>h3>span").text(company.name || "Mundo");
+    $("#dashboard .free-alert").toggle(company.license_type.startsWith("free"));
+    $("#dashboard .remain_plan_time").toggle(company.license_type.startsWith("free"));
 
     function RemoveDashSkeleton() {
         $(".dashboard-results-container .filter-date").removeClass("skeleton");
