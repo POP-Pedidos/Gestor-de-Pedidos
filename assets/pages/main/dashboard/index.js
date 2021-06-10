@@ -228,7 +228,7 @@ function LoadProducts(products_data, is_search = false) {
             });
         }
     } else {
-        $(".top-products-container").html(`<img src="../../images/empty-folder.svg"/>`);
+        $(".top-products-container").html(`<img src="../../../images/empty-folder.svg"/>`);
     }
 }
 
@@ -308,7 +308,7 @@ function LoadClients(client_data) {
             });
         }
     } else {
-        $(".dashboard-results-container .top-clients-container").html(`<img src="../../images/empty-folder2.svg"/>`);
+        $(".dashboard-results-container .top-clients-container").html(`<img src="../../../images/empty-folder2.svg"/>`);
     }
 }
 
@@ -695,9 +695,9 @@ lazy_loading.onHandle = (state) => {
 
         state.offset += orders_data.results.length;
 
-        if (state.max === 0) $(".dashboard-results-container .orders>main").html(`<img src="../../images/order.svg"/>`);
+        if (state.max === 0) $(".dashboard-results-container .orders>main").html(`<img src="../../../images/order.svg"/>`);
     }).catch(error => {
-        $(".dashboard-results-container .orders>main").html(`<img src="../../images/order.svg"/>`);
+        $(".dashboard-results-container .orders>main").html(`<img src="../../../images/order.svg"/>`);
 
         Swal.fire("Opss...", "Ocorreu um erro ao tentar carregar os pedidos na dashboard!", "error");
         Swal.showValidationMessage(error);

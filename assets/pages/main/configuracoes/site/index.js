@@ -1,4 +1,4 @@
-var url = `https://${company.subdomain}.${domain}/`;
+var url = `https://${company.subdomain || "www"}.${domain}/`;
 
 var selected_options = {}
 var website_config_webview = $("#website_config webview")[0];
@@ -9,7 +9,7 @@ function LoadConfig() {
     $("#website_config>.configs section.subdomain>div>input").val(company.subdomain);
     $("#website_config>.configs section.primary-color>.color").css("background-color", `#${company.website_primary_color || "0cb50c"}`);
     $("#website_config>.configs section.primary-color>.color>input").val(`#${company.website_primary_color || "0cb50c"}`);
-    $("#website_config>.configs section.icon>img").attr("src", company.image?.small || "../../images/pop-black-icon.jpg");
+    $("#website_config>.configs section.icon>img").attr("src", company.image?.small || "../../../images/pop-black-icon.jpg");
     $("#website_config>.configs section.home-bg>img").attr("src", company.website_main_bg || `${api_url}/static/images/pop-bg.jpg`);
 }
 

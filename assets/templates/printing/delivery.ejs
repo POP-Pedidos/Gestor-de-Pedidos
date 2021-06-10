@@ -282,7 +282,7 @@
             <div class="name-value-item">
                 <span class="name">Desconto</span>
                 <span class="value">
-                    <%= MoneyFormat(order.discount, false); %>
+                    <%= MoneyFormat(order.discount + order.coupon_discount, false); %>
                 </span>
             </div>
             <div class="name-value-item">
