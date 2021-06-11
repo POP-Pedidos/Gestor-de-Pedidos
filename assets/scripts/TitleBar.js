@@ -66,7 +66,7 @@ $(`<style type="text/css">
     }
 
     body {
-        margin-top: 29px !important;
+        padding-top: 29px !important;
         height: calc(100vh - 29px) !important;
         min-height: calc(100vh - 29px) !important;
     }

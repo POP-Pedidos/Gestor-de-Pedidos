@@ -1,16 +1,12 @@
-<!-- Page header start -->
 <div class="page-header">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">Configurações</li>
         <li class="breadcrumb-item active">Empresa</li>
     </ol>
 </div>
-<!-- Page header end -->
 
-<!-- Main container start -->
 <div class="main-container">
 
-    <!-- Row starts -->
     <div class="row gutters">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <form id="configuracoes_empresa">
@@ -20,10 +16,16 @@
                             <label>Nome da empresa</label>
                             <input type="text" class="form-control name" name="name" placeholder="Especifique um nome para sua empresa" required>
                         </div>
-                        <!-- <div class="col">
-                            <label>Endereço</label>
-                            <input type="text" class="form-control address" placeholder="Digite um endereço e número" required>
-                        </div> -->
+                        <div class="col">
+                            <div class="address">
+                                <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
+                                <div class="details">
+                                    <span class="street">Rua Primeiro de maio, 383</span>
+                                    <span class="city-state">Nossa senhora aparecida, MG</span>
+                                </div>
+                                <i class="fas fa-pen"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -71,9 +73,52 @@
             </form>
         </div>
     </div>
-    <!-- Main container end -->
 
 </div>
-<!-- Page content end -->
 
+<div class="company-address-editor">
+    <div>
+        <button class="back"><i class="fas fa-chevron-left"></i><span>VOLTAR</span></button>
+        <div class="map loading">
+            <img class="placeholder" src="../../../images/map.jpg" />
+            <span class="spinner-border"></span>
+            <div class="map-container">
+                <pre class="coordinates"></pre>
+                <div class="marker">
+                    <img src="../../../images/map-marker.svg">
+                    <div class="shadow"></div>
+                </div>
+                <div class="map-content"></div>
+            </div>
+        </div>
+        <form>
+            <h3>Editar endereço</h3>
+
+            <label class="input-label input-auto-complete" autocomplete-type="state">
+                <input type="text" name="state" data-name="id_state" required>
+                <span>Estado</span>
+            </label>
+            <label class="input-label input-auto-complete" autocomplete-type="city">
+                <input type="text" name="city" data-name="id_city" required>
+                <span>Cidade</span>
+            </label>
+            <label class="input-label input-auto-complete" autocomplete-type="neighborhood">
+                <input type="text" name="neighborhood" data-name="id_neighborhood" required>
+                <span>Bairro</span>
+            </label>
+            <label class="input-label street">
+                <input type="text" name="street" minlength="1" maxlength="255" required>
+                <span>Rua</span>
+            </label>
+            <label class="input-label street_number">
+                <input type="text" name="street_number" minlength="1" maxlength="255" required>
+                <span>Número</span>
+            </label>
+            <button class="btn btn-primary">Salvar</button>
+        </form>
+    </div>
+</div>
+
+<script src="../../../scripts/input-auto-complete.js"></script>
+<script src="../configuracoes/empresa/map.js"></script>
 <script src="../configuracoes/empresa/index.js"></script>

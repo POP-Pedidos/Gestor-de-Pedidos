@@ -53,7 +53,7 @@ whatsappWebView.addEventListener('ipc-message', (event) => {
 
             if (Object.keys(message_times).includes(number)) return;
 
-            whatsappWebView.send("sendMessage", number, `Olá,${contact.pushname ? ` ${contact.pushname}` : ""} para acessar nossa lista de produtos acesse o link abaixo, não é necessário baixar nenhum aplicativo, o link irá mostrar nossa lista completa, e por lá mesmo você pode selecionar o que deseja e realizar o seu pedido! 🤩\n\nhttps://${company.subdomain}.${domain}?tel=${number}`);
+            whatsappWebView.send("sendMessage", number, `Olá ${contact.pushname ? ` ${contact.pushname}` : ""}, acesse o link e faça o seu pedido! 🏍️🚚🤩\n\nhttps://${company.subdomain}.${domain}?tel=${number}`);
 
             message_times[number] = Date.now();
             setTimeout(() => delete message_times[number], 6 * 60 * 60 * 1000); // 6h

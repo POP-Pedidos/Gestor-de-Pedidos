@@ -523,15 +523,15 @@ function addAudit(audit) {
                         description: change => `O usuário <b>${audit.username}</b> alterou a descrição do produto <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
                         sku: change => `O usuário <b>${audit.username}</b> alterou o SKU do produto <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
                         enabled: change => `O usuário <b>${audit.username}</b> Foi <b>${change.new_value ? "ativado" : "pausado"}</b>`,
-                        keywords: change => `O usuário <b>${audit.username}</b> alterou as palavras chave do SEO do produto <b>${audit.additional.name}</b> de <b>${change.old_value.split(",").join(", ")}</b> para <b>${change.new_value.split(",").join(", ")}</b>`,
+                        keywords: change => `O usuário <b>${audit.username}</b> alterou as palavras chave do SEO do produto <b>${audit.additional.name}</b>${change.old_value ? ` de <b>${change.old_value.join(", ")}</b>` : ""} para <b>${change.new_value.join(", ")}</b>`,
                         price: change => `O usuário <b>${audit.username}</b> alterou o preço do produto <b>${audit.additional.name}</b> de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`,
                         is_pizza: change => `O usuário <b>${audit.username}</b> alterou o tipo do produto <b>${audit.additional.name}</b> de <b>${change.old_value ? "pizza" : "comum"}</b> para <b>${change.new_value ? "pizza" : "comum"}</b>`,
                         pizza_price_rule: change => `O usuário <b>${audit.username}</b> alterou o tipo de precificação da pizza <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        pizza_quantity_flavors: change => `O usuário <b>${audit.username}</b> alterou a quantidade de sabores da pizza <b>${audit.additional.name}</b> ${!!change.old_value ? `de <b>${change.old_value.split(",").join(", ")}</b> ` : ""}para <b>${change.new_value.split(",").join(", ")}</b>`,
+                        pizza_quantity_flavors: change => `O usuário <b>${audit.username}</b> alterou a quantidade de sabores da pizza <b>${audit.additional.name}</b> ${!!change.old_value ? `de <b>${change.old_value.join(", ")}</b> ` : ""}para <b>${change.new_value.join(", ")}</b>`,
                         seo_title: change => `O usuário <b>${audit.username}</b> alterou o titulo de SEO do produto <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
                         seo_description: change => `O usuário <b>${audit.username}</b> alterou a descrição de SEO do produto <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        availability_daysOfWeek: change => `O usuário <b>${audit.username}</b> alterou a disponibilidade do produto <b>${audit.additional.name}</b> nos dias da semana de <b>${change.old_value.split(",").join(", ")}</b> para <b>${change.new_value.split(",").join(", ")}</b>`,
-                        availability_dayShifts: change => `O usuário <b>${audit.username}</b> alterou a disponibilidade do produto <b>${audit.additional.name}</b> dos turnos do dia de <b>${change.old_value.split(",").join(", ")}</b> para <b>${change.new_value.split(",").join(", ")}</b>`,
+                        availability_daysOfWeek: change => `O usuário <b>${audit.username}</b> alterou a disponibilidade do produto <b>${audit.additional.name}</b> nos dias da semana${change.old_value ? ` de <b>${change.old_value?.split(",").join(", ")}</b>` : ""} para <b>${change.new_value.split(",").join(", ")}</b>`,
+                        availability_dayShifts: change => `O usuário <b>${audit.username}</b> alterou a disponibilidade do produto <b>${audit.additional.name}</b> dos turnos do dia${change.old_value ? ` de <b>${change.old_value?.split(",").join(", ")}</b>` : ""} para <b>${change.new_value.split(",").join(", ")}</b>`,
                     }
 
                     const change = audit.changes[0];
@@ -548,21 +548,21 @@ function addAudit(audit) {
                         description: change => `Mudou a descrição de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
                         sku: change => `Mudou o SKU de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
                         enabled: change => `Foi <b>${change.new_value ? "ativado" : "pausado"}</b>`,
-                        keywords: change => `Mudou as palavras chave do SEO de <b>${change.old_value.split(",").join(", ")}</b> para <b>${change.new_value.split(",").join(", ")}</b>`,
+                        keywords: change => `Mudou as palavras chave do SEO${change.old_value ? ` de <b>${change.old_value.join(", ")}</b>` : ""} para <b>${change.new_value.join(", ")}</b>`,
                         price: change => `Mudou o preço de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`,
                         is_pizza: change => `Mudou o tipo do produto de <b>${change.old_value ? "pizza" : "comum"}</b> para <b>${change.new_value ? "pizza" : "comum"}</b>`,
                         pizza_price_rule: change => `Mudou o tipo de precificação da pizza de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        pizza_quantity_flavors: change => `Mudou a quantidade de sabores da pizza ${!!change.old_value ? `de <b>${change.old_value.split(",").join(", ")}</b> ` : ""}para <b>${change.new_value.split(",").join(", ")}</b>`,
+                        pizza_quantity_flavors: change => `Mudou a quantidade de sabores da pizza ${change.old_value ? `de <b>${change.old_value.join(", ")}</b> ` : ""}para <b>${change.new_value.join(", ")}</b>`,
                         seo_title: change => `Mudou o titulo do SEO de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
                         seo_description: change => `Mudou a descrição do SEO de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        availability_daysOfWeek: change => `Mudou a disponibilidade nos dias da semana de <b>${change.old_value.split(",").join(", ")}</b> para <b>${change.new_value.split(",").join(", ")}</b>`,
-                        availability_dayShifts: change => `Mudou a disponibilidade dos turnos do dia de <b>${change.old_value.split(",").join(", ")}</b> para <b>${change.new_value.split(",").join(", ")}</b>`,
+                        availability_daysOfWeek: change => `Mudou a disponibilidade nos dias da semana${change.old_value ? ` de <b>${change.old_value?.split(",").join(", ")}</b>` : ""} para <b>${change.new_value.split(",").join(", ")}</b>`,
+                        availability_dayShifts: change => `Mudou a disponibilidade dos turnos do dia${change.old_value ? ` de <b>${change.old_value?.split(",").join(", ")}</b>` : ""} para <b>${change.new_value.split(",").join(", ")}</b>`,
                     }
 
                     return {
                         icon: "list",
                         title: `<b>${audit.username}</b> alterou ${audit.changes?.length || ""} dado${audit.changes?.length ? "s" : ""} do produto <b>${audit.additional.name}</b>`,
-                        items: audit.changes.map(change => messages[change.key]?.(change)),
+                        items: audit.changes.map(change => {console.log(change); return messages[change.key]?.(change)}),
                     };
                 }
             },

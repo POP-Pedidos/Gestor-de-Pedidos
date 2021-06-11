@@ -3,11 +3,11 @@
   "productName": "POP Pedidos",
   "publisherName": "POP Pedidos",
   "appId": "poppedidos.com.br",
-  "version": "1.2.9",
+  "version": "1.3.0",
   "main": "index.js",
-  "author": "",
+  "author": "POP Pedidos",
   "license": "ISC",
-  "description": "",
+  "description": "Faça suas vendas online, facilitando a divulgação de sua empresa e seus produtos na internet.",
   "scripts": {
     "start": "set NODE_ENV=development&&electron . --enable-logging",
     "start:production": "set NODE_ENV=production&&electron . --enable-logging",
@@ -34,7 +34,7 @@
     }
   },
   "devDependencies": {
-    "electron": "^12.0.9",
+    "electron": "^13.1.2",
     "electron-builder": "^22.10.5",
     "electron-packager": "^15.2.0"
   },

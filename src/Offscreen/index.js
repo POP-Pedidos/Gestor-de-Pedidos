@@ -147,13 +147,8 @@ function printControlCopy(printer, order, company) {
             const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.device);
 
             win.webContents.print({
-                deviceName: printerDevice ? printer?.device : undefined,
+                deviceName: printerDevice?.name,
                 silent: !!printerDevice,
-                printBackground: true,
-                color: false,
-                landscape: false,
-                pagesPerSheet: 1,
-                collate: false,
                 copies: 1,
             }, (success, failureReason) => {
                 if (success) resolve();
@@ -189,13 +184,8 @@ function printDeliveryCopy(printer, order, company) {
             const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.device);
 
             win.webContents.print({
-                deviceName: printerDevice ? printer?.device : undefined,
+                deviceName: printerDevice?.name,
                 silent: !!printerDevice,
-                printBackground: true,
-                color: false,
-                landscape: false,
-                pagesPerSheet: 1,
-                collate: false,
                 copies: 1,
             }, (success, failureReason) => {
                 if (success) resolve();
@@ -224,13 +214,13 @@ function printProductionCopy(printer, order, company) {
             delete win;
             return reject("cannot render template");
         }
-        
+
         win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
 
         win.webContents.on("did-stop-loading", async () => {
             const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.device);
             win.webContents.print({
-                deviceName: printerDevice ? printer?.device : undefined,
+                deviceName: printerDevice?.name,
                 silent: !!printerDevice,
                 printBackground: true,
                 color: false,
