@@ -968,7 +968,8 @@ body.dark-mode #configuracoes_empresa .address {
   border: none;
 }
 
-body.dark-mode #configuracoes_empresa .address>.details>.city-state {
+body.dark-mode #configuracoes_empresa .address>.details>.city-state,
+body.dark-mode #configuracoes_empresa .address>.details>.complement {
   color: #afafaf !important;
 }
 
@@ -14674,8 +14675,22 @@ td>.switch_enable {
   flex-direction: column;
 }
 
+#configuracoes_empresa .address>.details.no-address {
+  color: red;
+}
+
 #configuracoes_empresa .address>.details>.city-state {
   color: gray;
+}
+
+#configuracoes_empresa .address>.details>.complement {
+  color: #afafaf;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 #configuracoes_empresa .address>i {
@@ -14707,6 +14722,27 @@ td>.switch_enable {
   justify-content: center;
   align-items: center;
   z-index: 10000;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.company-address-editor.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.company-address-editor.show>div {
+  transform: scale(1) translateY(0px);
+}
+
+.company-address-editor.loading>div {
+  pointer-events: none;
+  user-select: none;
+}
+
+.company-address-editor.loading form .input-label {
+  opacity: 0.5;
 }
 
 .company-address-editor>div {
@@ -14721,7 +14757,9 @@ td>.switch_enable {
   width: 80%;
   height: 60%;
   max-width: 900px;
-  max-height: 450px;
+  max-height: 500px;
+  transform: scale(0.8) translateY(-40px);
+  transition: transform 0.3s;
 }
 
 .company-address-editor>div>button.back {
@@ -14752,6 +14790,11 @@ td>.switch_enable {
 
 .company-address-editor>div>button.back:hover {
   background-color: #54cc23;
+}
+
+.company-address-editor small {
+  margin: 0 4px 10px auto;
+  color: gray;
 }
 
 .mapboxgl-ctrl-logo {

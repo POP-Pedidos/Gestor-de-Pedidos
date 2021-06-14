@@ -55,12 +55,12 @@ function addAudit(audit) {
                 if (audit.changes.length == 1) {
                     const messages = {
                         subdomain: change => {
-                            if (change.old_value) return `<b>${audit.username}</b> alterou o subdomínio de <b>${change.old_value}</b> para <b>${change.new_value}</b>`;
+                            if (change.old_value) return `<b>${audit.username}</b> alterou o subdomínio ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`;
                             else return `<b>${audit.username}</b> alterou o subdomínio para <b>${change.new_value}</b>`;
                         },
-                        name: change => `<b>${audit.username}</b> alterou o nome da empresa de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        "cpf-cnpj": change => `<b>${audit.username}</b> alterou o cpf/cnpj da empresa de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        phone: change => `<b>${audit.username}</b> alterou o telefone da empresa de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        name: change => `<b>${audit.username}</b> alterou o nome da empresa ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        "cpf-cnpj": change => `<b>${audit.username}</b> alterou o cpf/cnpj da empresa ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        phone: change => `<b>${audit.username}</b> alterou o telefone da empresa ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         whatsapp: change => {
                             if (change.old_value) return `<b>${audit.username}</b> alterou o numero de WhatsApp de <b>${FormatTell(change.old_value)}</b> para <b>${FormatTell(change.new_value)}</b>`;
                             else return `<b>${audit.username}</b> alterou o numero de WhatsApp para <b>${FormatTell(change.new_value)}</b>`;
@@ -76,12 +76,12 @@ function addAudit(audit) {
                         website_main_bg: change => `<b>${audit.username}</b> alterou a imagem de fundo do site`,
                         online_check: change => `<b>${audit.username}</b> <b>${change.new_value ? "ativou" : "desativou"}</b> a função abrir estabelecimento pelo gestor`,
                         use_discount_coupon: change => `<b>${audit.username}</b> <b>${change.new_value ? "ativou" : "desativou"}</b> os cupons de desconto`,
-                        morning_shift_open: change => `<b>${audit.username}</b> alterou a hora de abertura do turno da <b>manhã</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        morning_shift_close: change => `<b>${audit.username}</b> alterou a hora de fechamento do turno da <b>manhã</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        afternoon_shift_open: change => `<b>${audit.username}</b> alterou a hora de abertura do turno da <b>tarde</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        afternoon_shift_close: change => `<b>${audit.username}</b> alterou a hora de fechamento do turno da <b>tarde</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        night_shift_open: change => `<b>${audit.username}</b> alterou a hora de abertura do turno da <b>noite</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        night_shift_close: change => `<b>${audit.username}</b> alterou a hora de fechamento do turno da <b>noite</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        morning_shift_open: change => `<b>${audit.username}</b> alterou a hora de abertura do turno da <b>manhã</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        morning_shift_close: change => `<b>${audit.username}</b> alterou a hora de fechamento do turno da <b>manhã</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        afternoon_shift_open: change => `<b>${audit.username}</b> alterou a hora de abertura do turno da <b>tarde</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        afternoon_shift_close: change => `<b>${audit.username}</b> alterou a hora de fechamento do turno da <b>tarde</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        night_shift_open: change => `<b>${audit.username}</b> alterou a hora de abertura do turno da <b>noite</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        night_shift_close: change => `<b>${audit.username}</b> alterou a hora de fechamento do turno da <b>noite</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         use_withdrawal: change => `<b>${audit.username}</b> ${change.new_value ? "ativou" : "desativou"} a função <b>Trabalha com retirada</b>`,
                         use_delivery: change => `<b>${audit.username}</b> ${change.new_value ? "ativou" : "desativou"} a função <b>Trabalha com entrega</b>`,
                         license_expiration: change => `A data de expiração do plano foi alterada ${change.old_value ? `de <b>${new Date(change.old_value).toLocaleDateString()}</b>` : ""} para <b>${change.new_value ? new Date(change.new_value).toLocaleDateString() : "Indefinido"}</b>`,
@@ -108,12 +108,12 @@ function addAudit(audit) {
                 } else {
                     const messages = {
                         subdomain: change => {
-                            if (change.old_value) return `O subdomínio foi alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`;
+                            if (change.old_value) return `O subdomínio foi alterado ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`;
                             else return `O subdomínio foi alterado para <b>${change.new_value}</b>`;
                         },
-                        name: change => `O nome foi alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        "cpf-cnpj": change => `O cpf/cnpj foi alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        phone: change => `Alterou o telefone de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        name: change => `O nome foi alterado ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        "cpf-cnpj": change => `O cpf/cnpj foi alterado ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        phone: change => `Alterou o telefone ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         whatsapp: change => {
                             if (change.old_value) return `O numero de WhatsApp foi alterado de <b>${FormatTell(change.old_value)}</b> para <b>${FormatTell(change.new_value)}</b>`;
                             else return `O numero de WhatsApp foi alterado para <b>${FormatTell(change.new_value)}</b>`;
@@ -129,12 +129,12 @@ function addAudit(audit) {
                         website_main_bg: change => `Mudou a imagem de fundo do site`,
                         online_check: change => `Abrir o estabelecimento pelo gestor foi <b>${change.new_value ? "ativado" : "desativado"}</b>`,
                         use_discount_coupon: change => `<b>${change.new_value ? "Ativou" : "Desativou"}</b> os cupons de desconto`,
-                        morning_shift_open: change => `Mudou a hora de abertura do turno da <b>manhã</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        morning_shift_close: change => `Mudou a hora de fechamento do turno da <b>manhã</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        afternoon_shift_open: change => `Mudou a hora de abertura do turno da <b>tarde</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        afternoon_shift_close: change => `Mudou a hora de fechamento do turno da <b>tarde</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        night_shift_open: change => `Mudou a hora de abertura do turno da <b>noite</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        night_shift_close: change => `Mudou a hora de fechamento do turno da <b>noite</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        morning_shift_open: change => `Mudou a hora de abertura do turno da <b>manhã</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        morning_shift_close: change => `Mudou a hora de fechamento do turno da <b>manhã</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        afternoon_shift_open: change => `Mudou a hora de abertura do turno da <b>tarde</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        afternoon_shift_close: change => `Mudou a hora de fechamento do turno da <b>tarde</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        night_shift_open: change => `Mudou a hora de abertura do turno da <b>noite</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        night_shift_close: change => `Mudou a hora de fechamento do turno da <b>noite</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         use_withdrawal: change => `Trabalha com <b>retirada</b> foi <b>${change.new_value ? "ativado" : "desativado"}</b>`,
                         use_delivery: change => `Trabalha com <b>entrega</b> foi <b>${change.new_value ? "ativado" : "desativado"}</b>`,
                         license_expiration: change => `A data de expiração do plano foi alterada ${change.old_value ? `de <b>${new Date(change.old_value).toLocaleDateString()}</b>` : ""} para <b>${change.new_value ? new Date(change.new_value).toLocaleDateString() : "Indefinido"}</b>`,
@@ -175,9 +175,9 @@ function addAudit(audit) {
             UPDATE: audit => {
                 if (audit.changes.length == 1) {
                     const messages = {
-                        username: change => `O nome de usuário de <b>${change.old_value}</b> foi alterado para <b>${change.new_value}</b>`,
+                        username: change => `O nome de usuário ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}foi alterado para <b>${change.new_value}</b>`,
                         password: change => `A senha do usuário <b>${audit.username}</b> foi alterada`,
-                        email: change => `O email do usuário <b>${audit.username}</b> foi alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        email: change => `O email do usuário <b>${audit.username}</b> foi alterado ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         enabled: change => `O usuário <b>${audit.username}</b> foi <b>${change.new_value ? "habilitado" : "desabilitado"}</b>`,
                         id_company: change => `Agora o usuário <b>${audit.username}</b> faz parte da empresa!`,
                     }
@@ -191,9 +191,9 @@ function addAudit(audit) {
                     };
                 } else {
                     const messages = {
-                        username: change => `Nome de usuário alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        username: change => `Nome de usuário alterado ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         password: change => `A senha foi alterada`,
-                        email: change => `O email foi alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        email: change => `O email foi alterado ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         enabled: change => `O usuário foi <b>${change.new_value ? "habilitado" : "desabilitado"}</b>`,
                         id_company: change => `Agora o usuário <b>${audit.username}</b> faz parte da empresa!`,
                     }
@@ -249,8 +249,8 @@ function addAudit(audit) {
                 if (audit.changes.length == 1) {
                     const messages = {
                         open: change => `O usuário <b>${audit.username}</b> alterou o horário <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> para <b>${change.new_value ? "aberto" : "fechado"}</b>`,
-                        opens: change => `O usuário <b>${audit.username}</b> alterou o horário de abertura <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        closes: change => `O usuário <b>${audit.username}</b> alterou o horário de fechamento <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        opens: change => `O usuário <b>${audit.username}</b> alterou o horário de abertura <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        closes: change => `O usuário <b>${audit.username}</b> alterou o horário de fechamento <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                     }
 
                     const change = audit.changes[0];
@@ -263,8 +263,8 @@ function addAudit(audit) {
                 } else {
                     const messages = {
                         open: change => `Horário <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> alterado para <b>${change.new_value ? "aberto" : "fechado"}</b>`,
-                        opens: change => `Horário de abertura <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        closes: change => `Horário de fechamento <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        opens: change => `Horário de abertura <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> alterado ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        closes: change => `Horário de fechamento <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> alterado ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                     }
 
                     return {
@@ -279,7 +279,7 @@ function addAudit(audit) {
             UPDATE: audit => {
                 if (audit.changes.length == 1) {
                     const messages = {
-                        name: change => `O usuário <b>${audit.username}</b> alterou o nome da categoria <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        name: change => `O usuário <b>${audit.username}</b> alterou o nome da categoria <b>${audit.additional.name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         image: change => `O usuário <b>${audit.username}</b> alterou a imagem da categoria <b>${audit.additional.name}</b>`,
                     }
 
@@ -292,7 +292,7 @@ function addAudit(audit) {
                     };
                 } else {
                     const messages = {
-                        name: change => `O nome alterado de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        name: change => `O nome alterado ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         image: change => `A imagem foi alterada`,
                     }
 
@@ -322,7 +322,7 @@ function addAudit(audit) {
             UPDATE: audit => {
                 if (audit.changes.length == 1) {
                     const messages = {
-                        coupon: change => `O usuário <b>${audit.username}</b> alterou o nome do cupom de desconto <b>${audit.additional.coupon}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        coupon: change => `O usuário <b>${audit.username}</b> alterou o nome do cupom de desconto <b>${audit.additional.coupon}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         discount: change => {
                             const is_percentual_key = audit.changes.find(change => change.key == "is_percentual");
 
@@ -333,8 +333,8 @@ function addAudit(audit) {
 
                             return `O usuário <b>${audit.username}</b> alterou o desconto do cupom de desconto <b>${audit.additional.coupon}</b> de <b>${is_percentual_key.old_value ? `${Number(change.old_value)}%` : MoneyFormat(change.old_value)}</b> para <b>${is_percentual_key.new_value ? `${Number(change.new_value)}%` : MoneyFormat(change.new_value)}</b>`
                         },
-                        limit: change => `O usuário <b>${audit.username}</b> alterou o limite de usos do cupom de desconto <b>${audit.additional.coupon}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        min_price: change => `O usuário <b>${audit.username}</b> alterou o preço mínimo elegível do cupom de desconto <b>${audit.additional.coupon}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        limit: change => `O usuário <b>${audit.username}</b> alterou o limite de usos do cupom de desconto <b>${audit.additional.coupon}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        min_price: change => `O usuário <b>${audit.username}</b> alterou o preço mínimo elegível do cupom de desconto <b>${audit.additional.coupon}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         in_delivery_cost: change => `O usuário <b>${audit.username}</b> configurou o cupom de desconto desconto <b>${audit.additional.coupon}</b> para <b>${change.new_value ? "não ser" : "ser também"}</b> aplicado ao preço do frete`,
                         enabled: change => `O usuário <b>${audit.username}</b> <b>${change.new_value ? "ativou" : "desativou"}</b> o cupom de desconto <b>${audit.additional.coupon}</b>`,
                     }
@@ -348,7 +348,7 @@ function addAudit(audit) {
                     };
                 } else {
                     const messages = {
-                        coupon: change => `Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        coupon: change => `Mudou o nome ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         discount: change => {
                             const is_percentual_key = audit.changes.find(change => change.key == "is_percentual");
 
@@ -359,8 +359,8 @@ function addAudit(audit) {
 
                             return `Mudou o desconto de <b>${is_percentual_key.old_value ? `${Number(change.old_value)}%` : MoneyFormat(change.old_value)}</b> para <b>${is_percentual_key.new_value ? `${Number(change.new_value)}%` : MoneyFormat(change.new_value)}</b>`
                         },
-                        limit: change => `Mudou o limite de usos de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        min_price: change => `Mudou o preço mínimo elegível de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        limit: change => `Mudou o limite de usos ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        min_price: change => `Mudou o preço mínimo elegível ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         in_delivery_cost: change => `O desconto <b>${change.new_value ? "não será" : "será também"}</b> aplicado ao preço do frete`,
                         enabled: change => `Foi <b>${change.new_value ? "ativado" : "desativado"}</b>`,
                     }
@@ -430,11 +430,11 @@ function addAudit(audit) {
 
                 if (audit.changes.length == 1) {
                     const messages = {
-                        name: change => `O usuário <b>${audit.username}</b> alterou o nome da impressora <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        device: change => `O usuário <b>${audit.username}</b> alterou o dispositivo de impressão da impressora <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        name: change => `O usuário <b>${audit.username}</b> alterou o nome da impressora <b>${audit.additional.name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        device: change => `O usuário <b>${audit.username}</b> alterou o dispositivo de impressão da impressora <b>${audit.additional.name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         is_primary: change => `O usuário <b>${audit.username}</b> ${change.new_value ? `definiu a impressora <b>${audit.additional.name}</b> como dispositivo <b>primário</b>` : `configurou a impressora <b>${audit.additional.name}</b> como não <b>primária</b>`}`,
                         type: change => `O usuário <b>${audit.username}</b> alterou o tipo de impressão da impressora <b>${audit.additional.name}</b> para ${GetPrintTypeName(change.new_value)}`,
-                        size: change => `O usuário <b>${audit.username}</b> alterou o tamanho da impressão da impressora <b>${audit.additional.name}</b> de ${change.old_value}mm para ${change.new_value}mm`,
+                        size: change => `O usuário <b>${audit.username}</b> alterou o tamanho da impressão da impressora <b>${audit.additional.name}</b> ${change.old_value ? `de ${change.old_value}mm ` : ""}para ${change.new_value}mm`,
                     }
 
                     const change = audit.changes[0];
@@ -446,7 +446,7 @@ function addAudit(audit) {
                     };
                 } else {
                     const messages = {
-                        name: change => `Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        name: change => `Mudou o nome ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         device: change => `Mudou o dispositivo de impressão <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
                         is_primary: change => change.new_value ? `Definiu como dispositivo <b>primário</b>` : `Não é mais um dispositivo <b>primário</b>`,
                         type: change => `Mudou o tipo de impressão para <b>${GetPrintTypeName(change.new_value)}</b>`,
@@ -519,17 +519,17 @@ function addAudit(audit) {
                 if (audit.changes.length == 1) {
                     const messages = {
                         order: change => `O usuário <b>${audit.username}</b> alterou a ordem de listagem do produto <b>${audit.additional.name}</b>`,
-                        name: change => `O usuário <b>${audit.username}</b> alterou o nome do produto <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        description: change => `O usuário <b>${audit.username}</b> alterou a descrição do produto <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        sku: change => `O usuário <b>${audit.username}</b> alterou o SKU do produto <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        name: change => `O usuário <b>${audit.username}</b> alterou o nome do produto <b>${audit.additional.name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        description: change => `O usuário <b>${audit.username}</b> alterou a descrição do produto <b>${audit.additional.name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        sku: change => `O usuário <b>${audit.username}</b> alterou o SKU do produto <b>${audit.additional.name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         enabled: change => `O usuário <b>${audit.username}</b> Foi <b>${change.new_value ? "ativado" : "pausado"}</b>`,
                         keywords: change => `O usuário <b>${audit.username}</b> alterou as palavras chave do SEO do produto <b>${audit.additional.name}</b>${change.old_value ? ` de <b>${change.old_value.join(", ")}</b>` : ""} para <b>${change.new_value.join(", ")}</b>`,
                         price: change => `O usuário <b>${audit.username}</b> alterou o preço do produto <b>${audit.additional.name}</b> de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`,
                         is_pizza: change => `O usuário <b>${audit.username}</b> alterou o tipo do produto <b>${audit.additional.name}</b> de <b>${change.old_value ? "pizza" : "comum"}</b> para <b>${change.new_value ? "pizza" : "comum"}</b>`,
-                        pizza_price_rule: change => `O usuário <b>${audit.username}</b> alterou o tipo de precificação da pizza <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        pizza_price_rule: change => `O usuário <b>${audit.username}</b> alterou o tipo de precificação da pizza <b>${audit.additional.name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         pizza_quantity_flavors: change => `O usuário <b>${audit.username}</b> alterou a quantidade de sabores da pizza <b>${audit.additional.name}</b> ${!!change.old_value ? `de <b>${change.old_value.join(", ")}</b> ` : ""}para <b>${change.new_value.join(", ")}</b>`,
-                        seo_title: change => `O usuário <b>${audit.username}</b> alterou o titulo de SEO do produto <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        seo_description: change => `O usuário <b>${audit.username}</b> alterou a descrição de SEO do produto <b>${audit.additional.name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        seo_title: change => `O usuário <b>${audit.username}</b> alterou o titulo de SEO do produto <b>${audit.additional.name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        seo_description: change => `O usuário <b>${audit.username}</b> alterou a descrição de SEO do produto <b>${audit.additional.name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         availability_daysOfWeek: change => `O usuário <b>${audit.username}</b> alterou a disponibilidade do produto <b>${audit.additional.name}</b> nos dias da semana${change.old_value ? ` de <b>${change.old_value?.split(",").join(", ")}</b>` : ""} para <b>${change.new_value.split(",").join(", ")}</b>`,
                         availability_dayShifts: change => `O usuário <b>${audit.username}</b> alterou a disponibilidade do produto <b>${audit.additional.name}</b> dos turnos do dia${change.old_value ? ` de <b>${change.old_value?.split(",").join(", ")}</b>` : ""} para <b>${change.new_value.split(",").join(", ")}</b>`,
                     }
@@ -544,17 +544,17 @@ function addAudit(audit) {
                 } else {
                     const messages = {
                         order: change => `Mudou a ordem de listagem`,
-                        name: change => `Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        description: change => `Mudou a descrição de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        sku: change => `Mudou o SKU de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        name: change => `Mudou o nome ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        description: change => `Mudou a descrição ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        sku: change => `Mudou o SKU ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         enabled: change => `Foi <b>${change.new_value ? "ativado" : "pausado"}</b>`,
                         keywords: change => `Mudou as palavras chave do SEO${change.old_value ? ` de <b>${change.old_value.join(", ")}</b>` : ""} para <b>${change.new_value.join(", ")}</b>`,
                         price: change => `Mudou o preço de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`,
                         is_pizza: change => `Mudou o tipo do produto de <b>${change.old_value ? "pizza" : "comum"}</b> para <b>${change.new_value ? "pizza" : "comum"}</b>`,
-                        pizza_price_rule: change => `Mudou o tipo de precificação da pizza de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        pizza_price_rule: change => `Mudou o tipo de precificação da pizza ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         pizza_quantity_flavors: change => `Mudou a quantidade de sabores da pizza ${change.old_value ? `de <b>${change.old_value.join(", ")}</b> ` : ""}para <b>${change.new_value.join(", ")}</b>`,
-                        seo_title: change => `Mudou o titulo do SEO de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        seo_description: change => `Mudou a descrição do SEO de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        seo_title: change => `Mudou o titulo do SEO ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        seo_description: change => `Mudou a descrição do SEO ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         availability_daysOfWeek: change => `Mudou a disponibilidade nos dias da semana${change.old_value ? ` de <b>${change.old_value?.split(",").join(", ")}</b>` : ""} para <b>${change.new_value.split(",").join(", ")}</b>`,
                         availability_dayShifts: change => `Mudou a disponibilidade dos turnos do dia${change.old_value ? ` de <b>${change.old_value?.split(",").join(", ")}</b>` : ""} para <b>${change.new_value.split(",").join(", ")}</b>`,
                     }
@@ -601,10 +601,10 @@ function addAudit(audit) {
             UPDATE: audit => {
                 if (audit.changes.length == 1) {
                     const messages = {
-                        name: change => `O usuário <b>${audit.username}</b> alterou o nome do sabor de pizza <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        description: change => `O usuário <b>${audit.username}</b> alterou a descrição do sabor de pizza <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        name: change => `O usuário <b>${audit.username}</b> alterou o nome do sabor de pizza <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        description: change => `O usuário <b>${audit.username}</b> alterou a descrição do sabor de pizza <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         price: change => `O usuário <b>${audit.username}</b> alterou o preço do sabor de pizza <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b> de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`,
-                        order: change => `O usuário <b>${audit.username}</b> alterou a ordem de listagem do sabor de pizza <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        order: change => `O usuário <b>${audit.username}</b> alterou a ordem de listagem do sabor de pizza <b>${audit.additional.name}</b> no produto <b>${audit.additional.product_name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                     }
 
                     const change = audit.changes[0];
@@ -616,10 +616,10 @@ function addAudit(audit) {
                     };
                 } else {
                     const messages = {
-                        name: change => `Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        description: change => `Mudou a descrição de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        name: change => `Mudou o nome ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        description: change => `Mudou a descrição ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         price: change => `Mudou o preço de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`,
-                        order: change => `Mudou a ordem de listagem de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        order: change => `Mudou a ordem de listagem ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                     }
 
                     return {
@@ -648,10 +648,10 @@ function addAudit(audit) {
             UPDATE: audit => {
                 if (audit.changes.length == 1) {
                     const messages = {
-                        name: change => `O usuário <b>${audit.username}</b> alterou o nome do grupo de complementos <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        name: change => `O usuário <b>${audit.username}</b> alterou o nome do grupo de complementos <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         required: change => `O usuário <b>${audit.username}</b> alterou a obrigatoriedade do grupo de complementos <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> para <b>${change.new_value ? "obrigatório" : "opcional"}</b>`,
-                        min: change => `O usuário <b>${audit.username}</b> alterou a quantidade minima do grupo de complementos <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        max: change => `O usuário <b>${audit.username}</b> alterou a quantidade máxima do grupo de complementos <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        min: change => `O usuário <b>${audit.username}</b> alterou a quantidade minima do grupo de complementos <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        max: change => `O usuário <b>${audit.username}</b> alterou a quantidade máxima do grupo de complementos <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                     }
 
                     const change = audit.changes[0];
@@ -663,10 +663,10 @@ function addAudit(audit) {
                     };
                 } else {
                     const messages = {
-                        name: change => `Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        name: change => `Mudou o nome ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         required: change => `Mudou a obrigatoriedade para <b>${change.new_value ? "obrigatório" : "opcional"}</b>`,
-                        min: change => `Mudou a quantidade minima de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        max: change => `Mudou a quantidade máxima de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        min: change => `Mudou a quantidade minima ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        max: change => `Mudou a quantidade máxima ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                     }
 
                     return {
@@ -695,10 +695,10 @@ function addAudit(audit) {
             UPDATE: audit => {
                 if (audit.changes.length == 1) {
                     const messages = {
-                        name: change => `O usuário <b>${audit.username}</b> alterou o nome do complemento <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        description: change => `O usuário <b>${audit.username}</b> alterou a descrição do complemento <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        name: change => `O usuário <b>${audit.username}</b> alterou o nome do complemento <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        description: change => `O usuário <b>${audit.username}</b> alterou a descrição do complemento <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         price: change => `O usuário <b>${audit.username}</b> alterou o preço do complemento <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`,
-                        order: change => `O usuário <b>${audit.username}</b> alterou a ordem de listagem do complemento <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        order: change => `O usuário <b>${audit.username}</b> alterou a ordem de listagem do complemento <b>${audit.additional.name}</b> do produto <b>${audit.additional.product_name}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                     }
 
                     const change = audit.changes[0];
@@ -710,10 +710,10 @@ function addAudit(audit) {
                     };
                 } else {
                     const messages = {
-                        name: change => `Mudou o nome de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        description: change => `Mudou a descrição de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        name: change => `Mudou o nome ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        description: change => `Mudou a descrição ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         price: change => `Mudou o preço de <b>${MoneyFormat(change.old_value)}</b> para <b>${MoneyFormat(change.new_value)}</b>`,
-                        order: change => `Mudou a ordem de listagem de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        order: change => `Mudou a ordem de listagem ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                     }
 
                     return {
@@ -754,8 +754,8 @@ function addAudit(audit) {
                 if (audit.changes.length == 1) {
                     const messages = {
                         open: change => `O usuário <b>${audit.username}</b> alterou o dia da semana <b>${GetDayOfWeekName()}</b> para <b>${change.new_value ? "aberto" : "fechado"}</b>`,
-                        opens: change => `O usuário <b>${audit.username}</b> alterou o horário de abertura do dia da semana <b>${GetDayOfWeekName()}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        closes: change => `O usuário <b>${audit.username}</b> alterou o horário de fechamento do dia da semana <b>${GetDayOfWeekName()}</b> de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        opens: change => `O usuário <b>${audit.username}</b> alterou o horário de abertura do dia da semana <b>${GetDayOfWeekName()}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        closes: change => `O usuário <b>${audit.username}</b> alterou o horário de fechamento do dia da semana <b>${GetDayOfWeekName()}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                     }
 
                     const change = audit.changes[0];
@@ -768,8 +768,8 @@ function addAudit(audit) {
                 } else {
                     const messages = {
                         open: change => `Mudou de <b>${change.old_value ? "aberto" : "fechado"}</b> para <b>${change.new_value ? "aberto" : "fechado"}</b>`,
-                        opens: change => `Mudou o horário de abertura de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
-                        closes: change => `Mudou o horário de fechamento de <b>${change.old_value}</b> para <b>${change.new_value}</b>`,
+                        opens: change => `Mudou o horário de abertura ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                        closes: change => `Mudou o horário de fechamento ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                     }
 
                     return {

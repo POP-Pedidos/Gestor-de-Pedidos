@@ -41,12 +41,9 @@ const FetchAPI = (uri, config = {}) => {
 
         config.headers = Object.assign({
             "Authorization": `Bearer ${sessionStorage.token || localStorage.token}`,
-            "token": sessionStorage.token || localStorage.token,
             "Accept": "application/json",
             "Content-Type": "application/json"
         }, config.headers);
-
-        console.warn("[FetchAPI] token header is deprecated!");
 
         config.body = JSON.stringify(config.body);
 

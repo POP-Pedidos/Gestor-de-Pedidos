@@ -53,6 +53,14 @@ function LoadCompanyDataToForm() {
         if (typeof company[key] == "string") $(`#configuracoes_empresa [name="${key}"]`).val(company[key]);
         if (typeof company[key] == "boolean") $(`#configuracoes_empresa [name="${key}"]`).prop("checked", company[key]);
     }
+
+    $("#configuracoes_empresa .address>.details").toggleClass("no-address", !company.id_neighborhood || !company.location);
+
+    if(company.id_neighborhood && company.location) {
+        $("#configuracoes_empresa .address>.details>.street").text(`${company.street}, ${company.street_number}`);
+        $("#configuracoes_empresa .address>.details>.city-state").text(`${company.city} - ${company.state}`);
+        $("#configuracoes_empresa .address>.details>.complement").text(company.complement);
+    }
 }
 
 $("input.phone").inputmask({
@@ -80,21 +88,6 @@ $(".company-address-editor .input-auto-complete[autocomplete-type] input").each(
     const $street = $(`.company-address-editor input[name="street"]`);
     const $street_number = $(`.company-address-editor input[name="street_number"]`);
 
-    if (company.location) map.jumpTo({
-        center: [company.location.lng, company.location.lat]
-    });
-
-    if (company.id_neighborhood) {
-        $state.inputAutoComplete("set", company.id_state, company.state);
-        $city.inputAutoComplete("set", company.id_city, company.city, { id_state: company.id_state });
-        $city.inputAutoComplete("params", { id_state: company.id_state });
-        $neighborhood.inputAutoComplete("set", company.id_neighborhood, company.neighborhood, { id_state: company.id_state, id_city: company.id_city });
-        $neighborhood.inputAutoComplete("params", { id_state: company.id_state, id_city: company.id_city });
-    }
-
-    $street.val(company.street).keyup();
-    $street_number.val(company.street_number).keyup();
-
     $state.on("place-change", (e, place_data) => {
         $city.inputAutoComplete("clear");
 
@@ -119,5 +112,85 @@ $(".company-address-editor .input-auto-complete[autocomplete-type] input").each(
                 speed: 5,
             });
         }
+    });
+
+    $("#configuracoes_empresa .address>i").on("click", function () {
+        if (company.location) map.jumpTo({
+            center: [company.location.lng, company.location.lat]
+        });
+    
+        if (company.id_neighborhood) {
+            $state.inputAutoComplete("set", company.id_state, company.state);
+            $city.inputAutoComplete("set", company.id_city, company.city, { id_state: company.id_state });
+            $city.inputAutoComplete("params", { id_state: company.id_state });
+            $neighborhood.inputAutoComplete("set", company.id_neighborhood, company.neighborhood, { id_state: company.id_state, id_city: company.id_city });
+            $neighborhood.inputAutoComplete("params", { id_state: company.id_state, id_city: company.id_city });
+        }
+    
+        $street.val(company.street).keyup();
+        $street_number.val(company.street_number).keyup();
+
+        $(".content-page .company-address-editor").addClass("show");
+        map.resize();
+    });
+
+    $(".company-address-editor>div>button.back").on("click", function () {
+        $(".company-address-editor").removeClass("show");
+    });
+
+    $(".company-address-editor").on("mousedown", function () {
+        if ($(this).hasClass("loading")) return;
+
+        $(this).removeClass("show");
+    });
+
+    $(".company-address-editor>div").on("mousedown", function (e) {
+        e.stopPropagation();
+    });
+
+    $(".company-address-editor form").on("submit", function (e) {
+        e.preventDefault();
+
+        const formData = $(this).serializeFormJSON();
+        const id_neighborhood = $(this).find(`input[name="neighborhood"]`).data("selected");
+        const location = map.getCenter();
+
+        if (
+            company.id_neighborhood == id_neighborhood &&
+            formData.street === company.street &&
+            formData.street_number == company.street_number &&
+            location && company.location && location.lat === company.location.lat && location.lng === company.location.lng && 
+            formData.complement == company.complement
+        ) {
+            $(".company-address-editor").removeClass("show");
+            return;
+        }
+
+        $(".company-address-editor").addClass("loading");
+        $(".company-address-editor form button").addClass("loading");
+
+        FetchAPI("/company", {
+            method: "PUT",
+            body: {
+                id_neighborhood,
+                location,
+                street: formData.street,
+                street_number: formData.street_number,
+                complement: formData.complement,
+            }
+        }).then(data => {
+            company = data;
+            $('#configuracoes_empresa .company-logo [name="photo"]').val("");
+
+            LoadHeaderUserProfile();
+            LoadCompanyDataToForm();
+        }).catch(error => {
+            if (!error) return;
+            Swal.fire("Opss...", `Ocorreu um erro ao tentar atualizar a empresa!`, "error");
+            Swal.showValidationMessage(error);
+        }).finally(() => {
+            $(".company-address-editor").removeClass("show loading");
+            $(".company-address-editor form button").removeClass("loading");
+        });
     });
 })();

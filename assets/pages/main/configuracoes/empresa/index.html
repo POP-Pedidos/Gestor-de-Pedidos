@@ -20,8 +20,9 @@
                             <div class="address">
                                 <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
                                 <div class="details">
-                                    <span class="street">Rua Primeiro de maio, 383</span>
-                                    <span class="city-state">Nossa senhora aparecida, MG</span>
+                                    <span class="street">Nenhum endereço configurado!</span>
+                                    <span class="city-state">Algumas coisas não funcionam sem o endereço</span>
+                                    <span class="complement"></span>
                                 </div>
                                 <i class="fas fa-pen"></i>
                             </div>
@@ -77,7 +78,7 @@
 </div>
 
 <div class="company-address-editor">
-    <div>
+    <div class="loading">
         <button class="back"><i class="fas fa-chevron-left"></i><span>VOLTAR</span></button>
         <div class="map loading">
             <img class="placeholder" src="../../../images/map.jpg" />
@@ -111,10 +112,18 @@
                 <span>Rua</span>
             </label>
             <label class="input-label street_number">
-                <input type="text" name="street_number" minlength="1" maxlength="255" required>
+                <input type="number" name="street_number" min="1" required>
                 <span>Número</span>
             </label>
-            <button class="btn btn-primary">Salvar</button>
+            <label class="input-label street_number">
+                <input type="text" name="complement" minlength="1" maxlength="60">
+                <span>Complemento</span>
+            </label>
+            <small>Opcional</small>
+            <button class="btn btn-primary">
+                <span class="spinner-border"></span>
+                Salvar
+            </button>
         </form>
     </div>
 </div>
