@@ -221,7 +221,11 @@ function PrintWindow(win, printer_name) {
     
                 ptp.print(tempFilePath, { printer: printerDevice.name })
                 .then(() => resolve())
-                .catch(reject);
+                .catch(reject).finally(() => {
+                    try {
+                        fs.unlink(tempFilePath);
+                    } catch {}
+                });
             })
         } else {
             win.webContents.print({

@@ -76,7 +76,7 @@ function SendOrderStatusMessage(order) {
         credit: "Cartão de Crédito",
     }
 
-    const company_address = `${company.street}, ${company.street_number} - ${company.neighborhood}, ${company.city} - ${company.state}`;
+    const company_address = `${company.street}, ${company.street_number} - ${company.neighborhood}, ${company.city} - ${company.state}${company.complement ? ` - ${company.complement}` : ""}`;
     const order_address = order.delivery_type !== "withdrawal" ? `${order.street_name}, ${order.street_number} - ${order.neighborhood}, ${order.city} - ${order.complement || order.state}` : null;
     const payment_name = payment_name_translations[order.payment_method] || "Unknown";
 
