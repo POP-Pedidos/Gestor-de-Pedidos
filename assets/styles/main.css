@@ -60,24 +60,6 @@ body.countdown {
   height: 100%;
 }
 
-@media print {
-  @page {
-    margin: 0;
-  }
-
-  body {
-    margin: 0;
-  }
-
-  #sidebar,
-  #body,
-  .content-page,
-  .modal-backdrop,
-  .swal2-container {
-    display: none !important;
-  }
-}
-
 .skeleton-noAnimation .skeleton::after {
   animation: none !important;
 }
@@ -14648,7 +14630,7 @@ td>.switch_enable {
   position: relative;
   flex: 1;
   overflow: auto;
-  height: calc(100vh - 56px);
+  height: calc(100vh - 85px);
 }
 
 #configuracoes_empresa .address {
@@ -14753,11 +14735,11 @@ td>.switch_enable {
   color: white;
   border-radius: 6px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgb(0 0 0 / 40%);
-  width: 80%;
-  height: 60%;
-  max-width: 900px;
-  max-height: 500px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  max-width: 80%;
+  max-height: 80%;
+  width: 900px;
+  height: 500px;
   transform: scale(0.8) translateY(-40px);
   transition: transform 0.3s;
 }
@@ -14902,10 +14884,24 @@ td>.switch_enable {
   position: absolute;
 }
 
+@media (max-width: 767px) {
+  .company-address-editor>div {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: calc(100% - 30px);
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1.5fr;
+    margin-top: 30px;
+    border-radius: 0;
+  }
+}
+
 .company-address-editor form {
   display: flex;
   flex-direction: column;
   padding: 20px;
+  min-width: 290px;
 }
 
 .company-address-editor form>h3 {

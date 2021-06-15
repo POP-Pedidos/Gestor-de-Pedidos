@@ -9,6 +9,8 @@ window.app_name = ipcRenderer.sendSync("app_name");
 
 window.GetPrintersList = () => ipcRenderer.sendSync("printers");
 
+window.testprint = (...args) => ipcRenderer.invoke("test:print", ...args);
+
 window.taskbar = {
     setProgressBar: (...args) => ipcRenderer.send("taskbar:setProgressBar", ...args),
     flashFrame: (flag = true) => ipcRenderer.send("taskbar:flashFrame", flag),

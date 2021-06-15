@@ -1,6 +1,6 @@
 const os = require("os");
 const fs = require("fs");
-const { app, ipcMain, BrowserWindow, nativeTheme, dialog } = require("electron");
+const { app, ipcMain, nativeTheme, dialog } = require("electron");
 const { autoUpdater } = require("electron-updater");
 
 const AutoUpdater = require("./AutoUpdater");
@@ -18,7 +18,7 @@ ipcMain.on("icon", (event) => event.returnValue = icon);
 ipcMain.on("app_name", (event) => event.returnValue = app.getName());
 
 ipcMain.on("printers", (event) => {
-    event.returnValue = win?.webContents.getPrinters()?.map(printer => printer.name || printer.displayName);
+    event.returnValue = win?.webContents.getPrinters()?.map(printer => printer.name);
 });
 
 ipcMain.on("dark-mode:themeSource", (event) => event.returnValue = nativeTheme.themeSource);

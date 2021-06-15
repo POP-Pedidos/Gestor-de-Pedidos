@@ -1,5 +1,9 @@
 const { BrowserWindow } = require("electron");
 const fs = require("fs");
+const os = require("os");
+const ptp = require("pdf-to-printer");
+const { v4: UUIDv4 } = require("uuid");
+
 const templates = require("./Templates");
 
 function GetWindow(options = {}) {
@@ -144,16 +148,7 @@ function printControlCopy(printer, order, company) {
         win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
 
         win.webContents.on("did-stop-loading", async () => {
-            const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.device);
-
-            win.webContents.print({
-                deviceName: printerDevice?.name,
-                silent: !!printerDevice,
-                copies: 1,
-            }, (success, failureReason) => {
-                if (success) resolve();
-                else reject(failureReason);
-            });
+            PrintWindow(win, printer?.device);
         });
     });
 }
@@ -181,16 +176,7 @@ function printDeliveryCopy(printer, order, company) {
         win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
 
         win.webContents.on("did-stop-loading", async () => {
-            const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.device);
-
-            win.webContents.print({
-                deviceName: printerDevice?.name,
-                silent: !!printerDevice,
-                copies: 1,
-            }, (success, failureReason) => {
-                if (success) resolve();
-                else reject(failureReason);
-            });
+            PrintWindow(win, printer?.device);
         });
     });
 }
@@ -218,22 +204,35 @@ function printProductionCopy(printer, order, company) {
         win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
 
         win.webContents.on("did-stop-loading", async () => {
-            const printerDevice = win.webContents.getPrinters()?.find(device => (device.name || device.displayName) === printer?.device);
+            PrintWindow(win, printer?.device);
+        });
+    });
+}
+
+function PrintWindow(win, printer_name) {
+    return new Promise((resolve, reject) => {
+        const printerDevice = win.webContents.getPrinters()?.find(device => device.name === printer_name);
+
+        if(printerDevice) {
+            const tempFilePath = `${os.tmpdir()}\\${UUIDv4()}.tmp`;
+        
+            win.webContents.printToPDF({ printBackground: true, landscape: true }).then(data => {
+                fs.writeFileSync(tempFilePath, data);
+    
+                ptp.print(tempFilePath, { printer: printerDevice.name })
+                .then(() => resolve())
+                .catch(reject);
+            })
+        } else {
             win.webContents.print({
-                deviceName: printerDevice?.name,
-                silent: !!printerDevice,
-                printBackground: true,
-                color: false,
-                landscape: false,
-                pagesPerSheet: 1,
-                collate: false,
+                silent: false,
                 copies: 1,
             }, (success, failureReason) => {
                 if (success) resolve();
                 else reject(failureReason);
             });
-        });
-    });
+        }
+    })
 }
 
 module.exports = {
