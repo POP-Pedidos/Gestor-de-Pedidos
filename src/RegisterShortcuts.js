@@ -2,10 +2,10 @@ const { globalShortcut } = require("electron");
 
 module.exports = function CreateShortcuts(win) {
     globalShortcut.register("CommandOrControl+Shift+I", () => {
-        win.webContents.toggleDevTools();
+        if (win.isFocused()) win.webContents.toggleDevTools();
     });
 
     globalShortcut.register("Alt+CommandOrControl+Shift+I", () => {
-        win.webContents.executeJavaScript(`if(window.whatsappWebView) whatsappWebView.isDevToolsOpened() ? whatsappWebView.closeDevTools() : whatsappWebView.openDevTools();`);
+        if (win.isFocused()) win.webContents.executeJavaScript(`if(window.whatsappWebView) whatsappWebView.isDevToolsOpened() ? whatsappWebView.closeDevTools() : whatsappWebView.openDevTools();`);
     });
 }

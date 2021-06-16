@@ -2,7 +2,7 @@ const $whatsappWebView = $("#whatsappWebView");
 const message_times = [];
 
 $whatsappWebView.attr("partition", "persist:whatsapp");
-$whatsappWebView.attr("webpreferences", "javascript=yes");
+$whatsappWebView.attr("webpreferences", "javascript=yes, contextIsolation=yes");
 $whatsappWebView.attr("preload", "../../../scripts/whatsapp/preload.js");
 $whatsappWebView.attr("src", "https://web.whatsapp.com/");
 
@@ -49,11 +49,12 @@ whatsappWebView.addEventListener('ipc-message', (event) => {
             if (!msg || msg.isMe || msg.isStatusV3 || msg.isGroupMsg || !msg.isNewMsg || msg.isMedia || msg.id.fromMe) return;
 
             const number = msg.from?.user || msg.author?.user;
+            const name = contact.verifiedName || contact.name || contact.pushname;
             // const text = msg.text || msg.body;
 
             if (Object.keys(message_times).includes(number)) return;
 
-            whatsappWebView.send("sendMessage", number, `Olá ${contact.pushname ? ` ${contact.pushname}` : ""}, acesse o link e faça o seu pedido! 🏍️🚚🤩\n\nhttps://${company.subdomain}.${domain}?tel=${number}`);
+            whatsappWebView.send("sendMessage", number, `Olá${name ? ` ${name}` : ""}, acesse o link e faça o seu pedido! 🏍️🚚🤩\n\nhttps://${company.subdomain}.${domain}?tel=${number}`);
 
             message_times[number] = Date.now();
             setTimeout(() => delete message_times[number], 6 * 60 * 60 * 1000); // 6h
