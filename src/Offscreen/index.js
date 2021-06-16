@@ -1,8 +1,5 @@
 const { BrowserWindow } = require("electron");
 const fs = require("fs");
-const os = require("os");
-const ptp = require("pdf-to-printer");
-const { v4: UUIDv4 } = require("uuid");
 
 const templates = require("./Templates");
 
@@ -214,7 +211,7 @@ function PrintWindow(win, printer_name) {
         const printerDevice = win.webContents.getPrinters()?.find(device => device.name === printer_name);
         win.webContents.print({
             deviceName: printerDevice.name.startsWith("\\\\") ? undefined : printerDevice?.name,
-            silent: !printerDevice?.name?.startsWith('\\\\'),
+            silent: !printerDevice.name.startsWith("\\\\"),
             copies: 1,
         }, (success, failureReason) => {
             if (success) resolve();
