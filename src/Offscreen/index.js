@@ -1,8 +1,5 @@
 const { BrowserWindow } = require("electron");
 const fs = require("fs");
-const os = require("os");
-const ptp = require("pdf-to-printer");
-const { v4: UUIDv4 } = require("uuid");
 
 const templates = require("./Templates");
 
@@ -213,29 +210,14 @@ function PrintWindow(win, printer_name) {
     return new Promise((resolve, reject) => {
         const printerDevice = win.webContents.getPrinters()?.find(device => device.name === printer_name);
 
-        if(printerDevice) {
-            const tempFilePath = `${os.tmpdir()}\\${UUIDv4()}.tmp`;
-        
-            win.webContents.printToPDF({ printBackground: true, landscape: true }).then(data => {
-                fs.writeFileSync(tempFilePath, data);
-    
-                ptp.print(tempFilePath, { printer: printerDevice.name })
-                .then(() => resolve())
-                .catch(reject).finally(() => {
-                    try {
-                        fs.unlink(tempFilePath);
-                    } catch {}
-                });
-            })
-        } else {
-            win.webContents.print({
-                silent: false,
-                copies: 1,
-            }, (success, failureReason) => {
-                if (success) resolve();
-                else reject(failureReason);
-            });
-        }
+        win.webContents.print({
+            deviceName: printerDevice.name.startsWith("\\\\") ? undefined : printerDevice?.name,
+            silent: !printerDevice.name.startsWith("\\\\"),
+            copies: 1,
+        }, (success, failureReason) => {
+            if (success) resolve();
+            else reject(failureReason);
+        });
     })
 }
 

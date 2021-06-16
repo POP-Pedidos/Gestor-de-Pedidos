@@ -43,7 +43,6 @@
     "electron-log": "^4.3.5",
     "electron-reload": "^1.5.0",
     "electron-updater": "^4.3.9",
-    "pdf-to-printer": "^2.0.5",
     "uuid": "^8.3.2"
   }
 }
