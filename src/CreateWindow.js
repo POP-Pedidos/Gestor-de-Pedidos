@@ -40,12 +40,17 @@ module.exports = function CreateWindow() {
 
     win.removeMenu();
 
-    win.webContents.setWindowOpenHandler(({ url }) => {
-        try {
-            setImmediate(() => shell.openExternal(url));
-        } catch { }
+    // win.webContents.setWindowOpenHandler(({ url }) => {
+    //     try {
+    //         setImmediate(() => shell.openExternal(url));
+    //     } catch { }
 
-        return { action: "deny" };
+    //     return { action: "deny" };
+    // });
+
+    win.webContents.on('new-window', function (e, url) {
+        e.preventDefault();
+        require('electron').shell.openExternal(url);
     });
 
     win.webContents.on("did-finish-load", () => {

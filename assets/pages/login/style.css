@@ -184,6 +184,7 @@ form.loading>.right>.inputs {
 
 #art>svg {
     transform: scale(1.2) translateX(3%);
+    height: 100%;
 }
 
 form>.right {
