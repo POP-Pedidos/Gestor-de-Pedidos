@@ -34,7 +34,7 @@
         }
 
         html[paper_size="58"] {
-            width: 50mm;
+            width: 49mm;
             --font-size5: 8px;
             --font-size4: 10px;
             --font-size3: 11px;
@@ -67,7 +67,7 @@
         }
 
         html[paper_size="80"] {
-            width: 79mm;
+            width: 80mm;
             --font-size5: 11px;
             --font-size4: 13px;
             --font-size3: 14px;
@@ -308,27 +308,19 @@
         <div id="cost" class="name-value-table">
             <div class="name-value-item">
                 <span class="name">Subtotal</span>
-                <span class="value">
-                    <%= MoneyFormat(order.subtotal, false); %>
-                </span>
+                <span class="value"><%= MoneyFormat(order.subtotal, false); %></span>
             </div>
             <div class="name-value-item">
                 <span class="name">Taxa de Entrega </span>
-                <span class="value">
-                    <%= MoneyFormat(order.delivery_cost, false); %>
-                </span>
+                <span class="value"><%= MoneyFormat(order.delivery_cost, false); %></span>
             </div>
             <div class="name-value-item">
                 <span class="name">Desconto</span>
-                <span class="value">
-                    <%= MoneyFormat(order.discount + order.coupon_discount, false); %>
-                </span>
+                <span class="value"><%= MoneyFormat(order.discount + order.coupon_discount, false); %></span>
             </div>
             <div class="name-value-item">
                 <span class="name">Total</span>
-                <span class="value">
-                    <%= MoneyFormat(order.total, false); %>
-                </span>
+                <span class="value"><%= MoneyFormat(order.total, false); %></span>
             </div>
         </div>
     </main>
@@ -338,9 +330,7 @@
         <div id="infos" class="name-value-table">
             <div class="name-value-item">
                 <span class="name">Telefone</span>
-                <span class="value">
-                    <%= order.phone_client %>
-                </span>
+                <span class="value"><%= order.phone_client %></span>
             </div>
             <% if(order.delivery_type !== "withdrawal") { %>
                 <div class="name-value-table-group">
@@ -370,9 +360,7 @@
 
             <div class="name-value-item">
                 <span class="name">Forma de pagamento</span>
-                <span class="value">
-                    <%= TranslatePaymentMethod(order.payment_method); %>
-                </span>
+                <span class="value"><%= TranslatePaymentMethod(order.payment_method); %></span>
             </div>
             <% if(order.cash_change> 0) { %>
                 <div class="name-value-item">

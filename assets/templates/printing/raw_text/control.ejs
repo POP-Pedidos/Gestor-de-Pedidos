@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html paper_size="<%= printer?.size || 58 %>">
+
+<head>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        @page {
+            margin: 0;
+        }
+
+        @media print {
+            body {
+                margin: 0;
+            }
+        }
+
+        @media not print {
+            html {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                background: rgb(32, 32, 32);
+            }
+        }
+
+        html[paper_size="58"] {
+            width: 49mm;
+        }
+
+        html[paper_size="80"] {
+            width: 80mm;
+        }
+
+        body {
+            background: white;
+            margin: 0;
+            display: inline-block;
+            font-family: monospace, sans-serif;
+            font-weight: bold;
+            width: 100%;
+            padding: 5px;
+            font-size: 11.6px;
+        }
+    </style>
+    <title>Via de controle (<%= order.order_company_sequence %>)</title>
+</head>
+
+<html>
+
+<body>
+<%- ESC_COMMANDS.ALIGN_CENTER %><%- ESC_COMMANDS.TEXT_SIZE_LARGE %>VIA DE CONTROLE<br>
+<br>
+PEDIDO: <%= order.order_company_sequence %><br>
+CLIENTE: <%= order.name_client %><br>
+TELEFONE: <%= order.phone_client %><br>
+<br>
+<%- ESC_COMMANDS.ALIGN_CENTER %><%= CenterText("ITENS", 41, "="); %><br>
+<br>
+
+<% for(const item of order.items) { %>
+    <%= item.quantity %>x
+    <%= item.product.name %>
+    <%= MoneyFormat(item.price * item.quantity, false); %><br>
+
+    <% if(!!item.pizza_flavors?.length) { %>
+    Sabores<br>
+    <% for(const flavor of item.pizza_flavors) { %>
+        <%= "\t" %>
+        <% const total_flavors=item.pizza_flavors.reduce((accumulator, flavor)=> accumulator + flavor.quantity, 0); %>
+        <%= item.pizza_flavors.length> 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1} x` %>
+        <%= flavor.name %>
+        <%= MoneyFormat(flavor.price, false); %><br>
+    <% } %>
+    <% } %>
+    <% for (const complement of item.complements || []) { %>
+    <%= complement.name.toUpperCase() %><br>
+    <% for (const complement_item of complement.items || []) { %>
+        <%= "\t" %>
+        <%= `${complement.required===false ? "+ " : "" }${(company.multiply_complements ? complement_item.quantity * item.quantity : complement_item.quantity) || 1}x` %>
+        <%= complement_item.name %>
+        <%= MoneyFormat(complement_item.price * complement_item.quantity, false); %>
+        <br>
+    <% } %>
+<% } %>
+
+<% if(item.observation) { %>    • <%- item.observation %><% } %>
+<% } %>
+
+<br>
+SUBTOTAL: <%= MoneyFormat(order.subtotal, false); %><br>
+TAXA DE ENTREGA: <%= MoneyFormat(order.delivery_cost, false); %><br>
+DESCONTO: <%= MoneyFormat(order.discount + order.coupon_discount, false); %><br>
+TOTAL: <%= MoneyFormat(order.total, false); %><br>
+<%- ESC_COMMANDS.ALIGN_CENTER %><%= CenterText("", 41, "="); %><br>
+
+<% if(order.delivery_type !== "withdrawal") { %>
+ENDEREÇO: <%= order.address || `${order.street_name}, ${order.street_number} - ${order.neighborhood}, ${order.city} - ${order.state}` %><br>
+<% if(!!order.reference) { %>REFERENCIA: <%= order.reference %><br><% } %>
+<% if(!!order.complement) { %>COMPLEMENTO: <%= order.complement %><br><% } %>
+<% } else { %>
+TIPO: Retirada<br>
+<% } %>
+FORMA DE PAGTO: <%= TranslatePaymentMethod(order.payment_method); %><br>
+<% if(order.cash_change> 0) { %>
+TROCO: <%= MoneyFormat(order.cash_change - order.total); %><br>
+<% } %>
+<% if(!!order.observation) { %>
+OBS: <%= order.observation %><br>
+<% } %>
+DATA PEDIDO: <%= new Date(order.createdAt).toLocaleString() %><br>
+DATA IMPRESAO: <%= new Date().toLocaleString() %>
+</body>
+
+</html>

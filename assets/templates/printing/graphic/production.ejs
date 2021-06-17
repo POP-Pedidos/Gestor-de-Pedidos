@@ -34,7 +34,7 @@
         }
 
         html[paper_size="58"] {
-            width: 50mm;
+            width: 49mm;
             --font-size5: 8px;
             --font-size4: 10px;
             --font-size3: 11px;
@@ -67,7 +67,7 @@
         }
 
         html[paper_size="80"] {
-            width: 79mm;
+            width: 80mm;
             --font-size5: 11px;
             --font-size4: 13px;
             --font-size3: 14px;
@@ -114,7 +114,6 @@
 
         #products {
             width: 100%;
-            border-bottom: 1px solid gray;
             padding: 5px 0;
             border-spacing: 0;
             border-collapse: collapse;
@@ -183,12 +182,9 @@
             border-bottom: 1px solid #e7e7e7;
         }
 
-        #cost {
-            margin: 5px 0 6px;
-        }
-
         tr.sub_item>td {
-            font-size: var(--font-size5) !important;
+            font-style: italic;
+            font-size: var(--font-size4) !important;
         }
 
         tr.complement_name {
@@ -201,7 +197,7 @@
         }
 
         tr.observation>td {
-            font-size: 10px !important;
+            font-size: var(--font-size5) !important;
             font-style: italic !important;
             padding-bottom: 6px !important;
         }
@@ -228,14 +224,16 @@
             margin: 15px 5px 5px 5px;
         }
     </style>
-    <title>Via de controle (<%= order.order_company_sequence %>)</title>
+    <title>Via de produção (<%= order.order_company_sequence %>)</title>
 </head>
 
 <body>
 
     <header>
-        <span class="title"><%= company.name %></span>
-        <span class="type">Via de Controle</span>
+        <span class="title">
+            <%= company.name %>
+        </span>
+        <span class="type">Via de Produção</span>
         <span class="others">NÃO É DOCUMENTO FISCAL</span>
         <span class="order">Pedido: <span><%= order.order_company_sequence %></span></span>
     </header>
@@ -244,25 +242,16 @@
             <tr>
                 <th>QNT</th>
                 <th>PRODUTO</th>
-                <th>TOTAL (R$)</th>
             </tr>
             <% for(const item of order.items) { %>
                 <tr class="product">
-                    <td>
-                        <%= item.quantity %>
-                    </td>
-                    <td>
-                        <%= item.product.name %>
-                    </td>
-                    <td>
-                        <%= MoneyFormat(item.price * item.quantity, false); %>
-                    </td>
+                    <td><%= item.quantity %></td>
+                    <td><%= item.product.name %></td>
                 </tr>
 
                 <% if(!!item.pizza_flavors?.length) { %>
                     <td></td>
                     <td>Sabores</td>
-                    <td></td>
                     <% for(const flavor of item.pizza_flavors) { %>
                         <% const total_flavors=item.pizza_flavors.reduce((accumulator, flavor)=> accumulator + flavor.quantity, 0); %>
                         <tr class="sub_item">
@@ -281,7 +270,6 @@
                         <td>
                             <%= complement.name %>
                         </td>
-                        <td></td>
                     </tr>
                     <% for (const complement_item of complement.items || []) { %>
                         <tr class="sub_item">
@@ -289,9 +277,6 @@
                             <td>
                                 <span><%= `${complement.required===false ? "+ " : "" }${(company.multiply_complements ? complement_item.quantity * item.quantity : complement_item.quantity) || 1}x` %></span>
                                 <%= complement_item.name %>
-                            </td>
-                            <td>
-                                <%= MoneyFormat(complement_item.price * complement_item.quantity, false); %>
                             </td>
                         </tr>
                     <% } %>
@@ -305,35 +290,11 @@
                 <% } %>
             <% } %>
         </table>
-        <div id="cost" class="name-value-table">
-            <div class="name-value-item">
-                <span class="name">Subtotal</span>
-                <span class="value">
-                    <%= MoneyFormat(order.subtotal, false); %>
-                </span>
-            </div>
-            <div class="name-value-item">
-                <span class="name">Taxa de Entrega </span>
-                <span class="value">
-                    <%= MoneyFormat(order.delivery_cost, false); %>
-                </span>
-            </div>
-            <div class="name-value-item">
-                <span class="name">Desconto</span>
-                <span class="value">
-                    <%= MoneyFormat(order.discount + order.coupon_discount, false); %>
-                </span>
-            </div>
-            <div class="name-value-item">
-                <span class="name">Total</span>
-                <span class="value">
-                    <%= MoneyFormat(order.total, false); %>
-                </span>
-            </div>
-        </div>
     </main>
     <footer>
-        <span class="client_name"><%= order.name_client %></span>
+        <span class="client_name">
+            <%= order.name_client %>
+        </span>
 
         <div id="infos" class="name-value-table">
             <div class="name-value-item">
@@ -342,62 +303,24 @@
                     <%= order.phone_client %>
                 </span>
             </div>
-            <% if(order.delivery_type !== "withdrawal") { %>
-                <div class="name-value-table-group">
-                    <div class="name-value-item">
-                        <span class="name">Endereço</span>
-                        <span class="value"><%= order.address || `${order.street_name}, ${order.street_number} - ${order.neighborhood}, ${order.city} - ${order.state}` %></span>
-                    </div>
-                    <% if(!!order.reference) { %>
-                    <div class="name-value-item">
-                        <span class="name">Referencia</span>
-                        <span class="value"><%= order.reference %></span>
-                    </div>
-                    <% } %>
-                    <% if(!!order.complement) { %>
-                    <div class="name-value-item">
-                        <span class="name">Complemento</span>
-                        <span class="value"><%= order.complement %></span>
-                    </div>
-                    <% } %>
-                </div>
-            <% } else { %>
-                <div class="name-value-item">
-                    <span class="name">Tipo</span>
-                    <span class="value">Retirada</span>
-                </div>
-            <% } %>
-
-            <div class="name-value-item">
-                <span class="name">Forma de pagamento</span>
-                <span class="value">
-                    <%= TranslatePaymentMethod(order.payment_method); %>
-                </span>
-            </div>
-            <% if(order.cash_change> 0) { %>
-                <div class="name-value-item">
-                    <span class="name">Troco</span>
-                    <span class="value">
-                        <%= MoneyFormat(order.cash_change - order.total); %>
-                    </span>
-                </div>
-            <% } %>
             <% if(!!order.observation) { %>
                 <div class="name-value-item">
                     <span class="name">Observação</span>
-                    <span class="value"><%= order.observation %></span>
+                    <span class="value">
+                        <%= order.observation %>
+                    </span>
                 </div>
-            <% } %>
-            <div class="name-value-item">
-                <span class="name">Data do pedido</span>
-                <span class="value"><%= new Date(order.createdAt).toLocaleString() %></span>
-            </div>
-            <div class="name-value-item">
-                <span class="name">Data da impressão</span>
-                <span class="value"><%= new Date().toLocaleString() %></span>
-            </div>
+                <% } %>
+                    <div class="name-value-item">
+                        <span class="name">Data da impressão</span>
+                        <span class="value">
+                            <%= new Date().toLocaleString() %>
+                        </span>
+                    </div>
         </div>
-        <span class="website"><%= company.subdomain || "www" %>.poppedidos.com.br</span>
+        <span class="website">
+            <%= company.subdomain || "www" %>.poppedidos.com.br
+        </span>
     </footer>
 </body>
 

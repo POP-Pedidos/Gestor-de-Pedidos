@@ -1,14 +1,11 @@
 const socket = io(api_url, {
     path: "/socket/company",
     query: {
-        token: sessionStorage.token || localStorage.token,
         Hostname: window.hostname,
         Authorization: `Bearer ${sessionStorage.token || localStorage.token}`
     },
     transports: ['websocket', 'polling', 'flashsocket'],
 });
-
-console.warn("[Socket] token query is deprecated!");
 
 socket.on('connect', function () {
     console.log("Connected to (" + api_url + ")!");

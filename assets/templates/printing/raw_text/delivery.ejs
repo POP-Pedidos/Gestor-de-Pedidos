@@ -34,7 +34,7 @@
         }
 
         html[paper_size="58"] {
-            width: 50mm;
+            width: 49mm;
             --font-size5: 8px;
             --font-size4: 10px;
             --font-size3: 11px;
@@ -42,32 +42,8 @@
             --font-size1: 15px;
         }
 
-        html[paper_size="58"] .complement_name {
-            display: none;
-        }
-
-        html[paper_size="80"] .sub_item>td:nth-child(2) {
-            padding-left: 8% !important;
-        }
-
-        html[paper_size="58"] .sub_item>td:nth-child(2) {
-            padding-left: 4% !important;
-        }
-
-        html[paper_size="80"] .sub_item {
-            text-transform: capitalize;
-        }
-
-        html[paper_size="58"] .sub_item {
-            text-transform: uppercase;
-        }
-
-        html[paper_size="58"] .sub_item>td:nth-child(2)>span {
-            text-transform: lowercase !important;
-        }
-
         html[paper_size="80"] {
-            width: 79mm;
+            width: 80mm;
             --font-size5: 11px;
             --font-size4: 13px;
             --font-size3: 14px;
@@ -95,6 +71,11 @@
         header>.title {
             text-transform: uppercase;
             font-size: var(--font-size1);
+        }
+
+        header>.subtitle {
+            text-transform: uppercase;
+            font-size: var(--font-size5);
         }
 
         header>.type {
@@ -191,15 +172,6 @@
             font-size: var(--font-size5) !important;
         }
 
-        tr.complement_name {
-            text-transform: uppercase !important;
-            padding-left: 4% !important;
-        }
-
-        tr.product {
-            background-color: #e8e8e8;
-        }
-
         tr.observation>td {
             font-size: 10px !important;
             font-style: italic !important;
@@ -228,14 +200,15 @@
             margin: 15px 5px 5px 5px;
         }
     </style>
-    <title>Via de controle (<%= order.order_company_sequence %>)</title>
+    <title>Via de entrega (<%= order.order_company_sequence %>)</title>
 </head>
 
 <body>
 
     <header>
         <span class="title"><%= company.name %></span>
-        <span class="type">Via de Controle</span>
+        <span class="subtitle"><%= company["cpf-cnpj"] %> — <%= company.phone %></span>
+        <span class="type">Via de Entrega</span>
         <span class="others">NÃO É DOCUMENTO FISCAL</span>
         <span class="order">Pedido: <span><%= order.order_company_sequence %></span></span>
     </header>
@@ -259,35 +232,23 @@
                     </td>
                 </tr>
 
-                <% if(!!item.pizza_flavors?.length) { %>
-                    <td></td>
-                    <td>Sabores</td>
-                    <td></td>
-                    <% for(const flavor of item.pizza_flavors) { %>
-                        <% const total_flavors=item.pizza_flavors.reduce((accumulator, flavor)=> accumulator + flavor.quantity, 0); %>
-                        <tr class="sub_item">
-                            <td></td>
-                            <td>
-                                <%= item.pizza_flavors.length> 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1} x` %>
-                                <%= flavor.name %>
-                            </td>
-                            <td><%= MoneyFormat(flavor.price, false); %></td>
-                        </tr>
-                    <% } %>
-                <% } %>
-                <% for (const complement of item.complements || []) { %>
-                    <tr class="complement_name">
+                <% for(const flavor of item.pizza_flavors) { %>
+                    <% const total_flavors=item.pizza_flavors.reduce((accumulator, flavor)=> accumulator + flavor.quantity, 0); %>
+                    <tr class="sub_item">
                         <td></td>
                         <td>
-                            <%= complement.name %>
+                            <%= item.pizza_flavors.length> 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1} x` %>
+                            <%= flavor.name %>
                         </td>
-                        <td></td>
+                        <td><%= MoneyFormat(flavor.price, false); %></td>
                     </tr>
+                    <% } %>
+                <% for (const complement of item.complements || []) { %>
                     <% for (const complement_item of complement.items || []) { %>
                         <tr class="sub_item">
                             <td></td>
                             <td>
-                                <span><%= `${complement.required===false ? "+ " : "" }${(company.multiply_complements ? complement_item.quantity * item.quantity : complement_item.quantity) || 1}x` %></span>
+                                <%= `${complement.required===false ? "+ " : "" }${(company.multiply_complements ? complement_item.quantity * item.quantity : complement_item.quantity) || 1} x` %>
                                 <%= complement_item.name %>
                             </td>
                             <td>

@@ -2,12 +2,19 @@ const os = require("os");
 const fs = require("fs");
 const { app, ipcMain, nativeTheme, dialog } = require("electron");
 const { autoUpdater } = require("electron-updater");
-
 const AutoUpdater = require("./AutoUpdater");
-
 const { domain, api_url, places_url, icon } = require("../config");
 const offscreen = require("./Offscreen");
 const Store = require("./Store");
+
+const printGraphicControlCopy = require("./Printer/graphic/control");
+const printGraphicDeliveryCopy = require("./Printer/graphic/delivery");
+const printGraphicProductionCopy = require("./Printer/graphic/production");
+
+const printRawTextControlCopy = require("./Printer/raw_text/control");
+const printRawTextDeliveryCopy = require("./Printer/raw_text/delivery");
+const printRawTextProductionCopy = require("./Printer/raw_text/production");
+
 const theme_store = new Store("dark-mode", { themeSource: "system" });
 
 ipcMain.on("api_url", (event) => event.returnValue = api_url);
@@ -95,15 +102,21 @@ ipcMain.on("fs:writeFile", (event, ...args) => {
 });
 
 ipcMain.handle("printService:printControlCopy", (event, printer, order, company) => {
-    return offscreen.printControlCopy(printer, order, company);
+    if (printer?.type === "graphic") return printGraphicControlCopy(printer, order, company);
+    else if (printer?.type === "text") return printRawTextControlCopy(printer, order, company);
+    else return null;
 });
 
 ipcMain.handle("printService:printDeliveryCopy", (event, printer, order, company) => {
-    return offscreen.printDeliveryCopy(printer, order, company);
+    if (printer?.type === "graphic") return printGraphicDeliveryCopy(printer, order, company);
+    else if (printer?.type === "text") return printRawTextDeliveryCopy(printer, order, company);
+    else return null;
 });
 
 ipcMain.handle("printService:printProductionCopy", (event, printer, order, company) => {
-    return offscreen.printProductionCopy(printer, order, company);
+    if (printer?.type === "graphic") return printGraphicProductionCopy(printer, order, company);
+    else if (printer?.type === "text") return printRawTextProductionCopy(printer, order, company);
+    else return null;
 });
 
 ipcMain.handle("offscreen:generateProductThumbnail", (event, data) => {
