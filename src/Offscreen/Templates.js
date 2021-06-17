@@ -10,9 +10,9 @@ const templates = {
     "product": "assets/templates/thumbnails/product.ejs",
     "company": "assets/templates/thumbnails/company.ejs",
     "orders": "assets/templates/orders.ejs",
-    "printing:graphics:control": "assets/templates/printing/graphics/control.ejs",
-    "printing:graphics:delivery": "assets/templates/printing/graphics/delivery.ejs",
-    "printing:graphics:production": "assets/templates/printing/graphics/production.ejs",
+    "printing:graphics:control": "assets/templates/printing/graphic/control.ejs",
+    "printing:graphics:delivery": "assets/templates/printing/graphic/delivery.ejs",
+    "printing:graphics:production": "assets/templates/printing/graphic/production.ejs",
     "printing:raw_text:control": "assets/templates/printing/raw_text/control.ejs",
     "printing:raw_text:delivery": "assets/templates/printing/raw_text/delivery.ejs",
     "printing:raw_text:production": "assets/templates/printing/raw_text/production.ejs",
@@ -41,6 +41,7 @@ function GetTemplateHTML(template) {
 
 function Render(template, options) {
     try {
+        console.log(template)
         const rendered_html = ejs.render(GetTemplateHTML(template), {
             appPath: appPath.replace(/\\/g, "/"),
             ...utils,

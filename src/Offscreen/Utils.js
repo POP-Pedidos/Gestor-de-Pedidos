@@ -29,6 +29,7 @@ function CenterText(text, characters, character = " ") {
 }
 
 function NormalizeText(text) {
+    if(!text) return text;
     return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
