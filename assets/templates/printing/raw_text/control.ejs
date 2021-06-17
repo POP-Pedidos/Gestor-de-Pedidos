@@ -45,6 +45,11 @@
             padding: 5px;
             font-size: 11.6px;
         }
+
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
     </style>
     <title>Via de controle (<%= order.order_company_sequence %>)</title>
 </head>
@@ -52,67 +57,77 @@
 <html>
 
 <body>
-<%- ESC_COMMANDS.ALIGN_CENTER %><%- ESC_COMMANDS.TEXT_SIZE_LARGE %>VIA DE CONTROLE<br>
-<br>
-PEDIDO: <%= order.order_company_sequence %><br>
-CLIENTE: <%= order.name_client %><br>
-TELEFONE: <%= order.phone_client %><br>
-<br>
-<%- ESC_COMMANDS.ALIGN_CENTER %><%= CenterText("ITENS", 41, "="); %><br>
-<br>
+<%
+    let lines = [];
 
-<% for(const item of order.items) { %>
-    <%= item.quantity %>x
-    <%= item.product.name %>
-    <%= MoneyFormat(item.price * item.quantity, false); %><br>
+    lines.push(CenterText("VIA DE CONTROLE", 41));
 
-    <% if(!!item.pizza_flavors?.length) { %>
-    Sabores<br>
-    <% for(const flavor of item.pizza_flavors) { %>
-        <%= "\t" %>
-        <% const total_flavors=item.pizza_flavors.reduce((accumulator, flavor)=> accumulator + flavor.quantity, 0); %>
-        <%= item.pizza_flavors.length> 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1} x` %>
-        <%= flavor.name %>
-        <%= MoneyFormat(flavor.price, false); %><br>
-    <% } %>
-    <% } %>
-    <% for (const complement of item.complements || []) { %>
-    <%= complement.name.toUpperCase() %><br>
-    <% for (const complement_item of complement.items || []) { %>
-        <%= "\t" %>
-        <%= `${complement.required===false ? "+ " : "" }${(company.multiply_complements ? complement_item.quantity * item.quantity : complement_item.quantity) || 1}x` %>
-        <%= complement_item.name %>
-        <%= MoneyFormat(complement_item.price * complement_item.quantity, false); %>
-        <br>
-    <% } %>
-<% } %>
+    lines.push("");
 
-<% if(item.observation) { %>    • <%- item.observation %><% } %>
-<% } %>
+    lines.push(`PEDIDO: ${order.order_company_sequence}`);
+    lines.push(`CLIENTE: ${NormalizeText(order.name_client)}`);
+    lines.push(`TELEFONE: ${order.phone_client}`);
 
-<br>
-SUBTOTAL: <%= MoneyFormat(order.subtotal, false); %><br>
-TAXA DE ENTREGA: <%= MoneyFormat(order.delivery_cost, false); %><br>
-DESCONTO: <%= MoneyFormat(order.discount + order.coupon_discount, false); %><br>
-TOTAL: <%= MoneyFormat(order.total, false); %><br>
-<%- ESC_COMMANDS.ALIGN_CENTER %><%= CenterText("", 41, "="); %><br>
+    lines.push("");
 
-<% if(order.delivery_type !== "withdrawal") { %>
-ENDEREÇO: <%= order.address || `${order.street_name}, ${order.street_number} - ${order.neighborhood}, ${order.city} - ${order.state}` %><br>
-<% if(!!order.reference) { %>REFERENCIA: <%= order.reference %><br><% } %>
-<% if(!!order.complement) { %>COMPLEMENTO: <%= order.complement %><br><% } %>
-<% } else { %>
-TIPO: Retirada<br>
-<% } %>
-FORMA DE PAGTO: <%= TranslatePaymentMethod(order.payment_method); %><br>
-<% if(order.cash_change> 0) { %>
-TROCO: <%= MoneyFormat(order.cash_change - order.total); %><br>
-<% } %>
-<% if(!!order.observation) { %>
-OBS: <%= order.observation %><br>
-<% } %>
-DATA PEDIDO: <%= new Date(order.createdAt).toLocaleString() %><br>
-DATA IMPRESAO: <%= new Date().toLocaleString() %>
+    lines.push(CenterText("ITENS", 41, "="));
+
+    for(const item of order.items) {
+        lines.push(`${item.quantity} x ${item.product.name} = ${MoneyFormat(item.price * item.quantity, false)}`);
+
+        const total_flavors=item.pizza_flavors?.reduce((accumulator, flavor)=> accumulator + flavor.quantity, 0); 
+
+        if(!!total_flavors?.length) { 
+            lines.push(` ↳ Sabores`);
+            
+            for(const flavor of item.pizza_flavors) {
+                const quantity = item.pizza_flavors.length> 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1} x`;
+
+                lines.push(`    ↳ ${quantity} ${flavor.name} = ${MoneyFormat(flavor.price, false)}`);
+            } 
+        }
+
+        for (const complement of item.complements || []) {
+            lines.push(` ↳ ${NormalizeText(complement.name.toUpperCase())}`);
+
+            for (const complement_item of complement.items || []) {
+                const quantity = `${complement.required===false ? "+ " : "" }${(company.multiply_complements ? complement_item.quantity * item.quantity : complement_item.quantity) || 1}x`;
+
+                lines.push(`    ↳ ${quantity} ${complement_item.name} = ${MoneyFormat(complement_item.price * complement_item.quantity, false)}`);
+            }
+        }
+
+        if(item.observation) lines.push(` • ${item.observation}`);
+    } 
+
+    lines.push("");
+
+    lines.push(`SUBTOTAL: ${MoneyFormat(order.subtotal, false)}`);
+    lines.push(`TAXA DE ENTREGA: ${MoneyFormat(order.delivery_cost, false)}`);
+    lines.push(`DESCONTO: ${MoneyFormat(order.discount + order.coupon_discount, false)}`);
+    lines.push(`TOTAL: ${MoneyFormat(order.total, false)}`);
+
+    lines.push(CenterText("", 41, "="));
+
+    lines.push("");
+
+    if(order.delivery_type !="withdrawal") {
+        lines.push(`ENDEREÇO: ${NormalizeText(`${order.street_name}, ${order.street_number} - ${order.neighborhood}, ${order.city} - ${order.state}`)}`);
+
+        if(!!order.reference) lines.push(`REFERENCIA: ${NormalizeText(order.reference)}`);
+        if(!!order.complement) lines.push(`COMPLEMENTO: ${NormalizeText(order.complement)}`);
+    } else {
+        lines.push(`TIPO: Retirada`);
+    }
+
+    lines.push(`FORMA DE PAGTO: ${TranslatePaymentMethod(order.payment_method)}`);
+    if(order.cash_change > 0) lines.push(`TROCO: ${MoneyFormat(order.cash_change - order.total)}`);
+    if(!!order.observation) lines.push(`OBS: ${order.observation}`);
+
+    lines.push(`DATA PEDIDO: ${new Date(order.createdAt).toLocaleString()}`);
+    lines.push(`DATA IMPRESAO: ${new Date().toLocaleString()}`);
+%>
+<pre><%- lines.join("\n") %></pre>
 </body>
 
 </html>

@@ -28,20 +28,13 @@ function CenterText(text, characters, character = " ") {
     return `${left_text}${text}${right_text}`;
 }
 
-const ESC_COMMANDS = {
-    ALIGN_CENTER: "\x1b\x61\x01",
-    ALIGN_LEFT: "\x1b\x61\x00",
-    ALIGN_RIGHT: "\x1b\x61\x02",
-    TEXT_SIZE_NORMAL: "\x1b\x21\x00",
-    TEXT_SIZE_LARGE: "\x1b\x21\x30",
-    INVERTED_COLOR_ON: "\x1d\x42\x01",
-    BEEPER: "\x1b\x42\x05\x05",
-    CUT_PAPER: "\x1d\x56\x00",
+function NormalizeText(text) {
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
 module.exports = {
     MoneyFormat,
     TranslatePaymentMethod,
     CenterText,
-    ESC_COMMANDS,
+    NormalizeText,
 }
