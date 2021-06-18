@@ -62,10 +62,10 @@
     let lines = [];
 
     lines.push(CenterText("VIA DE CONTROLE", 41));
+    lines.push(CenterText(`PEDIDO ${order.order_company_sequence}`, 41));
 
     lines.push(" ");
 
-    lines.push(CenterText(`PEDIDO: ${order.order_company_sequence}`, 41));
     lines.push(`CLIENTE: {fill} ${order.name_client}`);
     lines.push(`TELEFONE: {fill}${order.phone_client}`);
 
@@ -98,7 +98,7 @@
             }
         }
 
-        if(item.observation) lines.push(` • ${item.observation}`);
+        if(item.observation) lines.push(` > ${item.observation}`);
 
         lines.push(" ");
     } 
@@ -131,7 +131,7 @@
     const text = NormalizeText(lines.map(line => {
         if(line.includes("{fill}")) {
             const spaces_count = 41 - (line.length - 6);
-            const spaces = Array.from({ length: spaces_count }, () => " ").join("");
+            const spaces = Array.from({ length: spaces_count > 0 ? spaces_count : 0 }, () => " ").join("");
 
             line = line.replace(/{fill}/g, spaces);
         }
