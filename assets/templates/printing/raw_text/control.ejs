@@ -48,8 +48,9 @@
 
         pre {
             margin: 0;
-            word-wrap: break-word;
-            white-space: pre-wrap;
+            white-space: break-spaces;
+            word-break: break-word;
+            overflow: hidden;
         }
     </style>
     <title>Via de controle (<%= order.order_company_sequence %>)</title>
@@ -61,8 +62,8 @@
 <%
     let lines = [];
 
-    lines.push(CenterText("VIA DE CONTROLE", 41));
-    lines.push(CenterText(`PEDIDO ${order.order_company_sequence}`, 41));
+    lines.push(CenterText("VIA DE CONTROLE", 42));
+    lines.push(CenterText(`PEDIDO ${order.order_company_sequence}`, 42));
 
     lines.push(" ");
 
@@ -71,7 +72,7 @@
 
     lines.push(" ");
 
-    lines.push(CenterText("ITENS", 41, "="));
+    lines.push(CenterText("ITENS", 42, "="));
 
     for(const item of order.items) {
         lines.push(`${item.quantity}x ${item.product.name} {fill} ${MoneyFormat(item.price * item.quantity, false)}`);
@@ -108,7 +109,7 @@
     lines.push(`DESCONTO: {fill} ${MoneyFormat(order.discount + order.coupon_discount, false)}`);
     lines.push(`TOTAL: {fill} ${MoneyFormat(order.total, false)}`);
 
-    lines.push(CenterText("", 41, "="));
+    lines.push(CenterText("", 42, "="));
 
     lines.push(" ");
 
@@ -130,7 +131,7 @@
 
     const text = NormalizeText(lines.map(line => {
         if(line.includes("{fill}")) {
-            const spaces_count = 41 - (line.length - 6);
+            const spaces_count = 42 - (line.length - 6);
             const spaces = Array.from({ length: spaces_count > 0 ? spaces_count : 0 }, () => " ").join("");
 
             line = line.replace(/{fill}/g, spaces);
