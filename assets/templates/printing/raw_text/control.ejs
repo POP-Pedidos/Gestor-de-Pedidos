@@ -65,9 +65,9 @@
 
     lines.push(" ");
 
-    lines.push(`PEDIDO: ${order.order_company_sequence}`);
-    lines.push(`CLIENTE: ${order.name_client}`);
-    lines.push(`TELEFONE: ${order.phone_client}`);
+    lines.push(CenterText(`PEDIDO: ${order.order_company_sequence}`, 41));
+    lines.push(`CLIENTE: {fill} ${order.name_client}`);
+    lines.push(`TELEFONE: {fill}${order.phone_client}`);
 
     lines.push(" ");
 
