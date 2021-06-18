@@ -25,7 +25,7 @@ module.exports = function CreateWindow() {
         show: false,
         webPreferences: {
             preload: path.join(__dirname, "../assets/scripts/preload.js"),
-            nodeIntegration: true,
+            nodeIntegration: false,
             contextIsolation: false,
             enableRemoteModule: false,
             webviewTag: true,
@@ -51,6 +51,15 @@ module.exports = function CreateWindow() {
     win.webContents.on('new-window', function (e, url) {
         e.preventDefault();
         require('electron').shell.openExternal(url);
+    });
+
+    app.on('web-contents-created', function (e, contents) {
+        if (contents.getType() === 'webview') {
+            contents.on('new-window', function (e, url) {
+                e.preventDefault();
+                require('electron').shell.openExternal(url);
+            });
+        }
     });
 
     win.webContents.on("did-finish-load", () => {

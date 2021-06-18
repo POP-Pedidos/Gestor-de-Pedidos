@@ -1,8 +1,8 @@
 const $whatsappWebView = $("#whatsappWebView");
 const message_times = [];
 
-$whatsappWebView.attr("partition", "persist:whatsapp");
-$whatsappWebView.attr("webpreferences", "javascript=yes, contextIsolation=yes");
+$whatsappWebView.attr("partition", `persist:whatsapp:${company.id_company}`);
+$whatsappWebView.attr("webpreferences", "javascript=yes, contextIsolation=yes, nativeWindowOpen=yes");
 $whatsappWebView.attr("preload", "../../../scripts/whatsapp/preload.js");
 $whatsappWebView.attr("src", "https://web.whatsapp.com/");
 
@@ -50,7 +50,7 @@ whatsappWebView.addEventListener('ipc-message', (event) => {
 
             const number = msg.from?.user || msg.author?.user;
             const name = contact.pushname || contact.verifiedName || contact.name;
-            
+
             // const text = msg.text || msg.body;
 
             if (Object.keys(message_times).includes(number)) return;
