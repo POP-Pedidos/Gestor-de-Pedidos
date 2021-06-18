@@ -1,6 +1,7 @@
 const socket = io(api_url, {
     path: "/socket/company",
     query: {
+        "token": sessionStorage.token || localStorage.token,
         Hostname: window.hostname,
         Authorization: `Bearer ${sessionStorage.token || localStorage.token}`
     },
