@@ -49,7 +49,8 @@ whatsappWebView.addEventListener('ipc-message', (event) => {
             if (!msg || msg.isMe || msg.isStatusV3 || msg.isGroupMsg || !msg.isNewMsg || msg.isMedia || msg.id.fromMe) return;
 
             const number = msg.from?.user || msg.author?.user;
-            const name = contact.name || contact.pushname || contact.verifiedName;
+            const name = contact.pushname || contact.verifiedName || contact.name;
+            
             // const text = msg.text || msg.body;
 
             if (Object.keys(message_times).includes(number)) return;

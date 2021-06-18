@@ -48,6 +48,7 @@
 
         pre {
             margin: 0;
+            word-wrap: break-word;
             white-space: pre-wrap;
         }
     </style>
@@ -62,72 +63,83 @@
 
     lines.push(CenterText("VIA DE CONTROLE", 41));
 
-    lines.push("");
+    lines.push(" ");
 
     lines.push(`PEDIDO: ${order.order_company_sequence}`);
-    lines.push(`CLIENTE: ${NormalizeText(order.name_client)}`);
+    lines.push(`CLIENTE: ${order.name_client}`);
     lines.push(`TELEFONE: ${order.phone_client}`);
 
-    lines.push("");
+    lines.push(" ");
 
     lines.push(CenterText("ITENS", 41, "="));
 
     for(const item of order.items) {
-        lines.push(`${item.quantity} x ${item.product.name} = ${MoneyFormat(item.price * item.quantity, false)}`);
+        lines.push(`${item.quantity}x ${item.product.name} {fill} ${MoneyFormat(item.price * item.quantity, false)}`);
 
         const total_flavors=item.pizza_flavors?.reduce((accumulator, flavor)=> accumulator + flavor.quantity, 0); 
 
         if(!!total_flavors?.length) { 
-            lines.push(` ↳ Sabores`);
+            lines.push(`| Sabores`);
             
             for(const flavor of item.pizza_flavors) {
-                const quantity = item.pizza_flavors.length> 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1} x`;
+                const quantity = item.pizza_flavors.length> 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1}x`;
 
-                lines.push(`    ↳ ${quantity} ${flavor.name} = ${MoneyFormat(flavor.price, false)}`);
+                lines.push(` |- ${quantity} ${flavor.name} {fill} ${MoneyFormat(flavor.price, false)}`);
             } 
         }
 
         for (const complement of item.complements || []) {
-            lines.push(` ↳ ${NormalizeText(complement.name.toUpperCase())}`);
+            lines.push(` | ${complement.name.toUpperCase()}`);
 
             for (const complement_item of complement.items || []) {
                 const quantity = `${complement.required===false ? "+ " : "" }${(company.multiply_complements ? complement_item.quantity * item.quantity : complement_item.quantity) || 1}x`;
 
-                lines.push(`    ↳ ${quantity} ${complement_item.name} = ${MoneyFormat(complement_item.price * complement_item.quantity, false)}`);
+                lines.push(` |- ${quantity} ${complement_item.name} {fill} ${MoneyFormat(complement_item.price * complement_item.quantity, false)}`);
             }
         }
 
         if(item.observation) lines.push(` • ${item.observation}`);
+
+        lines.push(" ");
     } 
 
-    lines.push("");
-
-    lines.push(`SUBTOTAL: ${MoneyFormat(order.subtotal, false)}`);
-    lines.push(`TAXA DE ENTREGA: ${MoneyFormat(order.delivery_cost, false)}`);
-    lines.push(`DESCONTO: ${MoneyFormat(order.discount + order.coupon_discount, false)}`);
-    lines.push(`TOTAL: ${MoneyFormat(order.total, false)}`);
+    lines.push(`SUBTOTAL: {fill} ${MoneyFormat(order.subtotal, false)}`);
+    lines.push(`TAXA DE ENTREGA: {fill} ${MoneyFormat(order.delivery_cost, false)}`);
+    lines.push(`DESCONTO: {fill} ${MoneyFormat(order.discount + order.coupon_discount, false)}`);
+    lines.push(`TOTAL: {fill} ${MoneyFormat(order.total, false)}`);
 
     lines.push(CenterText("", 41, "="));
 
-    lines.push("");
+    lines.push(" ");
 
     if(order.delivery_type !="withdrawal") {
-        lines.push(`ENDEREÇO: ${NormalizeText(`${order.street_name}, ${order.street_number} - ${order.neighborhood}, ${order.city} - ${order.state}`)}`);
+        lines.push(`ENDEREÇO: {fill} ${`${order.street_name}, ${order.street_number} - ${order.neighborhood}, ${order.city} - ${order.state}`}`);
 
-        if(!!order.reference) lines.push(`REFERENCIA: ${NormalizeText(order.reference)}`);
-        if(!!order.complement) lines.push(`COMPLEMENTO: ${NormalizeText(order.complement)}`);
+        if(!!order.reference) lines.push(`REFERENCIA: {fill} ${order.reference}`);
+        if(!!order.complement) lines.push(`COMPLEMENTO: {fill} ${order.complement}`);
     } else {
-        lines.push(`TIPO: Retirada`);
+        lines.push(`TIPO: {fill} Retirada`);
     }
 
-    lines.push(`FORMA DE PAGTO: ${TranslatePaymentMethod(order.payment_method)}`);
-    if(order.cash_change > 0) lines.push(`TROCO: ${MoneyFormat(order.cash_change - order.total)}`);
-    if(!!order.observation) lines.push(`OBS: ${order.observation}`);
+    lines.push(`FORMA DE PAGTO: {fill} ${TranslatePaymentMethod(order.payment_method)}`);
+    if(order.cash_change > 0) lines.push(`TROCO: {fill} ${MoneyFormat(order.cash_change - order.total)}`);
+    if(!!order.observation) lines.push(`OBS: {fill} ${order.observation}`);
 
-    lines.push(`DATA PEDIDO: ${new Date(order.createdAt).toLocaleString()}`);
-    lines.push(`DATA IMPRESAO: ${new Date().toLocaleString()}`);
+    lines.push(`DATA PEDIDO: {fill} ${new Date(order.createdAt).toLocaleString()}`);
+    lines.push(`DATA IMPRESAO: {fill} ${new Date().toLocaleString()}`);
+
+    const text = NormalizeText(lines.map(line => {
+        if(line.includes("{fill}")) {
+            const spaces_count = 41 - (line.length - 6);
+            const spaces = Array.from({ length: spaces_count }, () => " ").join("");
+
+            line = line.replace(/{fill}/g, spaces);
+        }
+
+        return line;
+    }).join("\n"));
 %>
-<pre><%- lines.join("\n") %></pre>
+<pre><%= text %></pre>
 </body>
 
 </html>
