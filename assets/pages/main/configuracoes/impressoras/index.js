@@ -25,6 +25,22 @@ $("#btnModalImpressora").on("click", function (e) {
     $("#frmImpressora select.type").val("");
     $("#frmImpressora select.type").selectpicker("refresh");
 
+    $("#frmImpressora select.columns").selectpicker("refresh");
+    $("#frmImpressora select.columns").val("");
+    $("#frmImpressora select.columns").selectpicker("refresh");
+
+    $("#frmImpressora select.font_scale").selectpicker("refresh");
+    $("#frmImpressora select.font_scale").val("");
+    $("#frmImpressora select.font_scale").selectpicker("refresh");
+
+    $("#frmImpressora .form-group.columns").hide();
+    $("#frmImpressora .form-group.font_scale").hide();
+    $("#frmImpressora .form-group.size").hide();
+
+    $("#frmImpressora select.columns").attr("disabled", true);
+    $("#frmImpressora select.size").attr("disabled", true);
+    $("#frmImpressora select.font_scale").attr("disabled", true);
+
     $("#modalImpressora").modal("show");
 });
 
@@ -71,7 +87,7 @@ $("#frmEditImpressora").on("submit", function (e) {
 
     const edit_printer_id = $(this).attr("id_printer");
     const formData = $(this).serializeFormJSON();
-
+    
     FetchAPI(`/printers/${edit_printer_id}`, {
         method: "PUT",
         body: formData
@@ -153,6 +169,11 @@ function editarImpressora(id) {
     for (const printer_name of GetPrintersList()) {
         $("#frmEditImpressora select.device").append(`<option>${printer_name}</option>`);
     }
+
+    $("#frmEditImpressora select.columns").attr("disabled", printer.type !== "text");
+    $("#frmEditImpressora select.size").attr("disabled", printer.type !== "graphic");
+    $("#frmEditImpressora select.font_scale").attr("disabled", printer.type !== "graphic");
+
     $("#frmEditImpressora select.device").selectpicker("refresh");
     $("#frmEditImpressora select.device").val(printer.device);
     $("#frmEditImpressora select.device").selectpicker("refresh");
@@ -164,6 +185,18 @@ function editarImpressora(id) {
     $("#frmEditImpressora select.type").selectpicker("refresh");
     $("#frmEditImpressora select.type").val(printer.type);
     $("#frmEditImpressora select.type").selectpicker("refresh");
+
+    $("#frmEditImpressora select.columns").selectpicker("refresh");
+    $("#frmEditImpressora select.columns").val(printer.size);
+    $("#frmEditImpressora select.columns").selectpicker("refresh");
+
+    $("#frmEditImpressora select.font_scale").selectpicker("refresh");
+    $("#frmEditImpressora select.font_scale").val(printer.font_scale);
+    $("#frmEditImpressora select.font_scale").selectpicker("refresh");
+
+    $("#frmEditImpressora .form-group.columns").toggle(printer.type === "text");
+    $("#frmEditImpressora .form-group.font_scale").toggle(printer.type === "graphic");
+    $("#frmEditImpressora .form-group.size").toggle(printer.type === "graphic");
 
     $("#modalEditImpressora").modal("show");
 }
@@ -199,4 +232,20 @@ FetchAPI(`/printers`, { instance_check: true, }).then(printers_data => {
 
 $(".selectpicker").selectpicker({
     noneSelectedText: "Nada selecionado",
+});
+
+$("select.selectpicker.type").on("change", function () {
+    const value = $(this).val();
+
+    $(".form-group.columns").toggle(value === "text");
+    $(".form-group.font_scale").toggle(value === "graphic");
+    $(".form-group.size").toggle(value === "graphic");
+
+    $("select.columns").attr("disabled", value !== "text");
+    $("select.size").attr("disabled", value !== "graphic");
+    $("select.font_scale").attr("disabled", value !== "graphic");
+
+    $("select.size").selectpicker("refresh");
+    $("select.font_scale").selectpicker("refresh");
+    $("select.columns").selectpicker("refresh");
 });

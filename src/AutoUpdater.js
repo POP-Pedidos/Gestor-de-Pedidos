@@ -1,5 +1,7 @@
 const { autoUpdater } = require("electron-updater");
 
+autoUpdater.autoDownload = false;
+
 module.exports = (win) => {
     if (process.env.NODE_ENV === "development") return;
 

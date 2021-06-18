@@ -33,46 +33,16 @@
             }
         }
 
-        html[paper_size="58"] {
-            width: 49mm;
-            --font-size5: 8px;
-            --font-size4: 10px;
-            --font-size3: 11px;
-            --font-size2: 13px;
-            --font-size1: 15px;
-        }
+        html {
+            --paper-size: <%- parseInt(printer?.size || 58) %>mm;
 
-        html[paper_size="58"] .complement_name {
-            display: none;
-        }
+            --font-size5: <%- parseInt(((printer?.size || 58) / 7.25) * (printer?.font_scale || 1)) %>px;
+            --font-size4: <%- parseInt(((printer?.size || 58) / 5.8) * (printer?.font_scale || 1)) %>px;
+            --font-size3: <%- parseInt(((printer?.size || 58) / 5.27) * (printer?.font_scale || 1)) %>px;
+            --font-size2: <%- parseInt(((printer?.size || 58) / 4.46) * (printer?.font_scale || 1)) %>px;
+            --font-size1: <%- parseInt(((printer?.size || 58) / 3.86) * (printer?.font_scale || 1)) %>px;
 
-        html[paper_size="80"] .sub_item>td:nth-child(2) {
-            padding-left: 8% !important;
-        }
-
-        html[paper_size="58"] .sub_item>td:nth-child(2) {
-            padding-left: 4% !important;
-        }
-
-        html[paper_size="80"] .sub_item {
-            text-transform: capitalize;
-        }
-
-        html[paper_size="58"] .sub_item {
-            text-transform: uppercase;
-        }
-
-        html[paper_size="58"] .sub_item>td:nth-child(2)>span {
-            text-transform: lowercase !important;
-        }
-
-        html[paper_size="80"] {
-            width: 80mm;
-            --font-size5: 11px;
-            --font-size4: 13px;
-            --font-size3: 14px;
-            --font-size2: 16px;
-            --font-size1: 18px;
+            width: var(--paper-size);
         }
 
         body {
@@ -80,7 +50,6 @@
             margin: 0;
             display: inline-block;
             font-family: "Greycliff", sans-serif;
-            /* font-family: 'Segoe UI', Arial, sans-serif; */
             font-weight: bold;
             width: 100%;
             padding: 5px 30px;
@@ -192,11 +161,6 @@
             font-size: var(--font-size5) !important;
         }
 
-        tr.complement_name {
-            text-transform: uppercase !important;
-            padding-left: 4% !important;
-        }
-
         tr.product {
             background-color: #e8e8e8;
         }
@@ -228,7 +192,35 @@
             font-weight: normal;
             margin: 15px 5px 5px 5px;
         }
+
+        tr.complement_name {
+            display: none;
+            text-transform: uppercase;
+        }
+
+        tr.sub_item {
+            text-transform: uppercase;
+        }
     </style>
+    <% if(printer && printer.size >= 80) { %>
+    <style>
+        tr.complement_name  {
+            display: contents;
+        }
+
+        tr.complement_name>td:nth-child(2) {
+            padding-left: 10px !important;
+        }
+
+        tr.sub_item {
+            text-transform: none;
+        }
+
+        tr.sub_item>td:nth-child(2) {
+            padding-left: 20px !important;
+        }
+    </style>
+    <% } %>
     <title>Via de controle (<%= order.order_company_sequence %>)</title>
 </head>
 
@@ -261,9 +253,11 @@
                 </tr>
 
                 <% if(!!item.pizza_flavors?.length) { %>
-                    <td></td>
-                    <td>Sabores</td>
-                    <td></td>
+                    <tr class="complement_name">
+                        <td></td>
+                        <td>Sabores</td>
+                        <td></td>
+                    </tr>
                     <% for(const flavor of item.pizza_flavors) { %>
                         <% const total_flavors=item.pizza_flavors.reduce((accumulator, flavor)=> accumulator + flavor.quantity, 0); %>
                         <tr class="sub_item">
