@@ -278,7 +278,7 @@ function AddProduct($section, product, $skeleton) {
                         $product.remove();
                         resolve();
                         Swal.fire("Sucesso!", `O produto "${product.name}" foi apagado!`, "success");
-                        if (!$section.find(">main>div").length) $section.find(">main").boo("Não há nada mais nada por aqui!");
+                        if ($section.find(">main>div").length === 0) $section.find(">main").boo("Não há nada mais nada por aqui!");
                     }).catch(error => {
                         Swal.fire("Opss...", `Ocorreu um erro ao tentar apagar o produto "${product.name}"!`, "error");
                         Swal.showValidationMessage(error);
@@ -490,10 +490,3 @@ lazy_loading.onHandle = async (state) => {
 
 categories = [];
 lazy_loading.Init();
-
-$(window).ready(function () {
-    if (window.product_toLoad) {
-        ShowProductEditor(window.product_toLoad);
-        delete window.product_toLoad;
-    }
-});

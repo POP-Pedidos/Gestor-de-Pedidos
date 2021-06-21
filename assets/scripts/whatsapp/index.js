@@ -12,54 +12,82 @@ whatsappWebView.addEventListener("dom-ready", function (event) {
     });
 });
 
-whatsappWebView.addEventListener('ipc-message', (event) => {
-    console.log("[WHATSAPP-IPC-MESSAGE]", event);
+whatsappWebView.addEventListener('ipc-message', async (event) => {
+    try {
+        switch (event.channel) {
+            case "authenticated": {
+                fetch("../../../scripts/whatsapp/inject/ModuleRaid.js").then(res => res.text()).then(ModuleRaid => {
+                    whatsappWebView.executeJavaScript(ModuleRaid);
 
-    switch (event.channel) {
-        case "authenticated": {
-            fetch("../../../scripts/whatsapp/inject/ModuleRaid.js").then(res => res.text()).then(ModuleRaid => {
-                whatsappWebView.executeJavaScript(ModuleRaid);
+                    fetch("../../../scripts/whatsapp/inject/ExposeStore.js").then(res => res.text()).then(ExposeStore => {
+                        whatsappWebView.executeJavaScript(ExposeStore);
 
-                fetch("../../../scripts/whatsapp/inject/ExposeStore.js").then(res => res.text()).then(ExposeStore => {
-                    whatsappWebView.executeJavaScript(ExposeStore);
+                        fetch("../../../scripts/whatsapp/inject/Utils.js").then(res => res.text()).then(Utils => {
+                            whatsappWebView.executeJavaScript(Utils);
 
-                    fetch("../../../scripts/whatsapp/inject/Utils.js").then(res => res.text()).then(Utils => {
-                        whatsappWebView.executeJavaScript(Utils);
-
-                        fetch("../../../scripts/whatsapp/inject/Functions.js").then(res => res.text()).then(Functions => {
-                            whatsappWebView.executeJavaScript(Functions);
+                            fetch("../../../scripts/whatsapp/inject/Functions.js").then(res => res.text()).then(Functions => {
+                                whatsappWebView.executeJavaScript(Functions);
+                            });
                         });
                     });
                 });
-            });
-        }
-        case "user_id": {
-            const [number] = event.args;
+            }
+            case "user_id": {
+                const [number] = event.args;
 
-            if (number && number !== company.whatsapp) FetchAPI("/company", {
-                method: "PUT",
-                body: { whatsapp: number },
-            }).then(data => {
-                company = data;
-            });
+                if (number && number !== company.whatsapp) FetchAPI("/company", {
+                    method: "PUT",
+                    body: { whatsapp: number },
+                }).then(data => {
+                    company = data;
+                });
+            }
+            case "onMessage": {
+                const [msg, contact] = event.args;
+
+                if (!msg || msg.isMe || msg.isStatusV3 || msg.isGroupMsg || !msg.isNewMsg || msg.isMedia || msg.id.fromMe) return;
+
+                const delay_ms = 6 * 60 * 60 * 1000;  // 6h
+                const number = msg.from?.user || msg.author?.user;
+                const name = contact.pushname || contact.verifiedName || contact.name;
+                const link = `https://${company.subdomain}.${domain}?tel=${number}`;
+
+                if (Object.keys(message_times).includes(number)) {
+                    console.warn(`[WHATSAPP-IPC-MESSAGE] Message from "${name}"(${number}) was ignored because it is in the timeout list`);
+                    return;
+                }
+
+                try {
+                    const chat_messages = await fetchMessages(msg.from._serialized, {
+                        filter: (_msg, args) => !_msg.isNotification && _msg.id.fromMe && (_msg.text || _msg.body)?.includes(args.link),
+                        filter_args: { link },
+                        limit: 1,
+                    });
+                    
+                    if (chat_messages.length > 0 && (Date.now() - new Date(0).setUTCSeconds(chat_messages[0].t)) < delay_ms) {
+                        console.warn(`[WHATSAPP-IPC-MESSAGE] Message from "${name}"(${number}) was ignored because the last automatic welcome message was sent recently`);
+                        return;
+                    }
+                } catch (ex) {
+                    console.error(ex);
+                }
+
+                whatsappWebView.send("sendMessage", number, `Olá${name ? ` ${name}` : ""}, acesse o link e faça o seu pedido! 🏍️🚚🤩\n\n${link}`);
+
+                message_times[number] = Date.now();
+                setTimeout(() => delete message_times[number], delay_ms);
+            }
         }
-        case "onMessage": {
+    } catch (error) {
+        console.error("[WHATSAPP-IPC-MESSAGE]", error);
+    } finally {
+        if (event.channel === "onMessage") {
             const [msg, contact] = event.args;
 
             if (!msg || msg.isMe || msg.isStatusV3 || msg.isGroupMsg || !msg.isNewMsg || msg.isMedia || msg.id.fromMe) return;
-
-            const number = msg.from?.user || msg.author?.user;
-            const name = contact.pushname || contact.verifiedName || contact.name;
-
-            // const text = msg.text || msg.body;
-
-            if (Object.keys(message_times).includes(number)) return;
-
-            whatsappWebView.send("sendMessage", number, `Olá${name ? ` ${name}` : ""}, acesse o link e faça o seu pedido! 🏍️🚚🤩\n\nhttps://${company.subdomain}.${domain}?tel=${number}`);
-
-            message_times[number] = Date.now();
-            setTimeout(() => delete message_times[number], 6 * 60 * 60 * 1000); // 6h
         }
+
+        console.log("[WHATSAPP-IPC-MESSAGE]", event);
     }
 });
 
@@ -70,6 +98,39 @@ whatsappWebView.addEventListener('crashed', function () {
         message: 'A janela do WhatsApp foi terminada inesperadamente!',
     });
 });
+
+whatsappWebView.evaluate = async (fn, ...args) => {
+    return await whatsappWebView.executeJavaScript(`
+        (async () => {
+            const evaluate_fn = ${fn.toString()}
+
+            return await evaluate_fn(${args.map(arg => typeof arg !== "function" ? JSON.stringify(arg) : arg).join(",")})
+        })();
+    `);
+}
+
+async function fetchMessages(chatId, options = {}) {
+    if (!options.limit) options.limit = 10;
+    if (!options.filter) options.filter = m => !m.isNotification;
+
+    let messages = await whatsappWebView.evaluate(async (chatId, limit, filter, filter_args) => {
+        const chat = window.Store.Chat.get(chatId);
+        let msgs = chat.msgs.models.filter(msg => filter(msg, filter_args));
+
+        while (msgs.length < limit) {
+            const loadedMessages = await chat.loadEarlierMsgs();
+            if (!loadedMessages) break;
+            msgs = [...loadedMessages.filter(msg => filter(msg, filter_args)), ...msgs];
+        }
+
+        msgs.sort((a, b) => (a.t > b.t) ? 1 : -1);
+        if (msgs.length > limit) msgs = msgs.splice(msgs.length - limit);
+        return msgs.map(m => window.WWebJS.getMessageModel(m));
+
+    }, chatId, options.limit, options.filter, options.filter_args);
+
+    return messages;
+}
 
 function SendOrderStatusMessage(order) {
     const payment_name_translations = {
@@ -86,7 +147,9 @@ function SendOrderStatusMessage(order) {
 
     function AppendItems() {
         for (const item of order.items) {
-            if (item.product.is_pizza) {
+            item.pizza_price_rule = item.pizza_price_rule || item.product.pizza_price_rule;
+
+            if (!!item.pizza_flavors.length) {
                 message += `\n● *${item.quantity}x* ${item.product.name} ${item.total > 0 ? `_(${MoneyFormat(item.total * item.quantity)})_` : ""}`;
             } else {
                 message += `\n● *${item.quantity}x* ${item.product.name} _(${MoneyFormat(item.total * item.quantity)})_`;
@@ -97,10 +160,14 @@ function SendOrderStatusMessage(order) {
                 const total_flavors = item.pizza_flavors.reduce((accumulator, flavor) => accumulator + flavor.quantity, 0);
 
                 for (const flavor of item.pizza_flavors) {
-                    if (item.product.pizza_price_rule === "biggest_price") {
-                        message += `\n    ↳ *${flavor.quantity}/${total_flavors}* ${flavor.name} _(${MoneyFormat(flavor.price / total_flavors * flavor.quantity)})_`;
-                    } else {
+                    if (item.pizza_price_rule === "average") {
                         message += `\n    ↳ *${flavor.quantity}/${total_flavors}* ${flavor.name} _(${MoneyFormat(flavor.price / total_flavors)})_`;
+                    } else if (item.pizza_price_rule === "biggest_price") {
+                        const biggest_price = Math.max(...item.pizza_flavors.map(item => item.price));
+
+                        message += `\n    ↳ *${flavor.quantity}/${total_flavors}* ${flavor.name} _(${MoneyFormat((biggest_price / total_flavors) * flavor.quantity)})_`;
+                    } else {
+                        message += `\n    ↳ *${flavor.quantity}/${total_flavors}* ${flavor.name} _(${MoneyFormat(flavor.price * flavor.quantity)})_`;
                     }
                 }
             }

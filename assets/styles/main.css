@@ -13122,12 +13122,6 @@ td>.switch_enable {
   align-items: center;
   border-radius: 3px;
   user-select: none;
-  cursor: pointer;
-}
-
-.complement-list>section>main>div:hover {
-  border-radius: 10px;
-  background-color: rgba(128, 128, 128, 0.2);
 }
 
 .complement-list>section>main>div>.image {

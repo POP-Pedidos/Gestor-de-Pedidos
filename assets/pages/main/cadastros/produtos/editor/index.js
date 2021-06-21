@@ -93,7 +93,9 @@ function ShowProductEditor(product) {
         $(this).find("input").prop("checked", $(this).hasClass("selected"));
     });
 
-    $("#product_editor .flavors_selectors>button").click(function () {
+    $("#product_editor .flavors_selectors>button").click(function (e) {
+        e.preventDefault();
+        
         $(this).toggleClass("selected");
 
         $(this).parent().find(">button")[0].setCustomValidity("");
@@ -422,11 +424,15 @@ function ShowProductEditor(product) {
             FetchAPI(`/product/${product_data.id_product}`, { instance_check: true, }).then(new_data => {
                 console.log("New Product Data:", new_data);
 
-                let $section = $(`.product-list>section[id_category="${new_data.id_category}"]`);
-                if ($section.length > 0) AddProduct($section, new_data);
-
                 if (product && product.id_category !== new_data.id_category) {
                     $(`.product-list>section[id_category="${product.id_category}"]>main>div[id_product="${new_data.id_product}"]`).remove();
+                }
+                
+                let $section = $(`.product-list>section[id_category="${new_data.id_category}"]`);
+                if ($section.length > 0) AddProduct($section, new_data);
+                else {
+                    $section = $(`.product-list>section>main>div[id_product="${new_data.id_product}"]`).parent().parent();
+                    AddProduct($section, new_data);
                 }
 
                 $("#product_editor-save main>section.finally").removeClass("active").addClass("success");

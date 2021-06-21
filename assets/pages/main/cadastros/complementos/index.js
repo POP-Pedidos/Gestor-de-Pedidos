@@ -50,10 +50,10 @@ function addProductToComplement($complement, product) {
     $product.find(">.name").text(`${product.name} (${MoneyFormat(product.price)})`);
     $product.find(">.price").text(product_complement_item?.price ? MoneyFormat(product_complement_item.price) : "");
 
-    $product.on("click", function () {
-        window.product_toLoad = product;
-        $(`[for_panel="cadastros_produtos"]`).click();
-    });
+    // $product.on("click", function () {
+    //     window.product_toLoad = product;
+    //     $(`[for_panel="cadastros_produtos"]`).click();
+    // });
 
     $complement.find(">main").append($product);
 }

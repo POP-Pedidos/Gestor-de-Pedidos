@@ -649,6 +649,7 @@ function LoadOrderOnElement($element, order, actions = true) {
 			product,
 			complements,
 			pizza_flavors,
+			pizza_price_rule,
 		} = item;
 
 		if (!product) continue;
@@ -679,8 +680,6 @@ function LoadOrderOnElement($element, order, actions = true) {
 
 		const $main = $("<main>");
 
-		const total_flavors = item.pizza_flavors.reduce((accumulator, flavor) => accumulator + flavor.quantity, 0);
-
 		for (const flavor of pizza_flavors || []) {
 			const $optional = $(`<div>
                 <span class="quantity"></span>
@@ -688,15 +687,23 @@ function LoadOrderOnElement($element, order, actions = true) {
                 <span class="price"></span>
             </div>`);
 
+			const total_flavors = item.pizza_flavors.reduce((accumulator, flavor) => accumulator + flavor.quantity, 0);
+
 			$optional.find(".quantity").text(pizza_flavors.length > 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1} x`);
 
 			$optional.find(".name").text(`Sabor ${flavor.name}`);
 			$optional.find(".price").attr("title", `Valor unitário: ${MoneyFormat(flavor.price)}\nValor total: ${MoneyFormat(flavor.price * flavor.quantity)}`);
+			
+			product.pizza_price_rule = pizza_price_rule || product.pizza_price_rule;
+			
+			if (product.pizza_price_rule === "average") {
+				$optional.find(".price").text(MoneyFormat((flavor.price / total_flavors) * flavor.quantity, false));
+			} else if (product.pizza_price_rule === "biggest_price") {
+				const biggest_price = Math.max(...item.pizza_flavors.map(item => item.price));
 
-			if (product.pizza_price_rule === "biggest_price") {
-				$optional.find(".price").text(MoneyFormat(flavor.price / total_flavors * flavor.quantity, false))
+				$optional.find(".price").text(MoneyFormat((biggest_price / total_flavors) * flavor.quantity, false));
 			} else {
-				$optional.find(".price").text(MoneyFormat(flavor.price / total_flavors, false))
+				$optional.find(".price").text(MoneyFormat(flavor.price * flavor.quantity, false));
 			}
 
 			$main.append($optional);
