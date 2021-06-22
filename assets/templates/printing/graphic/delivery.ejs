@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html paper_size="<%= printer?.size || 58 %>">
+<html>
 
 <head>
     <base href="file:///<%- appPath %>/">
+    <meta charset="UTF-8">
     <style>
         @font-face {
             font-family: "Greycliff";
@@ -33,22 +34,17 @@
             }
         }
 
-        html[paper_size="58"] {
-            width: 49mm;
-            --font-size5: 8px;
-            --font-size4: 10px;
-            --font-size3: 11px;
-            --font-size2: 13px;
-            --font-size1: 15px;
-        }
+        html {
+            --paper-size: <%- parseInt(printer?.size || 58) %>mm;
+            --font-scale: <%- parseFloat(printer?.font_scale || 1) %>;
 
-        html[paper_size="80"] {
-            width: 80mm;
-            --font-size5: calc(11px * var(--font-scale));
-            --font-size4: calc(13px * var(--font-scale));
-            --font-size3: calc(14px * var(--font-scale));
-            --font-size2: calc(16px * var(--font-scale));
-            --font-size1: calc(18px * var(--font-scale));
+            --font-size5: <%- Math.ceil(((printer?.size || 58) / 7.2) * (printer?.font_scale || 1)) %>px;
+            --font-size4: <%- Math.ceil(((printer?.size || 58) / 5.8) * (printer?.font_scale || 1)) %>px;
+            --font-size3: <%- Math.ceil(((printer?.size || 58) / 5.3) * (printer?.font_scale || 1)) %>px;
+            --font-size2: <%- Math.ceil(((printer?.size || 58) / 4.5) * (printer?.font_scale || 1)) %>px;
+            --font-size1: <%- Math.ceil(((printer?.size || 58) / 3.9) * (printer?.font_scale || 1)) %>px;
+
+            width: var(--paper-size);
         }
 
         body {
@@ -59,7 +55,7 @@
             /* font-family: 'Segoe UI', Arial, sans-serif; */
             font-weight: bold;
             width: 100%;
-            padding: 5px 30px;
+            padding: 5px 10px;
         }
 
         header {

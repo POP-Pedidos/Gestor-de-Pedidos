@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html paper_size="<%= printer?.size || 58 %>">
+<html>
 
 <head>
+    <meta charset="UTF-8">
     <style>
         * {
             box-sizing: border-box;
@@ -27,32 +28,29 @@
             }
         }
 
-        html[paper_size="58"] {
-            width: 49mm;
-        }
-
-        html[paper_size="80"] {
-            width: 80mm;
-        }
-
         body {
             background: white;
             margin: 0;
             display: inline-block;
-            font-family: monospace, sans-serif;
+            font-family: monospace;
             font-weight: bold;
             width: 100%;
             padding: 5px;
             font-size: 11.6px;
+            min-width: max-content;
+
+            --columns-count: <%- parseInt(printer?.size || 35) %>
         }
 
         pre {
             margin: 0;
-            word-wrap: break-word;
-            white-space: pre-wrap;
+            white-space: break-spaces;
+            word-break: break-word;
+            overflow: hidden;
+            width: calc(6.97px * var(--columns-count));
         }
     </style>
-    <title>Via de controle (<%= order.order_company_sequence %>)</title>
+    <title>Via de entrega (<%= order.order_company_sequence %>)</title>
 </head>
 
 <html>
@@ -60,9 +58,11 @@
 <body>
 <%
     let lines = [];
+    const columns_count = printer?.size || 35;
 
-    lines.push(CenterText("VIA DE ENTREGA", 41));
-    lines.push(CenterText(`PEDIDO ${order.order_company_sequence}`, 41));
+    lines.push(CenterText("VIA DE ENTREGA", columns_count));
+    lines.push(`${company["cpf-cnpj"]} — ${company.phone}`);
+    lines.push(CenterText(`PEDIDO ${order.order_company_sequence}`, columns_count));
 
     lines.push(" ");
 
@@ -71,14 +71,14 @@
 
     lines.push(" ");
 
-    lines.push(CenterText("ITENS", 41, "="));
+    lines.push(CenterText("ITENS", columns_count, "="));
 
     for(const item of order.items) {
         lines.push(`${item.quantity}x ${item.product.name} {fill} ${MoneyFormat(item.price * item.quantity, false)}`);
 
         const total_flavors=item.pizza_flavors?.reduce((accumulator, flavor)=> accumulator + flavor.quantity, 0); 
 
-        if(!!total_flavors?.length) {
+        if(!!total_flavors) { 
             lines.push(`| Sabores`);
             
             for(const flavor of item.pizza_flavors) {
@@ -98,6 +98,8 @@
             }
         }
 
+        if(item.observation) lines.push(` > ${item.observation}`);
+
         lines.push(" ");
     } 
 
@@ -106,7 +108,7 @@
     lines.push(`DESCONTO: {fill} ${MoneyFormat(order.discount + order.coupon_discount, false)}`);
     lines.push(`TOTAL: {fill} ${MoneyFormat(order.total, false)}`);
 
-    lines.push(CenterText("", 41, "="));
+    lines.push(CenterText("", columns_count, "="));
 
     lines.push(" ");
 
@@ -128,7 +130,7 @@
 
     const text = NormalizeText(lines.map(line => {
         if(line.includes("{fill}")) {
-            const spaces_count = 41 - (line.length - 6);
+            const spaces_count = columns_count - (line.length - 6);
             const spaces = Array.from({ length: spaces_count > 0 ? spaces_count : 0 }, () => " ").join("");
 
             line = line.replace(/{fill}/g, spaces);

@@ -11,7 +11,7 @@ module.exports = (printer, order, company) => {
                 offscreen: process.env.NODE_ENV !== "development",
                 webSecurity: false,
             },
-            width: (printer?.size || 58) * 5,
+            width: (printer?.size || 58) * 9,
         });
 
         try {

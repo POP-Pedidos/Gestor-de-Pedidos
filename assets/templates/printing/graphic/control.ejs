@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html paper_size="<%= printer?.size || 58 %>">
+<html>
 
 <head>
     <base href="file:///<%- appPath %>/">
+    <meta charset="UTF-8">
     <style>
         @font-face {
             font-family: "Greycliff";
@@ -35,12 +36,13 @@
 
         html {
             --paper-size: <%- parseInt(printer?.size || 58) %>mm;
+            --font-scale: <%- parseFloat(printer?.font_scale || 1) %>;
 
-            --font-size5: <%- parseInt(((printer?.size || 58) / 7.25) * (printer?.font_scale || 1)) %>px;
-            --font-size4: <%- parseInt(((printer?.size || 58) / 5.8) * (printer?.font_scale || 1)) %>px;
-            --font-size3: <%- parseInt(((printer?.size || 58) / 5.27) * (printer?.font_scale || 1)) %>px;
-            --font-size2: <%- parseInt(((printer?.size || 58) / 4.46) * (printer?.font_scale || 1)) %>px;
-            --font-size1: <%- parseInt(((printer?.size || 58) / 3.86) * (printer?.font_scale || 1)) %>px;
+            --font-size5: <%- Math.ceil(((printer?.size || 58) / 7.2) * (printer?.font_scale || 1)) %>px;
+            --font-size4: <%- Math.ceil(((printer?.size || 58) / 5.8) * (printer?.font_scale || 1)) %>px;
+            --font-size3: <%- Math.ceil(((printer?.size || 58) / 5.3) * (printer?.font_scale || 1)) %>px;
+            --font-size2: <%- Math.ceil(((printer?.size || 58) / 4.5) * (printer?.font_scale || 1)) %>px;
+            --font-size1: <%- Math.ceil(((printer?.size || 58) / 3.9) * (printer?.font_scale || 1)) %>px;
 
             width: var(--paper-size);
         }
@@ -52,7 +54,7 @@
             font-family: "Greycliff", sans-serif;
             font-weight: bold;
             width: 100%;
-            padding: 5px 30px;
+            padding: 5px 10px;
         }
 
         header {
@@ -161,10 +163,6 @@
             font-size: var(--font-size5) !important;
         }
 
-        tr.product {
-            background-color: #e8e8e8;
-        }
-
         tr.observation>td {
             font-size: 10px !important;
             font-style: italic !important;
@@ -201,6 +199,14 @@
         tr.sub_item {
             text-transform: uppercase;
         }
+    </style>
+    <% if(order.items.some(item => !!item.complements?.length)) { %>
+    <style>
+        tr.product {
+            background-color: #e8e8e8;
+        }
+    </style>
+    <% } %>
     </style>
     <% if(printer && printer.size >= 80) { %>
     <style>
@@ -273,9 +279,7 @@
                 <% for (const complement of item.complements || []) { %>
                     <tr class="complement_name">
                         <td></td>
-                        <td>
-                            <%= complement.name %>
-                        </td>
+                        <td><%= complement.name %></td>
                         <td></td>
                     </tr>
                     <% for (const complement_item of complement.items || []) { %>
@@ -285,9 +289,7 @@
                                 <span><%= `${complement.required===false ? "+ " : "" }${(company.multiply_complements ? complement_item.quantity * item.quantity : complement_item.quantity) || 1}x` %></span>
                                 <%= complement_item.name %>
                             </td>
-                            <td>
-                                <%= MoneyFormat(complement_item.price * complement_item.quantity, false); %>
-                            </td>
+                            <td><%= MoneyFormat(complement_item.price * complement_item.quantity, false); %></td>
                         </tr>
                     <% } %>
                 <% } %>

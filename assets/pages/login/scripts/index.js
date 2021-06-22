@@ -2,7 +2,7 @@ import * as Store from "./Store.js";
 import ShowError from "./ShowError.js";
 import AuthSuccessfully from "./AuthSuccessfully.js";
 
-import "./LoadColorPalette.js";
+import "../../../scripts/LoadColorPalette.js";
 import "./LoadArt.js";
 import "./AuthWithToken.js";
 
