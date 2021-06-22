@@ -26,6 +26,9 @@
     window.Store.Sticker = window.mR.findModule('Sticker')[0].default.Sticker;
     window.Store.UploadUtils = window.mR.findModule((module) => (module.default && module.default.encryptAndUpload) ? module.default : null)[0].default;
     window.Store.Label = window.mR.findModule('LabelCollection')[0].default;
+    window.Store.Features = window.mR.findModule('FEATURE_CHANGE_EVENT')[0].default;
+    window.Store.QueryOrder = window.mR.findModule('queryOrder')[0];
+    window.Store.QueryProduct = window.mR.findModule('queryProduct')[0];
 
     console.log("%c ExposeStore.js > Fully injected!", 'color: green; font-weight: bold;');
 } catch (ex) {

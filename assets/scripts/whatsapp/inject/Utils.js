@@ -1,5 +1,6 @@
 ﻿try {
     window.WWebJS = {};
+
     window.WWebJS.getNumberId = async (id) => {
 
         let result = await window.Store.Wap.queryExist(id);
@@ -7,6 +8,7 @@
             throw 'The number provided is not a registered whatsapp user';
         return result.jid;
     };
+
     window.WWebJS.sendSeen = async (chatId) => {
         let chat = window.Store.Chat.get(chatId);
         if (chat !== undefined) {
@@ -16,12 +18,22 @@
         return false;
 
     };
+
     window.WWebJS.sendMessage = async (chat, content, options = {}) => {
         let attOptions = {};
         if (options.attachment) {
-            attOptions = await window.WWebJS.processMediaData(options.attachment, options.sendAudioAsVoice);
-            content = attOptions.preview;
+            attOptions = options.sendMediaAsSticker
+                ? await window.WWebJS.processStickerData(options.attachment)
+                : await window.WWebJS.processMediaData(options.attachment, {
+                    forceVoice: options.sendAudioAsVoice,
+                    forceDocument: options.sendMediaAsDocument,
+                    forceGif: options.sendVideoAsGif
+                });
+
+            content = options.sendMediaAsSticker ? undefined : attOptions.preview;
+
             delete options.attachment;
+            delete options.sendMediaAsSticker;
         }
 
         let quotedMsgOptions = {};
@@ -120,10 +132,38 @@
         return window.Store.Msg.get(newMsgId._serialized);
     };
 
-    window.WWebJS.processMediaData = async (mediaInfo, forceVoice) => {
+    window.WWebJS.processStickerData = async (mediaInfo) => {
+        if (mediaInfo.mimetype !== 'image/webp') throw new Error('Invalid media type');
+
+        const file = window.WWebJS.mediaInfoToFile(mediaInfo);
+        let filehash = await window.WWebJS.getFileHash(file);
+        let mediaKey = await window.WWebJS.generateHash(32);
+
+        const controller = new AbortController();
+        const uploadedInfo = await window.Store.UploadUtils.encryptAndUpload({
+            blob: file,
+            type: 'sticker',
+            signal: controller.signal,
+            mediaKey
+        });
+
+        const stickerInfo = {
+            ...uploadedInfo,
+            clientUrl: uploadedInfo.url,
+            deprecatedMms3Url: uploadedInfo.url,
+            uploadhash: uploadedInfo.encFilehash,
+            size: file.size,
+            type: 'sticker',
+            filehash
+        };
+
+        return stickerInfo;
+    };
+
+    window.WWebJS.processMediaData = async (mediaInfo, { forceVoice, forceDocument, forceGif }) => {
         const file = window.WWebJS.mediaInfoToFile(mediaInfo);
         const mData = await window.Store.OpaqueData.createFromData(file, file.type);
-        const mediaPrep = window.Store.MediaPrep.prepRawMedia(mData, {});
+        const mediaPrep = window.Store.MediaPrep.prepRawMedia(mData, { asDocument: forceDocument });
         const mediaData = await mediaPrep.waitForPrep();
         const mediaObject = window.Store.MediaObject.getOrCreateMediaObject(mediaData.filehash);
 
@@ -134,6 +174,14 @@
 
         if (forceVoice && mediaData.type === 'audio') {
             mediaData.type = 'ptt';
+        }
+
+        if (forceGif && mediaData.type === 'video') {
+            mediaData.isGif = true;
+        }
+
+        if (forceDocument) {
+            mediaData.type = 'document';
         }
 
         if (!(mediaData.mediaBlob instanceof window.Store.OpaqueData)) {
@@ -157,10 +205,12 @@
 
         mediaData.set({
             clientUrl: mediaEntry.mmsUrl,
+            deprecatedMms3Url: mediaEntry.deprecatedMms3Url,
             directPath: mediaEntry.directPath,
             mediaKey: mediaEntry.mediaKey,
             mediaKeyTimestamp: mediaEntry.mediaKeyTimestamp,
             filehash: mediaObject.filehash,
+            encFilehash: mediaEntry.encFilehash,
             uploadhash: mediaEntry.uploadHash,
             size: mediaObject.size,
             streamingSidecar: mediaEntry.sidecar,
@@ -172,11 +222,16 @@
 
     window.WWebJS.getMessageModel = message => {
         const msg = message.serialize();
+
         msg.isStatusV3 = message.isStatusV3;
+        msg.links = (message.getLinks()).map(link => link.href);
+
         if (msg.buttons) {
             msg.buttons = msg.buttons.serialize();
         }
+
         delete msg.pendingAckUpdate;
+
         return msg;
     };
 
@@ -192,6 +247,8 @@
         }
 
         delete res.msgs;
+        delete res.msgUnsyncedButtonReplyMsgs;
+        delete res.unsyncedButtonReplies;
 
         return res;
     };
@@ -292,6 +349,22 @@
         });
     };
 
+    window.WWebJS.getFileHash = async (data) => {
+        let buffer = await data.arrayBuffer();
+        const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+        return btoa(String.fromCharCode(...new Uint8Array(hashBuffer)));
+    };
+
+    window.WWebJS.generateHash = async (length) => {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    };
+
     window.WWebJS.sendClearChat = async (chatId) => {
         let chat = window.Store.Chat.get(chatId);
         if (chat !== undefined) {
@@ -312,23 +385,59 @@
 
     window.WWebJS.sendChatstate = async (state, chatId) => {
         switch (state) {
-        case 'typing':
-            await window.Store.Wap.sendChatstateComposing(chatId);
-            break;
-        case 'recording':
-            await window.Store.Wap.sendChatstateRecording(chatId);
-            break;
-        case 'stop':
-            await window.Store.Wap.sendChatstatePaused(chatId);
-            break;
-        default:
-            throw 'Invalid chatstate';
+            case 'typing':
+                await window.Store.Wap.sendChatstateComposing(chatId);
+                break;
+            case 'recording':
+                await window.Store.Wap.sendChatstateRecording(chatId);
+                break;
+            case 'stop':
+                await window.Store.Wap.sendChatstatePaused(chatId);
+                break;
+            default:
+                throw 'Invalid chatstate';
         }
 
         return true;
     };
 
+    window.WWebJS.getLabelModel = label => {
+        let res = label.serialize();
+        res.hexColor = label.hexColor;
+
+        return res;
+    };
+
+    window.WWebJS.getLabels = () => {
+        const labels = window.Store.Label.models;
+        return labels.map(label => window.WWebJS.getLabelModel(label));
+    };
+
+    window.WWebJS.getLabel = (labelId) => {
+        const label = window.Store.Label.get(labelId);
+        return window.WWebJS.getLabelModel(label);
+    };
+
+    window.WWebJS.getChatLabels = async (chatId) => {
+        const chat = await window.WWebJS.getChat(chatId);
+        return (chat.labels || []).map(id => window.WWebJS.getLabel(id));
+    };
+
+    window.WWebJS.getOrderDetail = async (orderId, token) => {
+        return window.Store.QueryOrder.queryOrder(orderId, 80, 80, token);
+    };
+
+    window.WWebJS.getProductMetadata = async (productId) => {
+        let sellerId = window.Store.Conn.wid;
+        let product = await window.Store.QueryProduct.queryProduct(sellerId, productId);
+        if (product && product.data) {
+            return product.data;
+        }
+
+        return undefined;
+    };
+
     console.log("%c Utils.js > Fully injected!", 'color: green; font-weight: bold;');
-} catch(ex) {
+} catch (ex) {
     console.log("%c Utils.js > Inject Error:", 'color: red; font-weight: bold;', ex);
 }

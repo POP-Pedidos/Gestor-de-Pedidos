@@ -22,7 +22,7 @@
             const queue_item = this.queue[0];
             this.queue = this.queue.filter(item => item !== queue_item);
 
-            if (typeof queue_item !== "function") return this.next();
+            if (typeof queue_item !== "function") return false;
 
             this.loading = true;
 
@@ -68,7 +68,7 @@
         return result.jid !== undefined;
     }
 
-    window.main.on("sendMessage", (e, number, message, options = {}) => {
+    window.main.on("sendMessage", async (e, number, message, options = {}) => {
         messages_queue.add(async () => {
             if (!number || typeof number != "string") return;
             if (!message || typeof message != "string") return;
@@ -79,9 +79,7 @@
 
             if (message.includes("http://") || message.includes("https://")) options.linkPreview = true;
 
-            const msg = await window.WWebJS.sendMessage(chat, message, options);
-
-            return msg;
+            await window.WWebJS.sendMessage(chat, message, options);
         });
     });
 

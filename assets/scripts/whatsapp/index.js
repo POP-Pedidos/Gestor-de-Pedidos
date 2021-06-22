@@ -63,7 +63,7 @@ whatsappWebView.addEventListener('ipc-message', async (event) => {
                         filter_args: { link },
                         limit: 1,
                     });
-                    
+
                     if (chat_messages.length > 0 && (Date.now() - new Date(0).setUTCSeconds(chat_messages[0].t)) < delay_ms) {
                         console.warn(`[WHATSAPP-IPC-MESSAGE] Message from "${name}"(${number}) was ignored because the last automatic welcome message was sent recently`);
                         return;

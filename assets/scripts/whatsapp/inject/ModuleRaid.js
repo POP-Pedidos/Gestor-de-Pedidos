@@ -1,11 +1,11 @@
 ﻿try {
   /* moduleRaid v5
-  * https://github.com/@pedroslopez/moduleRaid
-  *
-  * Copyright pixeldesu, pedroslopez and other contributors
-  * Licensed under the MIT License
-  * https://github.com/pedroslopez/moduleRaid/blob/master/LICENSE
-  */
+   * https://github.com/@pedroslopez/moduleRaid
+   *
+   * Copyright pixeldesu, pedroslopez and other contributors
+   * Licensed under the MIT License
+   * https://github.com/pedroslopez/moduleRaid/blob/master/LICENSE
+   */
 
   const moduleRaid = function () {
     moduleRaid.mID = Math.random().toString(36).substring(7);
