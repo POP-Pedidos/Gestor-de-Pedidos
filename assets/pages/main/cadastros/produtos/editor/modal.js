@@ -23,14 +23,17 @@ $("#modalAddComplement .required input").change(function () {
     if (value) {
         $min_value.text(1);
         $min_input.val(1);
+        $min_input.attr("min", 1);
         $min.removeAttr("disabled");
 
         $min_remove.addClass("hide");
+
+        $max_input.attr("min", 1);
     } else {
         $min_input.val(0);
         $min_value.text(0);
         $min.attr("disabled", true);
-
+        $min_input.attr("min", 1);
         $max_input.attr("min", 1);
         if (Number($max_input.val()) != 1) $max_remove.removeClass("hide");
     }
