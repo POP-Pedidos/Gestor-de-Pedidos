@@ -60,6 +60,8 @@
     let lines = [];
     const columns_count = printer?.size || 35;
 
+    lines.push(" ");
+
     lines.push(CenterText("VIA DE CONTROLE", columns_count));
     lines.push(CenterText(`PEDIDO ${order.order_company_sequence}`, columns_count));
 
@@ -127,6 +129,8 @@
     lines.push(`DATA PEDIDO: {fill} ${new Date(order.createdAt).toLocaleString()}`);
     lines.push(`DATA IMPRESAO: {fill} ${new Date().toLocaleString()}`);
 
+    lines.push(" ");
+    
     const text = NormalizeText(lines.map(line => {
         if(line.includes("{fill}")) {
             const spaces_count = columns_count - (line.length - 6);
