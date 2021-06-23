@@ -44,12 +44,12 @@
             --font-size2: <%- Math.ceil(((printer?.size || 58) / 4.5) * (printer?.font_scale || 1)) %>px;
             --font-size1: <%- Math.ceil(((printer?.size || 58) / 3.9) * (printer?.font_scale || 1)) %>px;
 
+            --padding: <%- printer?.padding ? `${parseInt(printer.padding)}%` : `10px` %>;
+            
             width: var(--paper-size);
         }
 
         body {
-            --padding: <%- printer?.padding ? `${parseInt(printer.padding)}%` : `10px` %>;
-
             background: white;
             margin: 0;
             padding: 5px 10px;
