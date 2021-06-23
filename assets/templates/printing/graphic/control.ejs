@@ -48,13 +48,17 @@
         }
 
         body {
+            --padding: <%- printer?.padding ? `${parseInt(printer.padding)}%` : `10px` %>;
+
             background: white;
             margin: 0;
+            padding: 5px 10px;
+            padding-right: var(--padding);
+            padding-left: var(--padding);
             display: inline-block;
             font-family: "Greycliff", sans-serif;
             font-weight: bold;
             width: 100%;
-            padding: 5px 10px;
         }
 
         header {
