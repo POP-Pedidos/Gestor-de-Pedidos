@@ -1,4 +1,5 @@
-<div class="modal fade" id="modalImpressora" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalImpressora" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -14,7 +15,8 @@
                             <div class="col-xl-12 col-lglg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="name">Nome</label>
-                                    <input type="text" class="form-control name" name="name" placeholder="Nome para a impressora" required>
+                                    <input type="text" class="form-control name" name="name"
+                                        placeholder="Nome para a impressora" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="device">Dispositivo</label>
@@ -85,7 +87,21 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col"></div>
+                            <div class="col">
+                                <div class="form-group padding">
+                                    <label>Margem da impressão</label>
+                                    <select class="selectpicker padding" name="padding" required data-container="body" data-size="4" data-dropup-auto="false">
+                                        <option value="0">Nenhuma</option>
+                                        <option value="5">5%</option>
+                                        <option value="6">6%</option>
+                                        <option value="7">7%</option>
+                                        <option value="8">8%</option>
+                                        <option value="9">9%</option>
+                                        <option value="10">10%</option>
+                                        <option value="15">15%</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -98,7 +114,8 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalEditImpressora" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalEditImpressora" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -142,7 +159,8 @@
                                 </div>
                                 <div class="form-group columns">
                                     <label>Quantidade de colunas</label>
-                                    <select class="selectpicker columns" name="size" required data-container="body" data-size="4" data-dropup-auto="false">
+                                    <select class="selectpicker columns" name="size" required data-container="body"
+                                        data-size="4" data-dropup-auto="false">
                                         <option value="24">24</option>
                                         <option value="25">25</option>
                                         <option value="26">26</option>
@@ -178,14 +196,29 @@
                             <div class="col">
                                 <div class="form-group font_scale">
                                     <label>Tamanho da fonte</label>
-                                    <select class="selectpicker font_scale" name="font_scale" required data-container="body">
+                                    <select class="selectpicker font_scale" name="font_scale" required
+                                        data-container="body">
                                         <option value="0.8">Pequena</option>
                                         <option value="1" selected>Média</option>
                                         <option value="1.2">Grande</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col"></div>
+                            <div class="col">
+                                <div class="form-group padding">
+                                    <label>Margem da impressão</label>
+                                    <select class="selectpicker padding" name="padding" required data-container="body" data-size="4" data-dropup-auto="false">
+                                        <option value="0">Nenhuma</option>
+                                        <option value="5">5%</option>
+                                        <option value="6">6%</option>
+                                        <option value="7">7%</option>
+                                        <option value="8">8%</option>
+                                        <option value="9">9%</option>
+                                        <option value="10">10%</option>
+                                        <option value="15">15%</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

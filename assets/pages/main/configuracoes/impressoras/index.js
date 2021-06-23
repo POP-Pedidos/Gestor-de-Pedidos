@@ -33,13 +33,19 @@ $("#btnModalImpressora").on("click", function (e) {
     $("#frmImpressora select.font_scale").val("");
     $("#frmImpressora select.font_scale").selectpicker("refresh");
 
+    $("#frmImpressora select.padding").selectpicker("refresh");
+    $("#frmImpressora select.padding").val("");
+    $("#frmImpressora select.padding").selectpicker("refresh");
+
     $("#frmImpressora .form-group.columns").hide();
     $("#frmImpressora .form-group.font_scale").hide();
     $("#frmImpressora .form-group.size").hide();
+    $("#frmImpressora .form-group.padding").hide();
 
     $("#frmImpressora select.columns").attr("disabled", true);
     $("#frmImpressora select.size").attr("disabled", true);
     $("#frmImpressora select.font_scale").attr("disabled", true);
+    $("#frmImpressora select.padding").attr("disabled", true);
 
     $("#modalImpressora").modal("show");
 });
@@ -173,6 +179,7 @@ function editarImpressora(id) {
     $("#frmEditImpressora select.columns").attr("disabled", printer.type !== "text");
     $("#frmEditImpressora select.size").attr("disabled", printer.type !== "graphic");
     $("#frmEditImpressora select.font_scale").attr("disabled", printer.type !== "graphic");
+    $("#frmEditImpressora select.padding").attr("disabled", printer.type !== "graphic");
 
     $("#frmEditImpressora select.device").selectpicker("refresh");
     $("#frmEditImpressora select.device").val(printer.device);
@@ -194,9 +201,14 @@ function editarImpressora(id) {
     $("#frmEditImpressora select.font_scale").val(printer.font_scale);
     $("#frmEditImpressora select.font_scale").selectpicker("refresh");
 
+    $("#frmEditImpressora select.padding").selectpicker("refresh");
+    $("#frmEditImpressora select.padding").val(printer.padding);
+    $("#frmEditImpressora select.padding").selectpicker("refresh");
+
     $("#frmEditImpressora .form-group.columns").toggle(printer.type === "text");
     $("#frmEditImpressora .form-group.font_scale").toggle(printer.type === "graphic");
     $("#frmEditImpressora .form-group.size").toggle(printer.type === "graphic");
+    $("#frmEditImpressora .form-group.padding").toggle(printer.type === "graphic");
 
     $("#modalEditImpressora").modal("show");
 }
@@ -240,12 +252,15 @@ $("select.selectpicker.type").on("change", function () {
     $(".form-group.columns").toggle(value === "text");
     $(".form-group.font_scale").toggle(value === "graphic");
     $(".form-group.size").toggle(value === "graphic");
+    $(".form-group.padding").toggle(value === "graphic");
 
     $("select.columns").attr("disabled", value !== "text");
     $("select.size").attr("disabled", value !== "graphic");
     $("select.font_scale").attr("disabled", value !== "graphic");
+    $("select.padding").attr("disabled", value !== "graphic");
 
     $("select.size").selectpicker("refresh");
     $("select.font_scale").selectpicker("refresh");
     $("select.columns").selectpicker("refresh");
+    $("select.padding").selectpicker("refresh");
 });

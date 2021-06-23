@@ -142,7 +142,7 @@
         return line;
     }).join("\n"));
 %>
-<pre><%= text %></pre>
+<pre><%= text + String.fromCharCode(27) + String.fromCharCode(109) %></pre>
 </body>
 
 </html>
