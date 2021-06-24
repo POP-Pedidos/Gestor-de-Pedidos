@@ -13,6 +13,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.setAppUserModelId("poppedidos.com.br");
+app.originalUserAgent = app.userAgentFallback;
 app.userAgentFallback = app.userAgentFallback.replace(/(POP|Electron).+? /g, "");
 
 if (!app.requestSingleInstanceLock()) return app.quit();
