@@ -361,6 +361,7 @@ function AddPizzaFlavor(flavor) {
                     name: $item.find("input.name").val() || flavor?.name,
                     price: $item.find("input.price").val() || flavor?.price,
                     description: $item.find("textarea.desc").val() || flavor?.description,
+                    id_company: this.product.id_company,
                 }
             });
         }, TasksTypes.pizza_flavor);
