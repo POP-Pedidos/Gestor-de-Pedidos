@@ -142,6 +142,7 @@ function SendOrderStatusMessage(order) {
     const company_address = `${company.street}, ${company.street_number} - ${company.neighborhood}, ${company.city} - ${company.state}${company.complement ? ` - ${company.complement}` : ""}`;
     const order_address = order.delivery_type !== "withdrawal" ? `${order.street_name}, ${order.street_number} - ${order.neighborhood}, ${order.city} - ${order.complement || order.state}` : null;
     const payment_name = payment_name_translations[order.payment_method] || "Unknown";
+    const discount = order.discount + order.coupon_discount;
 
     let message = `O status do seu pedido foi alterado para "${order.status}"`;
 
@@ -203,8 +204,8 @@ function SendOrderStatusMessage(order) {
 
         message += `\n*―――――――« Total »―――――――*`;
 
-        if (order.discount_coupon) message += `\n*Cupom de desconto*: ${order.discount_coupon.is_percentual ? `${order.discount_coupon.discount}%` : MoneyFormat(order.discount_coupon.discount)} _(${order.discount_coupon.coupon})_`;
         message += `\n*Taxa de Entrega*: _${MoneyFormat(order.delivery_cost)}_`;
+        if(discount > 0) message += `\n*Desconto*: _${MoneyFormat(discount)}_`;
         message += `\n*Valor Total*: _${MoneyFormat(order.total)}_`;
 
     } else if (order.status == 1) {
@@ -231,6 +232,7 @@ function SendOrderStatusMessage(order) {
         }
 
         message += `\n*Taxa de Entrega*: _${MoneyFormat(order.delivery_cost)}_`;
+        if(discount > 0) message += `\n*Desconto*: _${MoneyFormat(discount)}_`;
         message += `\n*Valor Total*: _${MoneyFormat(order.total)}_`;
 
         message += `\n\n⚠️ *ATENÇÃO*: Para solicitar alterações no seu pedido nos faça uma ligação para o telefone disponibilizado no site!`
