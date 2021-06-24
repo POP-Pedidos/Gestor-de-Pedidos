@@ -150,9 +150,9 @@ function SendOrderStatusMessage(order) {
             item.pizza_price_rule = item.pizza_price_rule || item.product.pizza_price_rule;
 
             if (!!item.pizza_flavors.length) {
-                message += `\n● *${item.quantity}x* ${item.product.name} ${item.total > 0 ? `_(${MoneyFormat(item.total * item.quantity)})_` : ""}`;
+                message += `\n● *${item.quantity}x* ${item.product.name} ${item.total > 0 ? `_(${MoneyFormat(item.total)})_` : ""}`;
             } else {
-                message += `\n● *${item.quantity}x* ${item.product.name} _(${MoneyFormat(item.total * item.quantity)})_`;
+                message += `\n● *${item.quantity}x* ${item.product.name} _(${MoneyFormat(item.total)})_`;
             }
 
             if (!!item.pizza_flavors.length) {
@@ -208,7 +208,7 @@ function SendOrderStatusMessage(order) {
         message += `\n*Valor Total*: _${MoneyFormat(order.total)}_`;
 
     } else if (order.status == 1) {
-        message = `\n☑️ *SEU PEDIDO FOI CONFIRMADO*, e está aguardando produção!`;
+        message = `\n✅ *SEU PEDIDO FOI CONFIRMADO*, e está aguardando produção!`;
         message += `\n_Acompanhe abaixo o seu pedido_\n`;
 
         message += `\n👤 ${order.name_client}`;
