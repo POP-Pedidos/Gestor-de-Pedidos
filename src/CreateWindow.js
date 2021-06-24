@@ -40,6 +40,8 @@ module.exports = function CreateWindow() {
 
     win.removeMenu();
 
+    win.webContents.setUserAgent(app.originalUserAgent);
+    
     // win.webContents.setWindowOpenHandler(({ url }) => {
     //     try {
     //         setImmediate(() => shell.openExternal(url));
