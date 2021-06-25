@@ -30,7 +30,7 @@ $(`<style type="text/css">
         }
 
         #title-bar>.controls>button:hover {
-            background-color: var(--primary_color_light10);
+            background-color: var(--color-tones-20);
         }
     }
 
@@ -45,7 +45,7 @@ $(`<style type="text/css">
         }
 
         #title-bar>.controls>button:hover {
-            background-color: var(--primary_color_light50);
+            background-color: var(--color-tints-40);
         }
     }
 
@@ -114,7 +114,11 @@ $(`<style type="text/css">
 
 
 $title_bar.find(".title").text(document.title || window.app_name);
-$title_bar.find(".program>img").attr("src", window.icon);
+$title_bar.find(".program>img").attr("src", window.icons.default);
+
+window.onIconChanged(function (e, icon) {
+    $title_bar.find(".program>img").attr("src", icon);
+});
 
 $title_bar.find(".controls>.maximize-restore").toggleClass("maximized", window.controls?.state() === "maximized");
 
@@ -140,7 +144,7 @@ $title_bar.find(".controls>.maximize-restore").on("click", function () {
 });
 
 $title_bar.find(".controls>.close").on("click", function () {
-    window.controls.close();
+    window.controls.hide();
 });
 
 $("body").prepend($title_bar);

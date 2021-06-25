@@ -57,6 +57,9 @@ whatsappWebView.addEventListener('ipc-message', async (event) => {
                     return;
                 }
 
+                message_times[number] = Date.now();
+                setTimeout(() => delete message_times[number], delay_ms);
+
                 try {
                     const chat_messages = await fetchMessages(msg.from._serialized, {
                         filter: (_msg, args) => !_msg.isNotification && _msg.id.fromMe && (_msg.text || _msg.body)?.includes(args.link),
@@ -73,9 +76,6 @@ whatsappWebView.addEventListener('ipc-message', async (event) => {
                 }
 
                 whatsappWebView.send("sendMessage", number, `Olá${name ? ` ${name}` : ""}, acesse o link e faça o seu pedido! 🏍️🚚🤩\n\n${link}`);
-
-                message_times[number] = Date.now();
-                setTimeout(() => delete message_times[number], delay_ms);
             }
         }
     } catch (error) {
@@ -205,7 +205,7 @@ function SendOrderStatusMessage(order) {
         message += `\n*―――――――« Total »―――――――*`;
 
         message += `\n*Taxa de Entrega*: _${MoneyFormat(order.delivery_cost)}_`;
-        if(discount > 0) message += `\n*Desconto*: _${MoneyFormat(discount)}_`;
+        if (discount > 0) message += `\n*Desconto*: _${MoneyFormat(discount)}_`;
         message += `\n*Valor Total*: _${MoneyFormat(order.total)}_`;
 
     } else if (order.status == 1) {
@@ -232,7 +232,7 @@ function SendOrderStatusMessage(order) {
         }
 
         message += `\n*Taxa de Entrega*: _${MoneyFormat(order.delivery_cost)}_`;
-        if(discount > 0) message += `\n*Desconto*: _${MoneyFormat(discount)}_`;
+        if (discount > 0) message += `\n*Desconto*: _${MoneyFormat(discount)}_`;
         message += `\n*Valor Total*: _${MoneyFormat(order.total)}_`;
 
         message += `\n\n⚠️ *ATENÇÃO*: Para solicitar alterações no seu pedido nos faça uma ligação para o telefone disponibilizado no site!`

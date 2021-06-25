@@ -4,7 +4,7 @@ window.api_url = ipcRenderer.sendSync("api_url");
 window.places_url = ipcRenderer.sendSync("places_url");
 window.domain = ipcRenderer.sendSync("domain");
 window.hostname = ipcRenderer.sendSync("hostname");
-window.icon = ipcRenderer.sendSync("icon");
+window.icons = ipcRenderer.sendSync("icons");
 window.app_name = ipcRenderer.sendSync("app_name");
 
 window.GetPrintersList = () => ipcRenderer.sendSync("printers");
@@ -13,6 +13,14 @@ window.taskbar = {
     setProgressBar: (...args) => ipcRenderer.send("taskbar:setProgressBar", ...args),
     flashFrame: (flag = true) => ipcRenderer.send("taskbar:flashFrame", flag),
 }
+
+window.setIcon = (iconName) => {
+    return ipcRenderer.sendSync("app:setIcon", iconName);
+}
+
+window.onIconChanged = (callback) => ipcRenderer.on("icon:changed", callback);
+window.onTabChange = (callback) => ipcRenderer.on("tab:change", callback);
+
 window.controls = {
     onMaximize: (callback) => ipcRenderer.on("maximize", callback),
     onUnMaximize: (callback) => ipcRenderer.on("unmaximize", callback),
@@ -21,7 +29,7 @@ window.controls = {
     minimize: () => ipcRenderer.send("controls:minimize"),
     maximize: () => ipcRenderer.send("controls:maximize"),
     restore: () => ipcRenderer.send("controls:restore"),
-    close: () => ipcRenderer.send("controls:close"),
+    hide: () => ipcRenderer.send("controls:hide"),
 }
 
 window.darkMode = {

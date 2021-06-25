@@ -6,6 +6,8 @@ function NewTabInstance() {
 	window.tab_instance = randomInt(1, Number.MAX_SAFE_INTEGER);
 }
 
+window.onTabChange((e, tabName) => ChangeTab(tabName));
+
 function ChangeTab(for_panel) {
 	$(".content-page").show().empty();
 	$("#whatsappWebView").hide();
@@ -364,9 +366,11 @@ jQuery(function ($) {
 
 		if (has_pendent_accept && alert_audio.paused) {
 			taskbar.flashFrame(true);
+			window.setIcon("alert");
 			alert_audio.play();
 		} else if (!has_pendent_accept && !alert_audio.paused) {
 			taskbar.flashFrame(false);
+			window.setIcon("default");
 			alert_audio.pause();
 			alert_audio.currentTime = 0;
 		}
@@ -693,9 +697,9 @@ function LoadOrderOnElement($element, order, actions = true) {
 
 			$optional.find(".name").text(`Sabor ${flavor.name}`);
 			$optional.find(".price").attr("title", `Valor unitário: ${MoneyFormat(flavor.price)}\nValor total: ${MoneyFormat(flavor.price * flavor.quantity)}`);
-			
+
 			product.pizza_price_rule = pizza_price_rule || product.pizza_price_rule;
-			
+
 			if (product.pizza_price_rule === "average") {
 				$optional.find(".price").text(MoneyFormat((flavor.price / total_flavors) * flavor.quantity, false));
 			} else if (product.pizza_price_rule === "biggest_price") {
