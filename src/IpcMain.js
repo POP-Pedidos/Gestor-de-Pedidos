@@ -3,9 +3,10 @@ const fs = require("fs");
 const { app, ipcMain, nativeTheme, dialog } = require("electron");
 const { autoUpdater } = require("electron-updater");
 const AutoUpdater = require("./AutoUpdater");
-const { domain, api_url, places_url, icon } = require("../config");
+const { domain, api_url, places_url } = require("../config");
 const offscreen = require("./Offscreen");
 const Store = require("./Store");
+const Icons = require('./Icons');
 
 const printGraphicControlCopy = require("./Printer/graphic/control");
 const printGraphicDeliveryCopy = require("./Printer/graphic/delivery");
@@ -21,7 +22,7 @@ ipcMain.on("api_url", (event) => event.returnValue = api_url);
 ipcMain.on("places_url", (event) => event.returnValue = places_url);
 ipcMain.on("domain", (event) => event.returnValue = domain);
 ipcMain.on("hostname", (event) => event.returnValue = os.userInfo().username);
-ipcMain.on("icon", (event) => event.returnValue = icon);
+ipcMain.on("icons", (event) => event.returnValue = Icons);
 ipcMain.on("app_name", (event) => event.returnValue = app.getName());
 
 ipcMain.on("printers", (event) => {
@@ -59,29 +60,38 @@ ipcMain.on("taskbar:flashFrame", (event, flag) => {
     win.flashFrame(flag);
 });
 
+ipcMain.on("app:setIcon", (event, iconName) => {
+    if (!Icons[iconName]) return event.returnValue = false;
+
+    tray.setIcon(Icons[iconName]);
+    win.setIcon(Icons[iconName]);
+    win.webContents.send("icon:changed", Icons[iconName]);
+
+    return event.returnValue = true;
+});
+
 ipcMain.on("updater:install", (event) => {
     autoUpdater.quitAndInstall(false, true);
 });
 
 ipcMain.on("controls:minimize", (event) => {
-    win?.minimize();
+    win.minimize();
 });
 
 ipcMain.on("controls:maximize", (event) => {
-    win?.maximize();
+    win.maximize();
 });
 
 ipcMain.on("controls:restore", (event) => {
-    win?.restore();
+    win.restore();
 });
 
 ipcMain.on("updater:initialize", (event) => {
     AutoUpdater(win)
 });
 
-ipcMain.on("controls:close", (event) => {
-    win?.hide();
-    win?.close();
+ipcMain.on("controls:hide", (event) => {
+    win.hide();
 });
 
 ipcMain.handle("dialog:showSaveDialog", (event, ...args) => {

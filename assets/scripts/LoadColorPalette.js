@@ -1,27 +1,59 @@
 const primary_color = "#0cb50c";
 
 $(":root").css({
-    "--primary-color": primary_color,
-    "--light-primary-color": hexBrightness(primary_color, 75),
-    "--primary_color_light10": hexBrightness(primary_color, 10),
-    "--primary_color_light20": hexBrightness(primary_color, 20),
-    "--primary_color_light50": hexBrightness(primary_color, 50),
-    "--primary_color_light70": hexBrightness(primary_color, 70),
-    "--primary_color_light80": hexBrightness(primary_color, 80),
-    "--primary_color_light90": hexBrightness(primary_color, 90),
+    "--color-primary": primary_color,
+    "--color-shader-10": interpolateColor(primary_color, "#000000", 0.1),
+    "--color-shader-20": interpolateColor(primary_color, "#000000", 0.2),
+    "--color-shader-30": interpolateColor(primary_color, "#000000", 0.4),
+    "--color-shader-40": interpolateColor(primary_color, "#000000", 0.6),
+    "--color-shader-80": interpolateColor(primary_color, "#000000", 0.8),
+    "--color-tones-10": interpolateColor(primary_color, "#808080", 0.1),
+    "--color-tones-20": interpolateColor(primary_color, "#808080", 0.2),
+    "--color-tones-40": interpolateColor(primary_color, "#808080", 0.4),
+    "--color-tones-60": interpolateColor(primary_color, "#808080", 0.6),
+    "--color-tones-80": interpolateColor(primary_color, "#808080", 0.7),
+    "--color-tints-10": interpolateColor(primary_color, "#ffffff", 0.1),
+    "--color-tints-20": interpolateColor(primary_color, "#ffffff", 0.2),
+    "--color-tints-40": interpolateColor(primary_color, "#ffffff", 0.4),
+    "--color-tints-60": interpolateColor(primary_color, "#ffffff", 0.6),
+    "--color-tints-80": interpolateColor(primary_color, "#ffffff", 0.8),
 });
 
-function hexBrightness(hex, percent) {
-    hex = hex.replace(/^\s*#|\s*$/g, '');
+function interpolateColor(from_color, to_color, factor = 0.5) {
+    from_color = from_color.slice();
+    to_color = to_color.slice();
 
-    if (hex.length == 3) hex = hex.replace(/(.)/g, '$1$1');
+    if (isHexColor(from_color)) {
+        from_color = hexToRgb(from_color);
+    } else {
+        from_color = from_color.match(/\d+/g).map(Number);
+    }
 
-    const r = parseInt(hex.substr(0, 2), 16),
-        g = parseInt(hex.substr(2, 2), 16),
-        b = parseInt(hex.substr(4, 2), 16);
+    if (isHexColor(to_color)) {
+        to_color = hexToRgb(to_color);
+    } else {
+        to_color = to_color.match(/\d+/g).map(Number);
+    }
 
-    return '#' +
-        ((0 | (1 << 8) + r + (256 - r) * percent / 100).toString(16)).substr(1) +
-        ((0 | (1 << 8) + g + (256 - g) * percent / 100).toString(16)).substr(1) +
-        ((0 | (1 << 8) + b + (256 - b) * percent / 100).toString(16)).substr(1);
+    const result = from_color;
+
+    for (var i = 0; i < 3; i++) {
+        result[i] = Math.round(result[i] + factor * (to_color[i] - from_color[i]));
+    }
+
+    return `rgb(${result[0]}, ${result[1]}, ${result[2]})`;
+}
+
+function isHexColor(text) {
+    return /[0-9A-Fa-f]{6}/g.test(text);
+}
+
+function hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+
+    return result ? [
+        parseInt(result[1], 16),
+        parseInt(result[2], 16),
+        parseInt(result[3], 16)
+    ] : null;
 }

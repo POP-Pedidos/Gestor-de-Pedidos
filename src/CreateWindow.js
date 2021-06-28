@@ -3,8 +3,7 @@ const path = require("path");
 
 const Store = require("./Store");
 const RegisterShortcuts = require("./RegisterShortcuts");
-
-const { icon } = require("../config");
+const Icons = require('./Icons');
 
 module.exports = function CreateWindow() {
     const workAreaSize = screen.getPrimaryDisplay().workAreaSize
@@ -15,11 +14,11 @@ module.exports = function CreateWindow() {
 
     const win = new BrowserWindow({
         title: "POP Pedidos",
-        icon,
+        icon: Icons.default,
         width,
         height,
-        minWidth: 700,
-        minHeight: 400,
+        minWidth: 960,
+        minHeight: 600,
         titleBarStyle: "hidden",
         frame: false,
         show: false,
@@ -28,6 +27,7 @@ module.exports = function CreateWindow() {
             nodeIntegration: false,
             contextIsolation: false,
             enableRemoteModule: false,
+            backgroundThrottling: false,
             webviewTag: true,
             nativeWindowOpen: true,
         },
@@ -41,7 +41,7 @@ module.exports = function CreateWindow() {
     win.removeMenu();
 
     win.webContents.setUserAgent(app.originalUserAgent);
-    
+
     // win.webContents.setWindowOpenHandler(({ url }) => {
     //     try {
     //         setImmediate(() => shell.openExternal(url));
