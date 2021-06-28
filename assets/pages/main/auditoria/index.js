@@ -402,13 +402,13 @@ function addAudit(audit) {
                     if (audit.username) {
                         return {
                             icon: "sticker",
-                            title: `O usuário <b>${audit.username}</b> alterou o status do pedido <b>${audit.additional.order.order_company_sequence}</b> para <b>${GetStatusName(audit.additional.order.status)}</b>`,
+                            title: `O usuário <b>${audit.username}</b> alterou o status do pedido <b>${audit.additional.order_company_sequence}</b> para <b>${GetStatusName(audit.additional.status)}</b>`,
                             items: []
                         };
                     } else {
                         return {
                             icon: "sticker",
-                            title: `O status do pedido <b>${audit.additional.order.order_company_sequence}</b> foi alterado para <b>${GetStatusName(audit.additional.order.status)}</b>`,
+                            title: `O status do pedido <b>${audit.additional.order_company_sequence}</b> foi alterado para <b>${GetStatusName(audit.additional.status)}</b>`,
                             items: []
                         };
                     }
@@ -416,7 +416,7 @@ function addAudit(audit) {
                 CREATE: audit => {
                     return {
                         icon: "list",
-                        title: `O pedido <b>${audit.additional.order.order_company_sequence}</b> do cliente <b>${audit.additional.order.name_client}</b> foi registrado`,
+                        title: `O pedido <b>${audit.additional.order_company_sequence}</b> do cliente <b>${audit.additional.name_client}</b> foi registrado`,
                         items: []
                     };
                 }
