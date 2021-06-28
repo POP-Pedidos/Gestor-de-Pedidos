@@ -147,7 +147,7 @@ function UpdateFreteRegion(region, new_data) {
 function AddRegionToBlackListTable(region) {
     let region_name = region.neighborhood;
 
-    if (company.city !== region.city && company.state !== region.state) region_name =  `${region.neighborhood}, ${region.city} - ${region.state}`;
+    if (company.city !== region.city && company.state !== region.state) region_name = `${region.neighborhood}, ${region.city} - ${region.state}`;
     else if (company.city !== region.city) region_name = `${region.neighborhood}, ${region.city}`;
 
     const rowNode = datatable_blacklist.row.add([
@@ -292,6 +292,10 @@ if (company.delivery_fallback_type != null && company.delivery_cost_fallback != 
 if (company.delivery_free_in != null && company.delivery_free_val != null) {
     $("#frete_selector .delivery_free_in").val(company.delivery_free_in?.toFixed(2));
     $("#frete_selector .delivery_free_val").val(company.delivery_free_val?.toFixed(2));
+}
+
+if (company.delivery_time != null) {
+    $("#frete_selector .delivery_time").val(company.delivery_time?.toFixed(0));
 }
 
 $("#frete-search").on("blur_place", function () {

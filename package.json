@@ -12,7 +12,7 @@
   "license": "ISC",
   "description": "Faça suas vendas online, facilitando a divulgação de sua empresa e seus produtos na internet.",
   "scripts": {
-    "start": "set NODE_ENV=development&&electron . --enable-logging",
+    "start": "set NODE_ENV=development&&electron . --enable-logging --disable-gpu",
     "start:production": "set NODE_ENV=production&&electron . --enable-logging",
     "build": "electron-builder build --win --publish never",
     "publish": "electron-builder build --win --publish always"

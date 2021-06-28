@@ -71,26 +71,31 @@
                                         <label>Pedido à partir de</label>
                                         <div class="labelled_input">
                                             <span>R$</span>
-                                            <input type="number" class="delivery_free_in" placeholder="0,00" step="0.01">
+                                            <input type="number" class="delivery_free_in" placeholder="0,00"
+                                                step="0.01">
                                         </div>
                                     </div>
                                     <div class="col">
                                         <label>Taxa de Entrega de</label>
                                         <div class="labelled_input">
                                             <span>R$</span>
-                                            <input type="number" class="delivery_free_val" placeholder="0,00" step="0.01">
+                                            <input type="number" class="delivery_free_val" placeholder="0,00"
+                                                step="0.01">
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!--<div class="col flat_delivery_price">
-                                <label>Tempo médio de entrega</label>
+                            <div class="col flat_delivery_price">
                                 <div class="row">
-                                    <div class="labelled_input">
-                                        <input type="number" class="delivery_time" placeholder="Informe o tempo médio em minutos">
+                                    <div class="col">
+                                        <label>Tempo médio de entrega</label>
+                                        <div class="labelled_input">
+                                            <input type="number" class="delivery_time"
+                                                placeholder="Em minutos" step="1">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>-->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -101,9 +106,12 @@
                         <div class="neighborhood frete">
                             <label>Frete por localidade</label>
                             <div class="table-header none_selected">
-                                <input type="text" id="frete-search" class="form-control" placeholder="Nome do bairro" place-search="neighborhood" />
-                                <input type="number" class="price form-control" placeholder="Taxa em reais" step="0.01" />
-                                <button type="submit" class="btn btn-primary">Adicionar<div class="spinner-border"></div></button>
+                                <input type="text" id="frete-search" class="form-control" placeholder="Nome do bairro"
+                                    place-search="neighborhood" />
+                                <input type="number" class="price form-control" placeholder="Taxa em reais"
+                                    step="0.01" />
+                                <button type="submit" class="btn btn-primary">Adicionar<div class="spinner-border">
+                                    </div></button>
                             </div>
                             <div class="table-container">
                                 <div class="table-responsive">
@@ -127,8 +135,10 @@
                         <div class="neighborhood blacklist">
                             <label>Remover locais</label>
                             <div class="table-header none_selected">
-                                <input type="text" id="blacklist-search" class="form-control" placeholder="Nome do bairro" place-search="neighborhood" />
-                                <button type="submit" class="btn btn-primary">Adicionar<div class="spinner-border"></div></button>
+                                <input type="text" id="blacklist-search" class="form-control"
+                                    placeholder="Nome do bairro" place-search="neighborhood" />
+                                <button type="submit" class="btn btn-primary">Adicionar<div class="spinner-border">
+                                    </div></button>
                             </div>
                             <div class="table-container">
                                 <div class="table-responsive">
