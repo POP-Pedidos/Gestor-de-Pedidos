@@ -14,12 +14,12 @@ window.taskbar = {
     flashFrame: (flag = true) => ipcRenderer.send("taskbar:flashFrame", flag),
 }
 
-window.setIcon = (iconName) => {
-    return ipcRenderer.sendSync("app:setIcon", iconName);
+window.tray = {
+    setIcon: (iconName) => ipcRenderer.sendSync("tray:setIcon", iconName),
+    initialize: () => ipcRenderer.send("tray:initialize"),
+    destroy: () => ipcRenderer.send("tray:destroy"),
+    update: (options) => ipcRenderer.send("tray:update", options),
 }
-
-window.onIconChanged = (callback) => ipcRenderer.on("icon:changed", callback);
-window.onTabChange = (callback) => ipcRenderer.on("tab:change", callback);
 
 window.controls = {
     onMaximize: (callback) => ipcRenderer.on("maximize", callback),

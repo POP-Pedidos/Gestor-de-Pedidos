@@ -1,11 +1,10 @@
 const { autoUpdater } = require("electron-updater");
 
 // autoUpdater.autoDownload = false;
+let checkInterval;
 
 module.exports = (win) => {
-    if (process.env.NODE_ENV === "development") return;
-
-    let checkInterval;
+    if (process.env.NODE_ENV === "development" || checkInterval != null) return;
 
     autoUpdater.logger = require("electron-log");
     autoUpdater.logger.transports.file.level = "info";

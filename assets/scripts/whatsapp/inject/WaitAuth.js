@@ -1,44 +1,46 @@
 ﻿try {
-	let wpp_authenticated = false;
-	let last_user_id = undefined;
-
 	const GetUserID = () => window.Store?.Conn?.__x_wid?.user;
 
-	const StartCheckAuthentication = () => setInterval(() => {
-		const user_id = GetUserID();
+	function WaitFirstAuthentication() {
+		return new Promise((resolve, reject) => {
+			let check_first_auth_interval = setInterval(() => {
+				const element_name = `[data-asset-intro-image-light="true"], [data-asset-intro-image-dark="true"]`;
 
-		if (wpp_authenticated === false && !!user_id) {
-			wpp_authenticated = true;
-			console.log("%c WaitAuth.js > Authenticated!", 'color: cyan; font-weight: bold;');
+				if (document.querySelector(element_name)) {
+					clearInterval(check_first_auth_interval);
+					resolve();
+				}
+			}, 500);
+		});
+	}
 
-			window.main.send("user_id", user_id);
-			if (window.messages_queue) window.messages_queue.resume();
-		} else if (wpp_authenticated === true && !user_id) {
-			wpp_authenticated = false;
-			console.log("%c WaitAuth.js > Deauthenticated!", 'color: cyan; font-weight: bold;');
+	WaitFirstAuthentication().then(() => {
+		console.log("%c WaitAuth.js > First authentication! Injecting...", 'color: green; font-weight: bold;');
 
-			if (window.messages_queue) window.messages_queue.pause();
-		}
+		window.main.send("authenticated");
 
-		if (last_user_id !== user_id) {
-			window.main.send("user_id", user_id);
-			last_user_id = user_id;
-		}
-	}, 1000);
+		window.main.once("injected", () => {
+			window.main.send("connected");
+			window.main.send("user_id", GetUserID());
 
-	let check_first_auth_interval = setInterval(() => {
-		const element_name = `[data-asset-intro-image-light="true"], [data-asset-intro-image-dark="true"]`;
+			window.Store.AppState.on('change:state', (_AppState, state) => {
+				const ACCEPTED_STATES = ["CONNECTED", "PAIRING", "TIMEOUT"];
 
-		if (document.querySelector(element_name)) {
-			clearInterval(check_first_auth_interval);
+				if (state === "CONNECTED") {
+					window.main.send("connected");
+					window.main.send("user_id", GetUserID());
+					if (window.messages_queue) window.messages_queue.resume();
 
-			console.log("%c WaitAuth.js > First authentication! Injecting...", 'color: green; font-weight: bold;');
+					console.log("%c WaitAuth.js > Authenticated!", 'color: cyan; font-weight: bold;');
+				} else if (!ACCEPTED_STATES.includes(state)) {
+					window.main.send("disconnected");
+					if (window.messages_queue) window.messages_queue.pause();
 
-			wpp_authenticated = true;
-			window.main.send("authenticated");
-			StartCheckAuthentication();
-		}
-	}, 500);
+					console.log("%c WaitAuth.js > Deauthenticated!", 'color: cyan; font-weight: bold;');
+				}
+			});
+		});
+	});
 
 	console.log("%c WaitAuth.js > Fully injected!", 'color: green; font-weight: bold;');
 } catch (ex) {

@@ -6,8 +6,6 @@ function NewTabInstance() {
 	window.tab_instance = randomInt(1, Number.MAX_SAFE_INTEGER);
 }
 
-window.onTabChange((e, tabName) => ChangeTab(tabName));
-
 function ChangeTab(for_panel) {
 	$(".content-page").show().empty();
 	$("#whatsappWebView").hide();
@@ -366,11 +364,11 @@ jQuery(function ($) {
 
 		if (has_pendent_accept && alert_audio.paused) {
 			taskbar.flashFrame(true);
-			window.setIcon("alert");
+			tray.setIcon("alert");
 			alert_audio.play();
 		} else if (!has_pendent_accept && !alert_audio.paused) {
 			taskbar.flashFrame(false);
-			window.setIcon("default");
+			tray.setIcon("default");
 			alert_audio.pause();
 			alert_audio.currentTime = 0;
 		}

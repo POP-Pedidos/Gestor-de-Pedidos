@@ -3,7 +3,7 @@ const path = require("path");
 
 const Store = require("./Store");
 const RegisterShortcuts = require("./RegisterShortcuts");
-const Icons = require('./Icons');
+const Icons = require("./Icons");
 
 module.exports = function CreateWindow() {
     const workAreaSize = screen.getPrimaryDisplay().workAreaSize
@@ -22,6 +22,7 @@ module.exports = function CreateWindow() {
         titleBarStyle: "hidden",
         frame: false,
         show: false,
+        hasShadow: true,
         webPreferences: {
             preload: path.join(__dirname, "../assets/scripts/preload.js"),
             nodeIntegration: false,
@@ -50,16 +51,16 @@ module.exports = function CreateWindow() {
     //     return { action: "deny" };
     // });
 
-    win.webContents.on('new-window', function (e, url) {
+    win.webContents.on("new-window", function (e, url) {
         e.preventDefault();
-        require('electron').shell.openExternal(url);
+        require("electron").shell.openExternal(url);
     });
 
-    app.on('web-contents-created', function (e, contents) {
-        if (contents.getType() === 'webview') {
-            contents.on('new-window', function (e, url) {
+    app.on("web-contents-created", function (e, contents) {
+        if (contents.getType() === "webview") {
+            contents.on("new-window", function (e, url) {
                 e.preventDefault();
-                require('electron').shell.openExternal(url);
+                require("electron").shell.openExternal(url);
             });
         }
     });

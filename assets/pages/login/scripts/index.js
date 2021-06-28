@@ -39,3 +39,5 @@ $("form").on("submit", function (e) {
         $("form").removeClass("loading");
     });
 });
+
+tray.destroy();

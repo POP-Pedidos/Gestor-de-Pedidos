@@ -7,6 +7,7 @@ const { domain, api_url, places_url } = require("../config");
 const offscreen = require("./Offscreen");
 const Store = require("./Store");
 const Icons = require('./Icons');
+const CreateTray = require("./SystemTray");
 
 const printGraphicControlCopy = require("./Printer/graphic/control");
 const printGraphicDeliveryCopy = require("./Printer/graphic/delivery");
@@ -60,14 +61,28 @@ ipcMain.on("taskbar:flashFrame", (event, flag) => {
     win.flashFrame(flag);
 });
 
-ipcMain.on("app:setIcon", (event, iconName) => {
-    if (!Icons[iconName]) return event.returnValue = false;
+ipcMain.on("tray:initialize", (event, options = { disconnect_whatsapp: false }) => {
+    if (tray && !tray.isDestroyed()) return;
 
-    tray.setIcon(Icons[iconName]);
-    win.setIcon(Icons[iconName]);
-    win.webContents.send("icon:changed", Icons[iconName]);
+    tray = CreateTray(options);
+});
 
-    return event.returnValue = true;
+ipcMain.on("tray:destroy", (event) => {
+    if (tray && !tray.isDestroyed()) tray.destroy();
+});
+
+ipcMain.on("tray:update", (event, options = {}) => {
+    if (tray && !tray.isDestroyed()) {
+        tray.loadContextMenu(options);
+    }
+});
+
+ipcMain.on("tray:setIcon", (event, iconName) => {
+    event.returnValue = tray.setIcon(Icons[iconName]);
+});
+
+ipcMain.on("updater:initialize", (event) => {
+    AutoUpdater(win);
 });
 
 ipcMain.on("updater:install", (event) => {
@@ -84,10 +99,6 @@ ipcMain.on("controls:maximize", (event) => {
 
 ipcMain.on("controls:restore", (event) => {
     win.restore();
-});
-
-ipcMain.on("updater:initialize", (event) => {
-    AutoUpdater(win)
 });
 
 ipcMain.on("controls:hide", (event) => {
