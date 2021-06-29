@@ -12,6 +12,10 @@ whatsappWebView.addEventListener("dom-ready", function (event) {
     });
 });
 
+whatsapp.onSendMessage((e, number, message) => {
+    whatsappWebView.send("sendMessage", number, message);
+});
+
 whatsappWebView.addEventListener('ipc-message', async (event) => {
     try {
         if (event.channel === "authenticated") {
@@ -87,6 +91,7 @@ whatsappWebView.addEventListener('ipc-message', async (event) => {
             }
 
             whatsappWebView.send("sendMessage", number, `Olá${name ? ` ${name}` : ""}, acesse o link e faça o seu pedido! 🏍️🚚🤩\n\n${link}`);
+            local_api.sockets.broadcast("whatsapp:message", event.args);
         }
     } catch (error) {
         console.error("[WHATSAPP-IPC-MESSAGE]", error);
@@ -97,6 +102,7 @@ whatsappWebView.addEventListener('ipc-message', async (event) => {
             if (!msg || msg.isMe || msg.isStatusV3 || msg.isGroupMsg || !msg.isNewMsg || msg.isMedia || msg.id.fromMe) return;
         }
 
+        local_api.sockets.broadcast("whatsapp:event", Object.assign({}, event));
         console.log("[WHATSAPP-IPC-MESSAGE]", event);
     }
 });

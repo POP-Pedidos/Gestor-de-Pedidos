@@ -26,5 +26,6 @@ export default function AuthSuccessfully(user) {
     }).finally(() => {
         updater.initialize();
         tray.initialize();
+        local_api.listen();
     })
 }

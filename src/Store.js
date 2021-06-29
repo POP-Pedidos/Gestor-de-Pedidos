@@ -2,7 +2,7 @@ const { app } = require("electron");
 const path = require("path");
 const fs = require("fs");
 
-let cache = {};
+let cache = null;
 
 class Store {
     constructor(name, defaults = {}) {
@@ -28,6 +28,7 @@ class Store {
         if (!cache) cache = parseDataFile(this.file_path);
 
         if (cache[this.name]) cache[this.name][key] = val;
+        else cache[this.name] = { [key]: val }
 
         fs.writeFileSync(this.file_path, JSON.stringify(cache, null, 2));
     }

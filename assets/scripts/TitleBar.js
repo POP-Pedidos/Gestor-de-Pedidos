@@ -140,7 +140,7 @@ $title_bar.find(".controls>.maximize-restore").on("click", function () {
 });
 
 $title_bar.find(".controls>.close").on("click", function () {
-    window.controls.hide();
+    window.controls.close();
 });
 
 $("body").prepend($title_bar);

@@ -8,6 +8,7 @@ const offscreen = require("./Offscreen");
 const Store = require("./Store");
 const Icons = require('./Icons');
 const CreateTray = require("./SystemTray");
+const local_api = require("./LocalAPI");
 
 const printGraphicControlCopy = require("./Printer/graphic/control");
 const printGraphicDeliveryCopy = require("./Printer/graphic/delivery");
@@ -18,6 +19,7 @@ const printRawTextDeliveryCopy = require("./Printer/raw_text/delivery");
 const printRawTextProductionCopy = require("./Printer/raw_text/production");
 
 const theme_store = new Store("dark-mode", { themeSource: "system" });
+const app_store = new Store("app", { backgroundRunning: true });
 
 ipcMain.on("api_url", (event) => event.returnValue = api_url);
 ipcMain.on("places_url", (event) => event.returnValue = places_url);
@@ -53,12 +55,31 @@ ipcMain.on("controls:state", (event) => {
     else if (win?.isNormal()) event.returnValue = "normal";
 });
 
+ipcMain.on("window:focus", (event) => {
+    if (win.isMinimized()) win.restore();
+    else win.show();
+
+    win.focus();
+});
+
 ipcMain.on("taskbar:setProgressBar", (event, ...args) => {
     win.setProgressBar(...args);
 });
 
 ipcMain.on("taskbar:flashFrame", (event, flag) => {
     win.flashFrame(flag);
+});
+
+ipcMain.on("local_api:listen", (event) => {
+    local_api.listen();
+});
+
+ipcMain.on("local_api:close", (event) => {
+    local_api.close();
+});
+
+ipcMain.on("local_api:sockets:broadcast", (event, eventName, eventData) => {
+    local_api.socketsBroadcast(eventName, eventData);
 });
 
 ipcMain.on("tray:initialize", (event, options = { disconnect_whatsapp: false }) => {
@@ -105,6 +126,10 @@ ipcMain.on("controls:hide", (event) => {
     win.hide();
 });
 
+ipcMain.on("controls:close", (event) => {
+    win.close();
+});
+
 ipcMain.handle("dialog:showSaveDialog", (event, ...args) => {
     return dialog.showSaveDialog(win, ...args);
 });
@@ -120,6 +145,39 @@ ipcMain.on("fs:writeFile", (event, ...args) => {
     } catch {
         event.returnValue = false;
     }
+});
+
+ipcMain.on("app:openAtLogin", (event) => {
+    const options = app.getLoginItemSettings();
+    console.log(options);
+    event.returnValue = options.executableWillLaunchAtLogin || options.openAtLogin;
+});
+
+ipcMain.on("app:setOpenAtLogin", (event, open) => {
+    if (open === true) {
+        app.setLoginItemSettings({
+            name: "POPPedidos",
+            openAtLogin: false,
+        });
+    }
+
+    app.setLoginItemSettings({
+        name: "POPPedidos",
+        openAtLogin: open,
+        executableWillLaunchAtLogin: open,
+        path: process.execPath,
+        args: [
+            "--hidden",
+        ]
+    });
+});
+
+ipcMain.on("app:backgroundRunning", (event) => {
+    event.returnValue = app_store.get("backgroundRunning");
+});
+
+ipcMain.on("app:setBackgroundRunning", (event, open) => {
+    app_store.set("backgroundRunning", open);
 });
 
 ipcMain.handle("printService:printControlCopy", (event, printer, order, company) => {

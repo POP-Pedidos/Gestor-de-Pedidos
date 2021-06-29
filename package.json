@@ -15,6 +15,7 @@
     "start": "set NODE_ENV=development&&electron . --enable-logging --disable-gpu",
     "start:dev": "set NODE_ENV=development&&electron . --enable-logging",
     "start:prod": "set NODE_ENV=production&&electron . --enable-logging",
+    "start:hidden": "set NODE_ENV=production&&electron . --enable-logging --hidden",
     "build": "electron-builder build --win --publish never",
     "publish": "electron-builder build --win --publish always"
   },
@@ -46,6 +47,10 @@
     "ejs": "^3.1.6",
     "electron-log": "^4.3.5",
     "electron-reload": "^1.5.0",
-    "electron-updater": "^4.3.9"
+    "electron-updater": "^4.3.9",
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.1",
+    "uuid": "^8.3.2",
+    "ws": "^7.5.1"
   }
 }

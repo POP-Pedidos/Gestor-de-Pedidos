@@ -34,8 +34,9 @@ module.exports = function CreateWindow() {
         },
     });
 
-    const store = new Store("window", { width, height });
+    const window_store = new Store("window", { width, height });
     const theme_store = new Store("dark-mode", { themeSource: "system" });
+    const app_store = new Store("app", { backgroundRunning: true });
 
     nativeTheme.themeSource = theme_store.get("themeSource");
 
@@ -68,10 +69,10 @@ module.exports = function CreateWindow() {
     win.webContents.on("did-finish-load", () => {
         RegisterShortcuts(win);
 
-        if (store.get("maximized") === true) win.maximize();
-        else win.setSize(store.get("width"), store.get("height"));
+        if (window_store.get("maximized") === true) win.maximize();
+        else win.setSize(window_store.get("width"), window_store.get("height"));
 
-        win.show();
+        if (!process.argv.includes("--hidden")) win.show();
     });
 
     win.on("maximize", function (e) {
@@ -95,13 +96,18 @@ module.exports = function CreateWindow() {
     });
 
     win.on("close", function (e) {
+        if (app_store.get("backgroundRunning")) {
+            e.preventDefault();
+            win.hide();
+        } else {
+            if (tray && !tray.isDestroyed()) tray.destroy();
+        }
+
         const bounds = win.getBounds();
 
-        store.set("maximized", win.isMaximized());
-        store.set("width", bounds.width);
-        store.set("height", bounds.height);
-
-        app.exit();
+        window_store.set("maximized", win.isMaximized());
+        window_store.set("width", bounds.width);
+        window_store.set("height", bounds.height);
     });
 
     win.loadFile("assets/pages/login/index.html");

@@ -3,6 +3,7 @@ const CreateWindow = require("./src/CreateWindow");
 
 global.win = null;
 global.tray = null;
+global.local_api = null;
 
 require("./src/IpcMain");
 

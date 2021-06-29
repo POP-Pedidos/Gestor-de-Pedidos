@@ -47,6 +47,10 @@ function ChangeTab(for_panel) {
 		document.title = "POP Pedidos | Configurações - WhatsApp";
 		loadFile("../configuracoes/whatsapp/index.html");
 
+	} else if (for_panel === "configuracoes_gestor") {
+		document.title = "POP Pedidos | Configurações - Gestor";
+		loadFile("../configuracoes/gestor/index.html");
+
 	} else if (for_panel === "cadastros_categorias") {
 		document.title = "POP Pedidos | Cadastros - Categorias";
 		loadFile("../cadastros/categorias/index.html");
@@ -356,6 +360,7 @@ jQuery(function ($) {
 	}, 1000);
 
 	const alert_audio = new Audio("../../../sounds/alert.wav");
+	alert_audio.loop = true;
 
 	setInterval(() => {
 		if (!sessionStorage.token && !localStorage.token) return;

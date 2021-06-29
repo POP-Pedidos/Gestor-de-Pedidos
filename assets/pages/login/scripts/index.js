@@ -41,3 +41,4 @@ $("form").on("submit", function (e) {
 });
 
 tray.destroy();
+local_api.close();
