@@ -61,7 +61,11 @@ function ChangeTab(for_panel) {
 		document.title = "POP Pedidos | Editar Complementos";
 		loadFile("../cadastros/complementos/index.html");
 
-	} else if (for_panel === "cadastros_tamanhos") {
+	} else if (for_panel === "editar_sabores_pizza") {
+		document.title = "POP Pedidos | Editar Sabores de Pizza";
+		loadFile("../cadastros/sabores_pizza/index.html");
+
+	}else if (for_panel === "cadastros_tamanhos") {
 		document.title = "POP Pedidos | Cadastros - Tamanhos";
 		loadFile("../cadastros/tamanhos/index.html");
 

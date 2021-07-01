@@ -57,6 +57,10 @@ $("#frmImpressora").on("submit", function (e) {
 
     const formData = $(this).serializeFormJSON();
 
+    if (!formData.padding) {
+        formData.padding = 0;
+    }
+
     FetchAPI("/printers", {
         method: "POST",
         body: formData
@@ -93,7 +97,7 @@ $("#frmEditImpressora").on("submit", function (e) {
 
     const edit_printer_id = $(this).attr("id_printer");
     const formData = $(this).serializeFormJSON();
-    
+
     FetchAPI(`/printers/${edit_printer_id}`, {
         method: "PUT",
         body: formData
