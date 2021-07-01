@@ -6,8 +6,6 @@ function NewTabInstance() {
 	window.tab_instance = randomInt(1, Number.MAX_SAFE_INTEGER);
 }
 
-window.onTabChange((e, tabName) => ChangeTab(tabName));
-
 function ChangeTab(for_panel) {
 	$(".content-page").show().empty();
 	$("#whatsappWebView").hide();
@@ -48,6 +46,10 @@ function ChangeTab(for_panel) {
 	} else if (for_panel === "configuracoes_whatsapp") {
 		document.title = "POP Pedidos | Configurações - WhatsApp";
 		loadFile("../configuracoes/whatsapp/index.html");
+
+	} else if (for_panel === "configuracoes_gestor") {
+		document.title = "POP Pedidos | Configurações - Gestor";
+		loadFile("../configuracoes/gestor/index.html");
 
 	} else if (for_panel === "cadastros_categorias") {
 		document.title = "POP Pedidos | Cadastros - Categorias";
@@ -362,6 +364,7 @@ jQuery(function ($) {
 	}, 1000);
 
 	const alert_audio = new Audio("../../../sounds/alert.wav");
+	alert_audio.loop = true;
 
 	setInterval(() => {
 		if (!sessionStorage.token && !localStorage.token) return;
@@ -370,11 +373,11 @@ jQuery(function ($) {
 
 		if (has_pendent_accept && alert_audio.paused) {
 			taskbar.flashFrame(true);
-			window.setIcon("alert");
+			tray.setIcon("alert");
 			alert_audio.play();
 		} else if (!has_pendent_accept && !alert_audio.paused) {
 			taskbar.flashFrame(false);
-			window.setIcon("default");
+			tray.setIcon("default");
 			alert_audio.pause();
 			alert_audio.currentTime = 0;
 		}

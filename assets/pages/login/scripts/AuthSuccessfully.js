@@ -25,5 +25,7 @@ export default function AuthSuccessfully(user) {
         $("form button").removeClass("loading");
     }).finally(() => {
         updater.initialize();
+        tray.initialize();
+        local_api.listen();
     })
 }

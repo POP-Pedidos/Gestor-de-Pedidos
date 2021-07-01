@@ -1,9 +1,9 @@
 const { app, BrowserWindow } = require("electron");
 const CreateWindow = require("./src/CreateWindow");
-const CreateTray = require("./src/SystemTray");
 
 global.win = null;
 global.tray = null;
+global.local_api = null;
 
 require("./src/IpcMain");
 
@@ -19,7 +19,6 @@ if (!app.requestSingleInstanceLock()) return app.quit();
 
 app.whenReady().then(() => {
     win = CreateWindow();
-    tray = CreateTray();
 
     app.on("second-instance", (event, commandLine, workingDirectory) => {
         win.show();

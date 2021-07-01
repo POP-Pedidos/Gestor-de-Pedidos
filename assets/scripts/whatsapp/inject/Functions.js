@@ -83,19 +83,23 @@
         });
     });
 
-    window.Store.Msg.on('add', (msg) => {
+    window.main.on("logout", () => {
+        window.Store.AppState.logout();
+    });
+
+    window.Store.Msg.on("add", (msg) => {
         const message = window.WWebJS.getMessageModel(msg);
         const contact = window.WWebJS.getContact(msg.author || msg.from);
 
         window.main.send("onMessage", message, contact);
     });
 
-    // window.Store.Msg.on('change:type', (msg) => {
+    // window.Store.Msg.on("change:type", (msg) => {
     //     // message_deleted
     //     window.main.send("onChangeMessageTypeEvent", msg);
     // });
 
-    // window.Store.Msg.on('change:ack', (msg, ack) => {
+    // window.Store.Msg.on("change:ack", (msg, ack) => {
     //     /*
     //         == ACK VALUES ==
     //         ACK_ERROR: -1
@@ -110,23 +114,25 @@
     //     window.main.send("onMessageAckEvent", msg, ack);
     // });
 
-    // window.Store.Msg.on('change:isUnsentMedia', (msg, unsent) => {
+    // window.Store.Msg.on("change:isUnsentMedia", (msg, unsent) => {
     //     //console.log("onMessageMediaUploadedEvent", msg);
     //     window.main.send("onMessageMediaUploadedEvent", msg);
     // });
-    // window.Store.Msg.on('remove', (msg) => {
+    // window.Store.Msg.on("remove", (msg) => {
     //     //Emitted when a message is deleted by the current user.
     //     window.main.send("onRemoveMessageEvent", msg);
     // });
-    // window.Store.AppState.on('change:state', (_AppState, state) => {
-    //     //Emitted when the connection state changes
-    //     window.main.send("onAppStateChangedEvent", state);
-    // });
-    // window.Store.Conn.on('change:battery', (state) => {
-    //     window.main.send("onAppStateChangedEvent", state);
-    // });
 
-    console.log("%c Functions.js > Fully injected!", 'color: green; font-weight: bold;');
+    window.Store.AppState.on("change:state", (_AppState, state) => {
+        //Emitted when the connection state changes
+        window.main.send("onAppStateChangedEvent", state);
+    });
+
+    window.Store.Conn.on("change:battery", (state) => {
+        window.main.send("onAppStateChangedEvent", state);
+    });
+
+    console.log("%c Functions.js > Fully injected!", "color: green; font-weight: bold;");
 } catch (ex) {
-    console.log("%c Functions.js > Inject Error:", 'color: red; font-weight: bold;', ex);
+    console.log("%c Functions.js > Inject Error:", "color: red; font-weight: bold;", ex);
 }

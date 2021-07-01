@@ -12,71 +12,86 @@ whatsappWebView.addEventListener("dom-ready", function (event) {
     });
 });
 
+whatsapp.onSendMessage((e, number, message) => {
+    whatsappWebView.send("sendMessage", number, message);
+});
+
 whatsappWebView.addEventListener('ipc-message', async (event) => {
     try {
-        switch (event.channel) {
-            case "authenticated": {
-                fetch("../../../scripts/whatsapp/inject/ModuleRaid.js").then(res => res.text()).then(ModuleRaid => {
-                    whatsappWebView.executeJavaScript(ModuleRaid);
+        if (event.channel === "authenticated") {
+            fetch("../../../scripts/whatsapp/inject/ModuleRaid.js").then(res => res.text()).then(ModuleRaid => {
+                whatsappWebView.executeJavaScript(ModuleRaid);
 
-                    fetch("../../../scripts/whatsapp/inject/ExposeStore.js").then(res => res.text()).then(ExposeStore => {
-                        whatsappWebView.executeJavaScript(ExposeStore);
+                fetch("../../../scripts/whatsapp/inject/ExposeStore.js").then(res => res.text()).then(ExposeStore => {
+                    whatsappWebView.executeJavaScript(ExposeStore);
 
-                        fetch("../../../scripts/whatsapp/inject/Utils.js").then(res => res.text()).then(Utils => {
-                            whatsappWebView.executeJavaScript(Utils);
+                    fetch("../../../scripts/whatsapp/inject/Utils.js").then(res => res.text()).then(Utils => {
+                        whatsappWebView.executeJavaScript(Utils);
 
-                            fetch("../../../scripts/whatsapp/inject/Functions.js").then(res => res.text()).then(Functions => {
-                                whatsappWebView.executeJavaScript(Functions);
-                            });
+                        fetch("../../../scripts/whatsapp/inject/Functions.js").then(res => res.text()).then(Functions => {
+                            whatsappWebView.executeJavaScript(Functions);
+
+                            whatsappWebView.send("injected");
                         });
                     });
                 });
-            }
-            case "user_id": {
-                const [number] = event.args;
+            });
 
-                if (number && number !== company.whatsapp) FetchAPI("/company", {
-                    method: "PUT",
-                    body: { whatsapp: number },
-                }).then(data => {
-                    company = data;
+        } else if (event.channel === "connected") {
+            tray.update({
+                disconnect_whatsapp: true,
+            });
+
+        } else if (event.channel === "disconnected") {
+            tray.update({
+                disconnect_whatsapp: false,
+            });
+
+        } else if (event.channel === "user_id") {
+            const [number] = event.args;
+
+            if (number && number !== company.whatsapp) FetchAPI("/company", {
+                method: "PUT",
+                body: { whatsapp: number },
+            }).then(data => {
+                company = data;
+            });
+
+        } else if (event.channel === "onMessage") {
+            const [msg, contact] = event.args;
+
+            if (!msg || msg.isMe || msg.isStatusV3 || msg.isGroupMsg || !msg.isNewMsg || msg.isMedia || msg.id.fromMe) return;
+
+            const delay_ms = 6 * 60 * 60 * 1000;  // 6h
+            const number = msg.from?.user || msg.author?.user;
+            const name = contact.pushname || contact.verifiedName || contact.name;
+            const link = `https://${company.subdomain}.${domain}?tel=${number}`;
+
+            if (Object.keys(message_times).includes(number)) {
+                console.warn(`[WHATSAPP-IPC-MESSAGE] Message from "${name}"(${number}) was ignored because it is in the timeout list`);
+                return;
+            }
+
+            message_times[number] = Date.now();
+            setTimeout(() => delete message_times[number], delay_ms);
+
+            try {
+                const chat_messages = await fetchMessages(msg.from._serialized, {
+                    filter: (_msg, args) => !_msg.isNotification && _msg.id.fromMe && (_msg.text || _msg.body)?.includes(args.link),
+                    filter_args: { link },
+                    limit: 1,
                 });
-            }
-            case "onMessage": {
-                const [msg, contact] = event.args;
 
-                if (!msg || msg.isMe || msg.isStatusV3 || msg.isGroupMsg || !msg.isNewMsg || msg.isMedia || msg.id.fromMe) return;
-
-                const delay_ms = 6 * 60 * 60 * 1000;  // 6h
-                const number = msg.from?.user || msg.author?.user;
-                const name = contact.pushname || contact.verifiedName || contact.name;
-                const link = `https://${company.subdomain}.${domain}?tel=${number}`;
-
-                if (Object.keys(message_times).includes(number)) {
-                    console.warn(`[WHATSAPP-IPC-MESSAGE] Message from "${name}"(${number}) was ignored because it is in the timeout list`);
+                if (chat_messages.length > 0 && (Date.now() - new Date(0).setUTCSeconds(chat_messages[0].t)) < delay_ms) {
+                    console.warn(`[WHATSAPP-IPC-MESSAGE] Message from "${name}"(${number}) was ignored because the last automatic welcome message was sent recently`);
                     return;
                 }
-
-                message_times[number] = Date.now();
-                setTimeout(() => delete message_times[number], delay_ms);
-
-                try {
-                    const chat_messages = await fetchMessages(msg.from._serialized, {
-                        filter: (_msg, args) => !_msg.isNotification && _msg.id.fromMe && (_msg.text || _msg.body)?.includes(args.link),
-                        filter_args: { link },
-                        limit: 1,
-                    });
-
-                    if (chat_messages.length > 0 && (Date.now() - new Date(0).setUTCSeconds(chat_messages[0].t)) < delay_ms) {
-                        console.warn(`[WHATSAPP-IPC-MESSAGE] Message from "${name}"(${number}) was ignored because the last automatic welcome message was sent recently`);
-                        return;
-                    }
-                } catch (ex) {
-                    console.error(ex);
-                }
-
-                whatsappWebView.send("sendMessage", number, `Olá${name ? ` ${name}` : ""}, acesse o link e faça o seu pedido! 🏍️🚚🤩\n\n${link}`);
+            } catch (ex) {
+                console.error(ex);
             }
+
+            whatsappWebView.send("sendMessage", number, `Olá${name ? ` ${name}` : ""}, acesse o link e faça o seu pedido! 🏍️🚚🤩\n\n${link}`);
+            local_api.sockets.broadcast("whatsapp:message", event.args);
         }
     } catch (error) {
         console.error("[WHATSAPP-IPC-MESSAGE]", error);
@@ -87,6 +102,7 @@ whatsappWebView.addEventListener('ipc-message', async (event) => {
             if (!msg || msg.isMe || msg.isStatusV3 || msg.isGroupMsg || !msg.isNewMsg || msg.isMedia || msg.id.fromMe) return;
         }
 
+        local_api.sockets.broadcast("whatsapp:event", Object.assign({}, event));
         console.log("[WHATSAPP-IPC-MESSAGE]", event);
     }
 });

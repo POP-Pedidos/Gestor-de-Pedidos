@@ -56,6 +56,11 @@ socket.on("new_order", (order) => {
         const $order = addOrder(order);
         $order.insertBefore(".container-food_pedidos>.left>.list>div:first-child");
     }
+
+    taskbar.flashFrame(true);
+    window.focus();
+
+    local_api.sockets.broadcast("order", order);
 });
 
 socket.on("status_updated", (online) => {
