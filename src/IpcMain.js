@@ -192,7 +192,7 @@ ipcMain.handle("printService:printDeliveryCopy", (event, printer, order, company
     else return null;
 });
 
-ipcMain.handle("printService:printProductionCopy", (event, printer, order, company) => {
+ipcMain.handle("printService:printProductionCopy", async (event, printer, order, company) => {
     if (printer?.type === "graphic") return printGraphicProductionCopy(printer, order, company);
     else if (printer?.type === "text") return printRawTextProductionCopy(printer, order, company);
     else return null;

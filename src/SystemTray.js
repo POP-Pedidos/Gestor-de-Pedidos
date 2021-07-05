@@ -43,7 +43,7 @@ module.exports = function CreateTray(options = {}) {
     }
 
     function close() {
-        app.close();
+        app.exit();
     }
 
     let contextMenu;

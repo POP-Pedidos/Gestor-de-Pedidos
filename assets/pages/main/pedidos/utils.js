@@ -1,4 +1,4 @@
-function printOrder(order) {
+async function printOrder(order) {
     let cur_status;
 
     const order_data = { ...order };
@@ -14,14 +14,6 @@ function printOrder(order) {
         ...primary_printer,
         device: GetLocalPrinter(primary_printer?.id_printer) || primary_printer?.device,
     };
-
-    if (!!company.print_control_copy && company.print_control_copy === cur_status) {
-        printService.printControlCopy(primary_printer_device, order_data, company);
-    }
-
-    if (!!company.print_delivery_copy && company.print_delivery_copy === cur_status) {
-        printService.printDeliveryCopy(primary_printer_device, order_data, company);
-    }
 
     if (!!company.print_production_copy && company.print_production_copy === cur_status) {
         const printer_items = [];
@@ -42,9 +34,18 @@ function printOrder(order) {
             printer.device = GetLocalPrinter(id_printer) || printer.device;
             order_data.items = printer_items[id_printer];
 
-            printService.printProductionCopy(printer, order_data, company);
+            await printService.printProductionCopy(printer, order_data, company);
         }
     }
+
+    if (!!company.print_control_copy && company.print_control_copy === cur_status) {
+        printService.printControlCopy(primary_printer_device, order_data, company);
+    }
+
+    if (!!company.print_delivery_copy && company.print_delivery_copy === cur_status) {
+        printService.printDeliveryCopy(primary_printer_device, order_data, company);
+    }
+    
 }
 
 function UpdateOrderStatus(order, new_status) {
