@@ -53,7 +53,6 @@ module.exports = function CreateTray(options = {}) {
     });
 
     tray.loadContextMenu = (options = {}) => {
-        console.log(options)
         const menu_options = [
             { label: "Pedidos", type: "normal", click: openOrders },
             { label: "Produtos", type: "normal", click: openProducts },
