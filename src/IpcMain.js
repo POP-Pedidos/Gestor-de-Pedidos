@@ -19,7 +19,7 @@ const printRawTextDeliveryCopy = require("./Printer/raw_text/delivery");
 const printRawTextProductionCopy = require("./Printer/raw_text/production");
 
 const theme_store = new Store("dark-mode", { themeSource: "system" });
-const app_store = new Store("app", { backgroundRunning: true });
+const app_store = new Store("app", { backgroundRunning: false });
 
 ipcMain.on("api_url", (event) => event.returnValue = api_url);
 ipcMain.on("places_url", (event) => event.returnValue = places_url);

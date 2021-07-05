@@ -60,7 +60,7 @@ whatsappWebView.addEventListener('ipc-message', async (event) => {
         } else if (event.channel === "onMessage") {
             const [msg, contact] = event.args;
 
-            if (!msg || msg.isMe || msg.isStatusV3 || msg.isGroupMsg || !msg.isNewMsg || msg.isMedia || msg.id.fromMe) return;
+            if (!msg || msg.isMe || msg.isStatusV3 || msg.isGroupMsg || !msg.isNewMsg || msg.isMedia || msg.id.fromMe || msg.type !== "chat") return;
 
             const delay_ms = 6 * 60 * 60 * 1000;  // 6h
             const number = msg.from?.user || msg.author?.user;

@@ -36,7 +36,7 @@ module.exports = function CreateWindow() {
 
     const window_store = new Store("window", { width, height });
     const theme_store = new Store("dark-mode", { themeSource: "system" });
-    const app_store = new Store("app", { backgroundRunning: true });
+    const app_store = new Store("app", { backgroundRunning: false });
 
     nativeTheme.themeSource = theme_store.get("themeSource");
 
