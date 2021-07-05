@@ -39,11 +39,11 @@ async function printOrder(order) {
     }
 
     if (!!company.print_control_copy && company.print_control_copy === cur_status) {
-        printService.printControlCopy(primary_printer_device, order_data, company);
+        await printService.printControlCopy(primary_printer_device, order_data, company);
     }
 
     if (!!company.print_delivery_copy && company.print_delivery_copy === cur_status) {
-        printService.printDeliveryCopy(primary_printer_device, order_data, company);
+        await printService.printDeliveryCopy(primary_printer_device, order_data, company);
     }
     
 }
