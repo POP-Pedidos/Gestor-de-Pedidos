@@ -1096,6 +1096,14 @@ body.dark-mode .highcharts-legend-item>text:hover {
     border-top: 1px solid gray;
     padding-top: 10px;
   }
+
+  .days_of_week_calendar>.header>div>.open-hours {
+    display: none !important;
+  }
+
+  .days_of_week_calendar>.header>div>.title {
+    font-size: 15px !important;
+  }
 }
 
 .header-actions {
@@ -13932,6 +13940,7 @@ td>.switch_enable {
   flex-direction: column;
   max-width: 1080px;
   margin: 0 auto;
+  gap: 20px;
 }
 
 .content-column.schedules>.header>h2 {
@@ -13989,8 +13998,11 @@ td>.switch_enable {
   border-top: 1px solid #e8e8e8;
 }
 
-.content-column.schedules>.tabs>main .section>.content {
+.days_of_week_calendar {
+  display: flex;
+  flex-direction: column;
   padding: 20px;
+  gap: 20px;
 }
 
 .content-column.schedules .section>.content {
@@ -14002,6 +14014,7 @@ td>.switch_enable {
   display: flex;
   flex-direction: column;
   flex: 1;
+  padding: 20px;
 }
 
 .content-column.schedules .section>.content>.toggle-option>.title {
@@ -14030,6 +14043,7 @@ td>.switch_enable {
 
 .content-column.schedules .section.shifts>.content {
   flex-direction: column;
+  padding: 20px;
 }
 
 .content-column.schedules .section.shifts>.content>div {
@@ -14062,9 +14076,9 @@ td>.switch_enable {
 .content-column.schedules .section.shifts .timeline {
   position: relative;
   border-radius: 6px;
-  background-color: rgba(189, 189, 189, 0.2);
+  background-color: rgba(189, 189, 189, 0.06);
   height: 70px;
-  border: 1px solid #b9c6b3;
+  border: 1px solid #c8c8c8;
 
   user-select: none;
 }
@@ -14090,22 +14104,26 @@ td>.switch_enable {
 
 .content-column.schedules .section.shifts .timeline>.marker {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  background-color: rgba(109, 210, 69, 0.3);
-  border-left: 2px solid #5db33b;
-  border-right: 2px solid #5db33b;
+  top: 3px;
+  bottom: 3px;
+  background-color: rgba(123, 191, 96, .2);
+  border-left: 2px solid rgba(255, 255, 255, 0);
+  border-right: 2px solid rgba(255, 255, 255, 0);
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-.content-column.schedules .section.shifts .timeline>.marker:hover {
-  background-color: rgba(109, 210, 69, 0.6);
+.content-column.schedules .section.shifts .timeline>.marker:hover,
+.content-column.schedules .section.shifts .timeline>.marker:active {
+  border-radius: 0;
+  background-color: rgba(109, 210, 69, 0.4);
+  border-color: #5db33b;
 }
 
 .content-column.schedules .section.shifts .timeline>.marker::before {
   content: "";
-  display: block;
+  display: none;
   width: 9px;
   position: absolute;
   top: -1px;
@@ -14119,7 +14137,7 @@ td>.switch_enable {
 
 .content-column.schedules .section.shifts .timeline>.marker::after {
   content: "";
-  display: block;
+  display: none;
   width: 9px;
   position: absolute;
   top: -1px;
@@ -14129,6 +14147,13 @@ td>.switch_enable {
   border-top: 2px solid #5db33b;
   border-bottom: 2px solid #5db33b;
   cursor: col-resize;
+}
+
+.content-column.schedules .section.shifts .timeline>.marker:hover::before,
+.content-column.schedules .section.shifts .timeline>.marker:hover::after,
+.content-column.schedules .section.shifts .timeline>.marker:active::before,
+.content-column.schedules .section.shifts .timeline>.marker:active::after {
+  display: block;
 }
 
 .content-column.schedules .section.shifts .timeline>.marker>span {
@@ -14161,8 +14186,9 @@ td>.switch_enable {
   left: -2px;
   width: 2px;
   background-color: #8c8c8c;
-  height: 81px;
+  height: 77px;
   transform: translateY(-100%);
+  z-index: 1;
 }
 
 .content-column.schedules .schedules>.section.shifts.link-afternoon-night .afternoon .timeline>.marker::after {
@@ -14179,8 +14205,9 @@ td>.switch_enable {
   right: -2px;
   width: 2px;
   background-color: #8c8c8c;
-  height: 81px;
+  height: 77px;
   transform: translateY(100%);
+  z-index: 1;
 }
 
 .content-column.schedules .timeline>.current-time-indicator {
@@ -14194,68 +14221,53 @@ td>.switch_enable {
 .content-column.schedules .timeline>.current-time-indicator::before {
   content: "";
   display: block;
-  width: 4px;
+  width: 5px;
   position: absolute;
   top: 0;
-  left: 0;
+  left: -2px;
   bottom: 0;
-  transform: translateX(-2px);
   border-top: 1px solid #a58c00;
   border-bottom: 1px solid #a58c00;
-  cursor: col-resize;
+  pointer-events: none;
 }
 
-.content-column.schedules .timeline>.current-time-indicator::after {
-  content: "";
-  display: block;
-  width: 4px;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  transform: translateX(2px);
-  border-top: 1px solid #a58c00;
-  border-bottom: 1px solid #a58c00;
-  cursor: col-resize;
-}
-
-.content-column.schedules .section.opening-hours>.content>.header {
+.days_of_week_calendar>.header {
   display: flex;
-  align-items: flex-end;
   margin-left: 31px;
+  gap: 10px;
 }
 
-.content-column.schedules .section.opening-hours>.content {
-  flex-direction: column;
-}
-
-.content-column.schedules .section.opening-hours>.content>.header>div {
-  display: flex;
+.days_of_week_calendar>.header>div {
+  display: inline-block;
   flex-direction: column;
   align-items: center;
   width: calc(100% / 7);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
 }
 
-.content-column.schedules .section.opening-hours>.content>.header>div>.title {
+.days_of_week_calendar>.header>div>.title {
   font-size: 18px;
-  margin-bottom: 5px;
 }
 
-.content-column.schedules .section.opening-hours>.content>.header>div>.open-hours {
+.days_of_week_calendar>.header>div>.open-hours {
   border: 1px solid #7bbf60;
   padding: 5px 10px;
   text-align: center;
   color: #50a773;
-  white-space: nowrap;
-  border-radius: 50px;
+  border-radius: 14px;
+  margin: 5px auto 0;
+  display: inline-block;
+  max-width: 100%;
 }
 
-.content-column.schedules .section.opening-hours>.content>.header>div>.open-hours.closed {
+.days_of_week_calendar>.header>div>.open-hours.closed {
   border: 1px solid #bfbfbf;
   color: #a5a5a5;
 }
 
-.content-column.schedules .calendar>.hours-indicator {
+.days_of_week_calendar>.calendar-content>.hours-indicator {
   display: flex;
   flex-direction: column;
   height: 500px;
@@ -14266,20 +14278,22 @@ td>.switch_enable {
   width: 21px;
 }
 
-.content-column.schedules .calendar {
+.days_of_week_calendar>.calendar-content {
   display: flex;
   gap: 10px;
 }
 
-.content-column.schedules .calendar>.calendar-content {
+.days_of_week_calendar>.calendar-content>.calendar-content {
   flex: 1;
   display: flex;
   position: relative;
   border: 1px solid #c8c8c8;
+  background-color: rgba(189, 189, 189, 0.06);
   border-radius: 10px;
+  user-select: none;
 }
 
-.content-column.schedules .calendar>.calendar-content>.grid-indicators {
+.days_of_week_calendar>.calendar-content>.calendar-content>.grid-indicators {
   position: absolute;
   left: 0;
   right: 0;
@@ -14292,51 +14306,96 @@ td>.switch_enable {
   padding: 5px 0;
 }
 
-.content-column.schedules .calendar>.calendar-content>.grid-indicators>div {
+.days_of_week_calendar>.calendar-content>.calendar-content>.grid-indicators>div {
   width: 100%;
   height: 1px;
   background-color: #57772b1c;
 }
 
-.content-column.schedules .calendar>.calendar-content>.day_of_week {
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week {
   position: relative;
   flex: 1;
   padding: 0 5px;
 }
 
-.content-column.schedules .calendar>.calendar-content>.day_of_week:not(:last-child) {
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week:not(:last-child) {
   position: relative;
   flex: 1;
   border-right: 1px solid #b9c6b3;
 }
 
-.content-column.schedules .calendar>.calendar-content>.day_of_week>div {
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.marker {
   position: relative;
   background-color: rgba(123, 191, 96, .2);
   border-radius: 6px;
   cursor: pointer;
   border-top: 2px solid rgba(255, 255, 255, 0);
   border-bottom: 2px solid rgba(255, 255, 255, 0);
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-.content-column.schedules .calendar>.calendar-content>.day_of_week>div>span {
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.current-time-indicator {
+  position: absolute;
+  height: 1px;
+  left: 0;
+  right: 0;
+  background-color: #a58c00;
+}
+
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.current-time-indicator::before {
+  content: "";
+  display: block;
+  height: 5px;
+  position: absolute;
+  top: -2px;
+  left: 0;
+  right: 0;
+  border-left: 1px solid #a58c00;
+  border-right: 1px solid #a58c00;
+  pointer-events: none;
+}
+
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.time-marker {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-bottom: 3px solid #5db33b;
+  background-color: #5db33b;
+  cursor: pointer;
+  color: transparent;
+  padding: 0 5px 0 7px;
+  color: #3a9418;
+  font-size: 11px;
+  height: 0;
+  overflow: hidden;
+  transition: padding 0.3s linear, height 0.3s ease, color 0.6s ease;
+}
+
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.time-marker:hover {
+  border-color: #4c8e32;
+  height: 23px;
+  color: white;
+  padding: 5px 5px 2px 7px;
+  z-index: 2;
+}
+
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.marker>span {
   position: absolute;
   color: #50a773;
   font-size: 11px;
 }
 
-.content-column.schedules .calendar>.calendar-content>.day_of_week>div>span:nth-child(1) {
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.marker>span:nth-child(1) {
   left: 5px;
   top: 5px;
 }
 
-.content-column.schedules .calendar>.calendar-content>.day_of_week>div>span:nth-child(2) {
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.marker>span:nth-child(2) {
   right: 5px;
   bottom: 5px;
 }
 
-.content-column.schedules .calendar>.calendar-content>.day_of_week>div::before {
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.marker::before {
   content: "";
   display: none;
   height: 9px;
@@ -14350,7 +14409,7 @@ td>.switch_enable {
   cursor: row-resize;
 }
 
-.content-column.schedules .calendar>.calendar-content>.day_of_week>div::after {
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.marker::after {
   content: "";
   display: none;
   height: 9px;
@@ -14362,15 +14421,400 @@ td>.switch_enable {
   border-left: 2px solid #5db33b;
   border-right: 2px solid #5db33b;
   cursor: row-resize;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-.content-column.schedules .calendar>.calendar-content>.day_of_week>div:hover {
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.marker:hover,
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.marker:active {
   border-radius: 0;
   border-color: #5db33b;
   background-color: rgba(109, 210, 69, 0.4);
 }
 
-.content-column.schedules .calendar>.calendar-content>.day_of_week>div:hover::before,
-.content-column.schedules .calendar>.calendar-content>.day_of_week>div:hover::after {
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.marker:hover::before,
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.marker:hover::after,
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.marker:active::before,
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.marker:active::after {
   display: block;
+}
+
+.content-column.schedules>.tabs>main>.scheduling .days_of_week_calendar>.calendar-content>.hours-indicator {
+  height: 600px;
+}
+
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week:hover {
+  cursor: pointer;
+  background-color: rgba(189, 189, 189, 0.1);
+}
+
+.modal-schedules {
+  display: flex;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  backdrop-filter: blur(2px);
+  background-color: rgba(0, 0, 0, 0.3);
+  justify-content: center;
+  align-items: center;
+  z-index: -1;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 10000;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease, z-index 0.3s;
+}
+
+.modal-schedules>div {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgb(210 210 210 / 40%);
+  max-width: 80%;
+  max-height: 80%;
+  width: 500px;
+  transform: scale(0.8) translateY(-40px);
+  transition: transform 0.3s;
+}
+
+.modal-schedules.show {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-schedules.show>div {
+  transform: scale(1) translateY(0px);
+}
+
+.modal-schedules>div>.header {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-schedules>div>.header>.title {
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.modal-schedules>div>.header>.title>b {
+  border-bottom: 2px solid #54cc23;
+}
+
+.modal-schedules>div>.header>button {
+  border: none;
+  background: transparent;
+}
+
+.modal-schedules>div>.header>button>svg {
+  width: 24px;
+  fill: #54cc23;
+}
+
+.modal-schedules>div>.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.modal-schedules>div>.footer {
+  padding: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+.modal-schedules>div>.footer>.cancel {
+  border: 1px solid #54cc23;
+  border-radius: 5px;
+  background: transparent;
+  padding: 8px 16px;
+  font-size: 17px;
+  color: #54cc23;
+}
+
+.modal-schedules>div>.footer>.save {
+  border: none;
+  background-color: #54cc23;
+  padding: 8px 26px;
+  border-radius: 5px;
+  font-size: 17px;
+  color: white;
+}
+
+.ratio-checkmark {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  user-select: none;
+  gap: 10px;
+}
+
+.ratio-checkmark>.checkmark {
+  cursor: pointer;
+}
+
+.ratio-checkmark>.checkmark>input {
+  position: absolute;
+  opacity: 0;
+}
+
+.ratio-checkmark>.checkmark>span {
+  position: relative;
+  height: 25px;
+  width: 25px;
+  background-color: rgba(118, 118, 118, 0.2);
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ratio-checkmark>.checkmark>span:after {
+  content: "";
+  position: absolute;
+  display: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: white;
+  animation: ratio-checkmark-show 0.3s;
+}
+
+@keyframes ratio-checkmark-show {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.ratio-checkmark>.checkmark>input:checked+span {
+  background-color: #54cc23;
+  box-shadow: 0 0 5px #54cc23;
+}
+
+.ratio-checkmark>.checkmark>input:checked+span:after {
+  display: block;
+}
+
+.modal-schedules .ratio-checkmark>.checkmark>span:hover {
+  border: 1px solid #54cc23;
+}
+
+.modal-schedules .ratio-checkmark {
+  font-weight: normal;
+  font-size: 15px;
+  color: #5d5d5d;
+}
+
+.modal-schedules>div>.footer-alert-message {
+  visibility: hidden;
+  padding: 5px 25px;
+  color: #bb0000;
+  font-size: 13px;
+}
+
+.modal-schedules>div>.footer-alert-message.show {
+  visibility: visible;
+}
+
+.time-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid #80808062;
+  border-radius: 6px;
+  overflow: hidden;
+  padding: 0 2px;
+  height: 31px;
+  background-color: white;
+}
+
+.time-input.error {
+  border-color: #bb0000;
+  box-shadow: 0 0 5px #bb00004a;
+}
+
+.time-input>input {
+  border: none;
+  padding: 0;
+  outline: none;
+  padding: 5px 5px 1px;
+  text-align: center;
+  width: 30px;
+  border-bottom: 1px solid #80808015;
+  margin: 0 5px 5px 5px;
+  background-color: transparent;
+}
+
+.time-input>input::-webkit-outer-spin-button,
+.time-input>input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.time-input>span {
+  font-weight: bold;
+}
+
+.modal-schedules.shifts>div>.content {
+  flex: 1;
+  padding: 20px;
+  padding-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-schedules.shifts>div>.content .time-inputs-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-schedules.scheduling>div {
+  width: 450px;
+  height: 500px;
+}
+
+.modal-schedules.scheduling>div>.content {
+  flex: 1;
+  margin: 15px;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-schedules.scheduling>div>.content>button.add {
+  border: none;
+  background-color: #ececec;
+  padding: 10px 20px;
+  border-radius: 10px;
+  width: 100%;
+  display: flex;
+  gap: 7px;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  color: #505050;
+}
+
+.modal-schedules.scheduling>div>.content>button.add:hover {
+  background-color: #9aea8e;
+}
+
+.modal-schedules.scheduling>div>.content>.hours-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.modal-schedules.scheduling>div>.content>.hours-container>div {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f7f7f7;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.modal-schedules.scheduling>div>.content>.hours-container>div>button {
+  border: none;
+  background-color: transparent;
+  font-size: 20px;
+  color: #5d5d5d;
+}
+
+.modal-schedules.scheduling>div>.content>.hours-container>div>button:hover {
+  color: rgba(255, 0, 0, 0.5);
+}
+
+.modal-schedules.opening-hours>div {
+  width: 450px;
+  min-height: 400px;
+  max-height: 500px;
+}
+
+.modal-schedules.opening-hours>div>.content {
+  flex: 1;
+  margin: 15px;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-schedules.opening-hours>div>.content>button.add {
+  border: none;
+  background-color: #ececec;
+  padding: 10px 20px;
+  border-radius: 10px;
+  width: 100%;
+  display: flex;
+  gap: 7px;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  color: #505050;
+}
+
+.modal-schedules.opening-hours>div>.content>button.add:hover {
+  background-color: #9aea8e;
+}
+
+.modal-schedules.opening-hours>div>.content>.hours-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.modal-schedules.opening-hours>div>.content>.hours-container>div {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f7f7f7;
+  padding: 5px 5px 5px 10px;
+  border-radius: 10px;
+}
+
+.modal-schedules.opening-hours>div>.content>.hours-container>div>.time-inputs-container {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  gap: 8px;
+}
+
+.modal-schedules.opening-hours>div>.content>.hours-container>div>button {
+  border: none;
+  background-color: transparent;
+  font-size: 20px;
+  color: #5d5d5d;
+}
+
+.modal-schedules.opening-hours>div>.content>.hours-container>div>button:hover {
+  color: rgba(255, 0, 0, 0.5);
 }

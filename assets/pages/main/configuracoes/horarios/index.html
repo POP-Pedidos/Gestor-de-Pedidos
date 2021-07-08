@@ -165,7 +165,7 @@
                 </div>
                 <div class="section opening-hours">
                     <div class="header">Horários de funcionamento</div>
-                    <div class="content">
+                    <div class="content days_of_week_calendar">
                         <div class="header">
                             <div class="monday">
                                 <span class="title">Segunda</span>
@@ -196,7 +196,7 @@
                                 <span class="open-hours closed">Fechado</span>
                             </div>
                         </div>
-                        <div class="calendar">
+                        <div class="calendar-content">
                             <div class="hours-indicator">
                                 <span>0h</span>
                                 <span>2h</span>
@@ -227,43 +227,44 @@
                                     <div></div>
                                 </div>
                                 <div class="day_of_week monday">
-                                    <div style="top: 10%;height: 40%;">
+                                    <div class="current-time-indicator" style="top: 25%;"></div>
+                                    <div class="marker" style="top: 10%;height: 40%;">
                                         <span>19:40</span>
                                         <span>24:00</span>
                                     </div>
                                 </div>
                                 <div class="day_of_week tuesday">
-                                    <div style="top: 20%;height: 60%;">
+                                    <div class="marker" style="top: 20%;height: 60%;">
                                         <span>19:40</span>
                                         <span>24:00</span>
                                     </div>
                                 </div>
                                 <div class="day_of_week wednesday">
-                                    <div style="top: 20%;height: 60%;">
+                                    <div class="marker" style="top: 20%;height: 60%;">
                                         <span>19:40</span>
                                         <span>24:00</span>
                                     </div>
                                 </div>
                                 <div class="day_of_week thursday">
-                                    <div style="top: 20%;height: 65%;">
+                                    <div class="marker" style="top: 20%;height: 65%;">
                                         <span>19:40</span>
                                         <span>24:00</span>
                                     </div>
                                 </div>
                                 <div class="day_of_week friday">
-                                    <div style="top: 20%;height: 60%;">
+                                    <div class="marker" style="top: 20%;height: 60%;">
                                         <span>19:40</span>
                                         <span>24:00</span>
                                     </div>
                                 </div>
                                 <div class="day_of_week saturday">
-                                    <div style="top: 30%;height: 50%;">
+                                    <div class="marker" style="top: 30%;height: 50%;">
                                         <span>19:40</span>
                                         <span>24:00</span>
                                     </div>
                                 </div>
                                 <div class="day_of_week sunday">
-                                    <div style="top: 0%;height: 0%;">
+                                    <div class="marker" style="top: 0%;height: 0%;">
                                         <span>19:40</span>
                                         <span>24:00</span>
                                     </div>
@@ -274,9 +275,263 @@
                 </div>
             </div>
             <div class="scheduling">
+                <div class="section opening-hours">
+                    <div class="header">Horários de agendamento</div>
+                    <div class="content days_of_week_calendar">
+                        <div class="header">
+                            <div class="monday">
+                                <span class="title">Segunda</span>
+                            </div>
+                            <div class="tuesday">
+                                <span class="title">Terça</span>
+                            </div>
+                            <div class="wednesday">
+                                <span class="title">Quarta</span>
+                            </div>
+                            <div class="thursday">
+                                <span class="title">Quanta</span>
+                            </div>
+                            <div class="friday">
+                                <span class="title">Sexta</span>
+                            </div>
+                            <div class="saturday">
+                                <span class="title">Sábado</span>
+                            </div>
+                            <div class="sunday">
+                                <span class="title">Domingo</span>
+                            </div>
+                        </div>
+                        <div class="calendar-content">
+                            <div class="hours-indicator">
+                                <span>0h</span>
+                                <span>2h</span>
+                                <span>4h</span>
+                                <span>6h</span>
+                                <span>8h</span>
+                                <span>10h</span>
+                                <span>12h</span>
+                                <span>14h</span>
+                                <span>16h</span>
+                                <span>18h</span>
+                                <span>20h</span>
+                                <span>22h</span>
+                                <span>24h</span>
+                            </div>
+                            <div class="calendar-content">
+                                <div class="grid-indicators">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                                <div class="day_of_week monday">
+                                    <div class="current-time-indicator" style="top: 24%;"></div>
+                                    <div class="time-marker" style="bottom: 30%;">06:40</div>
+                                    <div class="time-marker" style="bottom: 31%;">06:50</div>
+                                    <div class="time-marker" style="bottom: 34%;">07:00</div>
+                                    <div class="time-marker" style="bottom: 40%;">07:30</div>
+                                    <div class="time-marker" style="bottom: 45%;">08:00</div>
+                                    <div class="time-marker" style="bottom: 50%;">08:30</div>
+                                </div>
+                                <div class="day_of_week tuesday">
 
+                                </div>
+                                <div class="day_of_week wednesday">
+
+                                </div>
+                                <div class="day_of_week thursday">
+
+                                </div>
+                                <div class="day_of_week friday">
+
+                                </div>
+                                <div class="day_of_week saturday">
+
+                                </div>
+                                <div class="day_of_week sunday">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
+    </div>
+</div>
+
+<div class="modal-schedules shifts">
+    <div>
+        <div class="header">
+            <span class="title">Configurar turno da <b>Manhã</b></span>
+            <button class="back">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="content">
+            <label class="ratio-checkmark">
+                <div class="checkmark">
+                    <input type="checkbox">
+                    <span></span>
+                </div>
+                <div class="time-inputs-container">
+                    <span>Das</span>
+                    <div class="time-input">
+                        <input type="number">
+                        <span>:</span>
+                        <input type="number">
+                    </div>
+                    <span>até as</span>
+                    <div class="time-input error">
+                        <input type="number" value="13">
+                        <span>:</span>
+                        <input type="number" value="15">
+                    </div>
+                </div>
+            </label>
+            <label class="ratio-checkmark">
+                <div class="checkmark">
+                    <input type="checkbox">
+                    <span></span>
+                </div>
+                <span>Não abre neste turno</span>
+            </label>
+        </div>
+        <div class="footer-alert-message show"><i class="fas fa-exclamation-circle"></i> O horário final está em conflito com o horário do turno da tarde</div>
+        <div class="footer">
+            <button class="cancel">Cancelar</button>
+            <button class="save">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-schedules opening-hours">
+    <div>
+        <div class="header">
+            <span class="title">Horários de funcionamento de <b>Segunda</b></span>
+            <button class="back">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="content">
+            <div class="hours-container">
+                <div>
+                    <div class="time-inputs-container">
+                        <span>Das</span>
+                        <div class="time-input">
+                            <input type="number">
+                            <span>:</span>
+                            <input type="number">
+                        </div>
+                        <span>até as</span>
+                        <div class="time-input error">
+                            <input type="number" value="13">
+                            <span>:</span>
+                            <input type="number" value="15">
+                        </div>
+                    </div>
+                    <button class="remove"><i class="fas fa-trash"></i></button>
+                </div>
+                <div>
+                    <div class="time-inputs-container">
+                        <span>Das</span>
+                        <div class="time-input">
+                            <input type="number">
+                            <span>:</span>
+                            <input type="number">
+                        </div>
+                        <span>até as</span>
+                        <div class="time-input">
+                            <input type="number">
+                            <span>:</span>
+                            <input type="number">
+                        </div>
+                    </div>
+                    <button class="remove"><i class="fas fa-trash"></i></button>
+                </div>
+                <div>
+                    <div class="time-inputs-container">
+                        <span>Das</span>
+                        <div class="time-input">
+                            <input type="number">
+                            <span>:</span>
+                            <input type="number">
+                        </div>
+                        <span>até as</span>
+                        <div class="time-input">
+                            <input type="number">
+                            <span>:</span>
+                            <input type="number">
+                        </div>
+                    </div>
+                    <button class="remove"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <button class="add"><i class="fas fa-plus"></i>Novo horário</button>
+        </div>
+        <div class="footer-alert-message show"><i class="fas fa-exclamation-circle"></i> O horário final está em conflito com o horário do turno da tarde</div>
+        <div class="footer">
+            <button class="cancel">Cancelar</button>
+            <button class="save">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-schedules scheduling">
+    <div>
+        <div class="header">
+            <span class="title">Horários de agendamento de <b>Segunda</b></span>
+            <button class="back">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="content">
+            <div class="hours-container">
+                <div>
+                    <div class="time-input">
+                        <input type="number">
+                        <span>:</span>
+                        <input type="number">
+                    </div>
+                    <button class="remove"><i class="fas fa-trash"></i></button>
+                </div>
+                <div>
+                    <div class="time-input">
+                        <input type="number">
+                        <span>:</span>
+                        <input type="number">
+                    </div>
+                    <button class="remove"><i class="fas fa-trash"></i></button>
+                </div>
+                <div>
+                    <div class="time-input">
+                        <input type="number">
+                        <span>:</span>
+                        <input type="number">
+                    </div>
+                    <button class="remove"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <button class="add"><i class="fas fa-plus"></i>Novo horário</button>
+        </div>
+        <div class="footer-alert-message show"><i class="fas fa-exclamation-circle"></i> O horário 00:00 já existe</div>
+        <div class="footer">
+            <button class="cancel">Cancelar</button>
+            <button class="save">Salvar</button>
+        </div>
     </div>
 </div>
 
