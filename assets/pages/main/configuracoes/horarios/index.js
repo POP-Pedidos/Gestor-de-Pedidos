@@ -90,7 +90,7 @@ $("#table-configuracoes-horarios input").on("change", function () {
         else times.push(data);
     }).catch(error => {
         if (!error) return;
-        
+
         Swal.fire("Opss...", `Ocorreu um erro ao tentar atualizar o horário "${dayOfWeek}"!`, "error");
         Swal.showValidationMessage(error);
     });

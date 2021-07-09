@@ -2,7 +2,7 @@
   "name": "pop-pedidos",
   "productName": "POP Pedidos",
   "appId": "poppedidos.com.br",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "private": true,
   "main": "index.js",
   "author": {

@@ -124,12 +124,11 @@
     // });
 
     window.Store.AppState.on("change:state", (_AppState, state) => {
-        //Emitted when the connection state changes
         window.main.send("onAppStateChangedEvent", state);
     });
 
     window.Store.Conn.on("change:battery", (state) => {
-        window.main.send("onAppStateChangedEvent", state);
+        window.main.send("onAppConnectionEvent", state?.serialize());
     });
 
     console.log("%c Functions.js > Fully injected!", "color: green; font-weight: bold;");

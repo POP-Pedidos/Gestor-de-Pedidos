@@ -92,6 +92,8 @@ function CheckSave() {
 }
 
 $("#website_config>.configs button.save").click(function () {
+    $(this).addClass("loading");
+
     FetchAPI(`/company`, {
         method: "PUT",
         body: selected_options
@@ -108,6 +110,8 @@ $("#website_config>.configs button.save").click(function () {
             Swal.fire("Opss...", "Ocorreu um erro ao tentar salvar a edição!", "error");
             Swal.showValidationMessage(error);
         }
+    }).finally(() => {
+        $(this).removeClass("loading");
     });
 });
 
