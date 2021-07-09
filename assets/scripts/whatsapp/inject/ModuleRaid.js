@@ -11,10 +11,10 @@
     moduleRaid.mID = Math.random().toString(36).substring(7);
     moduleRaid.mObj = {};
 
-    fillModuleArray = function () {
-      webpackChunkbuild.push([
-        [moduleRaid.mID], {}, function (e) {
-          Object.keys(e.m).forEach(function (mod) {
+    fillModuleArray = function() {
+      (window.webpackChunkbuild || window.webpackChunkwhatsapp_web_client).push([
+        [moduleRaid.mID], {}, function(e) {
+          Object.keys(e.m).forEach(function(mod) {
             moduleRaid.mObj[mod] = e(mod);
           })
         }
