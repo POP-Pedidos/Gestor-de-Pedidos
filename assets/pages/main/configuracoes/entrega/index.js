@@ -250,7 +250,7 @@ $("#frete_selector input, #frete_selector select").on("change", function (e) {
     const use_delivery = $("#frete_selector #switch_entrega").is(":checked");
     const use_withdrawal = $("#frete_selector #switch_retirada").is(":checked");
     const delivery_time = $("#frete_selector .delivery_time").val() || null;
-    console.log(delivery_time);
+    
     FetchAPI("/company", {
         method: "PUT",
         body: {
@@ -295,7 +295,7 @@ if (company.delivery_free_in != null && company.delivery_free_val != null) {
 }
 
 if (company.delivery_time != null) {
-    $("#frete_selector .delivery_time").val(company.delivery_time?.toFixed(0));
+    $("#frete_selector .delivery_time").val(company.delivery_time);
 }
 
 $("#frete-search").on("blur_place", function () {
