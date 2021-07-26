@@ -1,6 +1,5 @@
 async function printOrder(order) {
     let cur_status;
-
     const order_data = { ...order };
 
     if (order.status === 1) cur_status = "wait_production";
@@ -36,6 +35,8 @@ async function printOrder(order) {
 
             await printService.printProductionCopy(printer, order_data, company);
         }
+
+        order_data.items = order.items;
     }
 
     if (!!company.print_control_copy && company.print_control_copy === cur_status) {

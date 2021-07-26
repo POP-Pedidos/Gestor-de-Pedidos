@@ -67,7 +67,7 @@ function ChangeTab(for_panel) {
 		document.title = "POP Pedidos | Editar Sabores de Pizza";
 		loadFile("../cadastros/sabores_pizza/index.html");
 
-	}else if (for_panel === "cadastros_tamanhos") {
+	} else if (for_panel === "cadastros_tamanhos") {
 		document.title = "POP Pedidos | Cadastros - Tamanhos";
 		loadFile("../cadastros/tamanhos/index.html");
 
@@ -873,3 +873,21 @@ function LoadOrderOnElement($element, order, actions = true) {
 
 	if (!actions) $element.find(">.infos .actions").hide();
 }
+
+$(document).on("keydown keyup input", ".time-input>input", function (e) {
+	$(this).parent().removeClass("error");
+
+	if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) return; // 0-9
+	if (e.keyCode === 8 || e.keyCode === 9) return; // backspace | tab
+
+	e.preventDefault();
+	if ($(this).val().length > 2) $(this).val($(this).val().slice(0, 2));
+});
+
+$(document).on("keyup input", ".time-input>input.hours", function (e) {
+	if ($(this).val().length >= 2) $(this).parent().find("input.minutes").focus();
+});
+
+$(document).on("keydown input", ".time-input>input.minutes", function (e) {
+	if (e.keyCode === 8 && !$(this).val().length) $(this).parent().find("input.hours").focus();
+});

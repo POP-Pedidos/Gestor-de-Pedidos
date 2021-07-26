@@ -4,8 +4,8 @@ function PrintWindow(win, printer_name) {
             const printerDevice = win.webContents.getPrinters().find(device => device.name === printer_name);
 
             win.webContents.print({
-                deviceName: printerDevice.name.startsWith("\\\\") ? undefined : printerDevice?.name,
-                silent: !printerDevice.name.startsWith("\\\\"),
+                deviceName: printerDevice?.name.startsWith("\\\\") ? undefined : printerDevice?.name,
+                silent: !!printerDevice && !printerDevice.name.startsWith("\\\\"),
                 copies: 1,
             }, (success, failureReason) => {
                 if (success) resolve();

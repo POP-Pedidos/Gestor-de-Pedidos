@@ -1,121 +1,52 @@
-var table_configuracoes_horarios = $("#table-configuracoes-horarios").DataTable({
-    language: {
-        url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json"
-    },
-    ordering: false,
-    searching: false,
-    paging: false,
-    info: false,
-});
+$(".content-column.schedules>.tabs").initTabs();
 
-var table_configuracoes_turnos = $("#table-configuracoes-turnos").DataTable({
-    language: {
-        url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json"
-    },
-    ordering: false,
-    searching: false,
-    paging: false,
-    info: false,
-});
+$("#switch_online").prop("checked", company.online_check >= 1);
+$("#switch_just_time").prop("checked", company.online_check >= 2);
+$("#switch_scheduling").prop("checked", company.use_scheduling);
 
-$("#table-configuracoes-horarios input, #table-configuracoes-turnos input").inputmask("datetime", {
-    inputFormat: "HH:MM",
-    max: "24:00",
-    placeholder: "__:__",
-    showMaskOnHover: false,
-    clearIncomplete: true,
-});
+$(".content-column.schedules .only_schedule").toggleClass("disabled", company.online_check < 2);
+$(".content-column.schedules>.tabs>main .section.scheduling-hours").toggleClass("disabled", !company.use_scheduling);
 
-$("#table-configuracoes-turnos input").on("change", function () {
-    const $table = $("#table-configuracoes-turnos");
+$(".content-column.schedules .online_check>.switch>span").text(company.online_check >= 1 ? "Ativado" : "Desativado");
+$(".content-column.schedules .only_schedule>.switch>span").text(company.online_check >= 2 ? "Ativado" : "Desativado");
+$(".content-column.schedules .use_scheduling>.switch>span").text(company.use_scheduling ? "Ativado" : "Desativado");
 
-    const morning_open = $table.find("input.morning-open").val();
-    const morning_close = $table.find("input.morning-close").val();
-    const afternoon_open = $table.find("input.afternoon-open").val();
-    const afternoon_close = $table.find("input.afternoon-close").val();
-    const night_open = $table.find("input.night-open").val();
-    const night_close = $table.find("input.night-close").val();
+function TimeToMs(time) {
+    if (!time) return null;
+    const [hours, minutes, seconds] = time.split(":").map(Number);
 
-    if (company.morning_shift_open == morning_open &&
-        company.morning_shift_close == morning_close &&
-        company.afternoon_shift_open == afternoon_open &&
-        company.afternoon_shift_close == afternoon_close &&
-        company.night_shift_open == night_open &&
-        company.night_shift_close == night_close
-    ) return;
+    const hours_ms = (hours || 0) * 60 * 60 * 1000;
+    const minutes_ms = (minutes || 0) * 60 * 1000;
+    const seconds_ms = (seconds || 0) * 1000;
 
-    FetchAPI("/company", {
-        method: "PUT",
-        body: {
-            morning_shift_open: morning_open || null,
-            morning_shift_close: morning_close || null,
-            afternoon_shift_open: afternoon_open || null,
-            afternoon_shift_close: afternoon_close || null,
-            night_shift_open: night_open || null,
-            night_shift_close: night_close || null,
-        }
-    }).then(data => {
-        company = data;
-    }).catch(error => {
-        if (!error) return;
+    return hours_ms + minutes_ms + seconds_ms;
+}
 
-        Swal.fire("Opss...", `Ocorreu um erro ao tentar atualizar os turnos!`, "error");
-        Swal.showValidationMessage(error);
-    });
-});
+function MsToTime(time_ms = 0) {
+    const hours = Math.floor((time_ms / (1000 * 60 * 60)) % 24.1);
+    const minutes = Math.floor((time_ms / (1000 * 60)) % 60);
 
-$("#table-configuracoes-horarios input").on("change", function () {
-    const $tr = $($(this).parent().parent("tr")[0] || $(this).parent().parent().parent("tr")[0]);
+    return [hours, minutes];
+}
 
-    const dayOfWeek = $tr.attr("dayOfWeek");
+function MsToTimeString(time_ms = 0) {
+    const [hours, minutes] = MsToTime(time_ms);
 
-    const time_start = $tr.find("input.time_start").val();
-    const time_close = $tr.find("input.time_close").val();
-    const open = $tr.find(".custom-switch>input").is(":checked");
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+}
 
-    const old_time = times.find(time => time.dayOfWeek == dayOfWeek);
+function GetTimeInputValue($element, in_ms = false) {
+    const hours = $element.find(">.hours").val();
+    const minutes = $element.find(">.minutes").val();
 
-    if (old_time?.open == open && old_time?.opens == time_start && old_time?.closes == time_close) return;
+    if (isNaN(hours) || isNaN(minutes)) return null;
+    else {
+        const time = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 
-    FetchAPI(old_time ? `${api_url}/time/${dayOfWeek}` : `${api_url}/time`, {
-        method: old_time ? "PUT" : "POST",
-        body: {
-            dayOfWeek,
-            opens: time_start,
-            closes: time_close,
-            open,
-        }
-    }).then(data => {
-        if (old_time) ArrayChange(times, data, val => val.id_time == data.id_time);
-        else times.push(data);
-    }).catch(error => {
-        if (!error) return;
-
-        Swal.fire("Opss...", `Ocorreu um erro ao tentar atualizar o horário "${dayOfWeek}"!`, "error");
-        Swal.showValidationMessage(error);
-    });
-});
-
-$("#loading-wrapper-content").css("display", "flex").show();
-
-FetchAPI(`/time`, { instance_check: true, }).then(time_data => {
-    times = time_data;
-
-    for (const time of times) {
-        $(`[dayOfWeek="${time.dayOfWeek}"] .custom-switch>input`).prop('checked', time.open || false);
-        $(`[dayOfWeek="${time.dayOfWeek}"] .time_start`).val(time.opens || "");
-        $(`[dayOfWeek="${time.dayOfWeek}"] .time_close`).val(time.closes || "");
+        return in_ms ? TimeToMs(time) : time;
     }
+}
 
-    $("#table-configuracoes-turnos input.morning-open").val(company.morning_shift_open);
-    $("#table-configuracoes-turnos input.morning-close").val(company.morning_shift_close);
-    $("#table-configuracoes-turnos input.afternoon-open").val(company.afternoon_shift_open);
-    $("#table-configuracoes-turnos input.afternoon-close").val(company.afternoon_shift_close);
-    $("#table-configuracoes-turnos input.night-open").val(company.night_shift_open);
-    $("#table-configuracoes-turnos input.night-close").val(company.night_shift_close);
-}).catch(error => {
-    Swal.fire("Opss...", "Ocorreu um erro fatal ao tentar listar os horários!", "error");
-    Swal.showValidationMessage(error);
-}).finally(() => {
-    $("#loading-wrapper-content").fadeOut(400);
-});
+function GetCurrentTimeMs() {
+    return (new Date().getHours() * 60 * 60 * 1000) + (new Date().getMinutes() * 60 * 1000);
+}

@@ -1,28 +1,3 @@
-window.onerror = function (message, source, lineno, colno, error) {
-    if (!(error?.stack || error) && !source) return;
-
-    ReportError(`Error at source "${source}" in line ${lineno} and colum ${colno}\n\n${message}\n\n${error?.stack}\n\n${error}`);
-};
-
-window.console._error = window.console.error;
-window.console.error = (...args) => {
-    window.console._error(...args);
-    ReportError(args.join(" "));
-};
-
-function ReportError(message) {
-    if (!message || !window.company) return;
-
-    FetchAPI(`/error_report`, {
-        method: "POST",
-        body: { company, message }
-    }).then(data => {
-        console.log("Um erro foi reportado com sucesso!");
-    }).catch(error => {
-        console._error("Ocorreu um erro ao tentar reportar um erro!", error);
-    });
-}
-
 const FetchAPI = (uri, config = {}) => {
     const controller = new AbortController();
 
