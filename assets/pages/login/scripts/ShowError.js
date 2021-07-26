@@ -35,7 +35,7 @@ export default function ShowError(error) {
             icon: 'error',
             title: 'Opss...',
             text: 'A sua empresa foi bloqueado por um administrador, e por isso você não pode entrar no painel!',
-            footer: '<a target="_blank" href="https://api.whatsapp.com/send?phone=553438264315&text=Ol%C3%A1%2C%20preciso%20de%20um%20suporte!">Entrar em contato com o suporte</a>',
+            footer: 'Entre em contato com o financeiro',
             heightAuto: false
         })
         Swal.showValidationMessage(error.data);
