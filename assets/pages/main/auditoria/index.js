@@ -249,16 +249,16 @@ function addAudit(audit) {
 
                     if (audit.changes.length == 1) {
                         const messages = {
-                            open: change => `O usuário <b>${audit.username}</b> alterou o horário <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> para <b>${change.new_value ? "aberto" : "fechado"}</b>`,
-                            opens: change => `O usuário <b>${audit.username}</b> alterou o horário de abertura <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
-                            closes: change => `O usuário <b>${audit.username}</b> alterou o horário de fechamento <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                            open: change => `O usuário <b>${audit.username}</b> alterou o horário <b>${GetDayOfWeekName(audit.additional.dayOfWeek || audit.additional.name)}</b> para <b>${change.new_value ? "aberto" : "fechado"}</b>`,
+                            opens: change => `O usuário <b>${audit.username}</b> alterou o horário de abertura <b>${GetDayOfWeekName(audit.additional.dayOfWeek || audit.additional.name)}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                            closes: change => `O usuário <b>${audit.username}</b> alterou o horário de fechamento <b>${GetDayOfWeekName(audit.additional.dayOfWeek || audit.additional.name)}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                         }
 
                         const change = audit.changes[0];
 
                         return {
                             icon: "list",
-                            title: messages[change.key]?.(change) || `O usuário <b>${audit.username}</b> alterou o horário <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b>`,
+                            title: messages[change.key]?.(change) || `O usuário <b>${audit.username}</b> alterou o horário <b>${GetDayOfWeekName(audit.additional.dayOfWeek || audit.additional.name)}</b>`,
                             items: []
                         };
                     } else {
