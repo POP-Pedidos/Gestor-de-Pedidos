@@ -480,6 +480,7 @@ class LazyLoading {
     Init() {
         this.tab_instance = window.tab_instance;
         this.scroll_event_namespace = `scroll.${this.tab_instance}`;
+        this.container = $(this.props.container);
 
         this.container.on(this.scroll_event_namespace, (e) => this.handleEvent(e));
 

@@ -46,7 +46,7 @@ async function printOrder(order) {
     if (!!company.print_delivery_copy && company.print_delivery_copy === cur_status) {
         await printService.printDeliveryCopy(primary_printer_device, order_data, company);
     }
-    
+
 }
 
 function UpdateOrderStatus(order, new_status) {
@@ -103,7 +103,7 @@ async function viewOrder(order, transition = true) {
                         $order.addClass("active");
                         viewOrder(new_order);
                     } else {
-                        $(`.container-food_pedidos>.left>.list>[id_order="${order.id_order}"]`).remove();
+                        $(`.container-food_pedidos>.left>main>div.show>.list>[id_order="${order.id_order}"]`).remove();
 
                         orders = orders.filter(_order => _order.id_order !== order.id_order);
 
@@ -112,7 +112,7 @@ async function viewOrder(order, transition = true) {
 
                             $(".container-food_pedidos>.order-infos").html($status_message);
                         } else {
-                            $(".container-food_pedidos>.left>.list").html(`<div class="none-founded">
+                            $(".container-food_pedidos>.left>main>div.show>.list").html(`<div class="none-founded">
                                 <img src="../../../images/none-founded.svg"/>
                                 <span>Nada encontrado, por enquanto!</span>
                             </div>`);
@@ -165,7 +165,7 @@ async function viewOrder(order, transition = true) {
                     UpdateOrderStatus(order, new_status).then(new_order => {
                         Object.assign(order, new_order);
 
-                        $(`.container-food_pedidos>.left>.list>[id_order="${order.id_order}"]`).remove();
+                        $(`.container-food_pedidos>.left>main>div.show>.list>[id_order="${order.id_order}"]`).remove();
 
                         orders = orders.filter(_order => _order.id_order !== order.id_order);
 
@@ -176,7 +176,7 @@ async function viewOrder(order, transition = true) {
                                 $(".container-food_pedidos>.order-infos").html($status_message);
                             }
                         } else {
-                            $(".container-food_pedidos>.left>.list").html(`<div class="none-founded">
+                            $(".container-food_pedidos>.left>main>div.show>.list").html(`<div class="none-founded">
                                 <img src="../../../images/none-founded.svg"/>
                                 <span>Nada encontrado, por enquanto!</span>
                             </div>`);
@@ -211,7 +211,7 @@ function AddOrderSkeleton() {
         </div>
     </div>`);
 
-    $(".container-food_pedidos>.left>.list").append($order);
+    $(".container-food_pedidos>.left>main>div.show>.list").append($order);
 
     return $order;
 }
@@ -349,7 +349,7 @@ function addOrderInfosSkeleton() {
 
 function orderIsOnFilters(order) {
     let in_status = false;
-    const search_term = $(".container-food_pedidos>.left>header>.input-search>input").val();
+    const search_term = $(".container-food_pedidos>.left>main>.now>header>.input-search>input").val();
 
     if (!!search_term) {
         in_status = true;
@@ -400,14 +400,20 @@ function addOrder(order) {
     if (order.delivery_type !== "withdrawal") $order.find(".infos>.left>.info").text(`${order.street_name || order.neighborhood || order.city}, ${order.street_number || order.state}`);
     else $order.find(".infos>.left>.info").html(`<span class="withdrawal">Retirada</span>`);
 
-    $order.find(".infos>.right>.timer").text(MillisecondsToDate(DateSubtract(new Date(order.createdAt))));
+
     $order.find(".infos>.right>.total_price").text(MoneyFormat(order.total));
 
-    const interval = setInterval(() => {
-        if (!$order.length) clearInterval(interval);
+    if (order.scheduledAt) {
+        $order.find(".infos>.right>.timer").text(new Date(order.scheduledAt).toLocaleDateString("pt-BR", { hour: '2-digit', minute: '2-digit' }));
+    } else {
+        $order.find(".infos>.right>.timer").text(MillisecondsToDate(DateSubtract(new Date(order.createdAt))));
 
-        $order.find(".timer").text(MillisecondsToDate(DateSubtract(new Date(order.createdAt))));
-    }, 5000);
+        const interval = setInterval(() => {
+            if (!$order.length) clearInterval(interval);
+
+            $order.find(".timer").text(MillisecondsToDate(DateSubtract(new Date(order.createdAt))));
+        }, 5000);
+    }
 
     $order.on("click", () => {
         $order.parent().find(">.active").removeClass("active");
@@ -423,10 +429,10 @@ function addOrder(order) {
         }, open_orders?.length * 50);
     }
 
-    const $existent = $(`.container-food_pedidos>.left>.list>[id_order="${order.id_order}"]`);
+    const $existent = $(`.container-food_pedidos>.left>main>div.show>.list>[id_order="${order.id_order}"]`);
 
     if (!!$existent.length) $existent.replaceWith($order);
-    else $(".container-food_pedidos>.left>.list").append($order);
+    else $(".container-food_pedidos>.left>main>div.show>.list").append($order);
 
     return $order;
 }

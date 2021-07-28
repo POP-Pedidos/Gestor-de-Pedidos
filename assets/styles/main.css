@@ -397,72 +397,41 @@ body.dark-mode .btn-secondary {
 }
 
 body.dark-mode .container-food_pedidos>.left {
-  background-color: #303030;
+  background-color: #2b2b2b;
   box-shadow: 0 0 5px rgb(0 0 0 / 20%);
 }
 
-body.dark-mode .container-food_pedidos>.left>header,
-body.dark-mode .container-food_pedidos>.left>footer {
-  background-color: #303030;
-}
-
-body.dark-mode .container-food_pedidos>.left>header>.input-search {
+body.dark-mode .container-food_pedidos>.left>main>.now>header>.input-search {
   display: flex;
   padding: 3px 10px;
   border-radius: 50px;
-  background-color: #bdbdbd40;
 }
 
-body.dark-mode .container-food_pedidos>.left>header>.input-search>input {
+body.dark-mode .container-food_pedidos>.left>main>.now>header>.input-search>input {
   color: white;
 }
 
-body.dark-mode .container-food_pedidos>.left>header>.input-search>input::placeholder {
+body.dark-mode .container-food_pedidos>.left>main>.now>header>.input-search>input::placeholder {
   color: #bbbbbb;
 }
 
-body.dark-mode .container-food_pedidos>.left>.list>div {
+body.dark-mode .container-food_pedidos>.left>main>div>.list>div {
   background-color: #404040;
-  position: relative;
 }
 
-body.dark-mode .container-food_pedidos>.left>.list>div.new>* {
+body.dark-mode .container-food_pedidos>.left>main>div>.list>div.new>* {
   z-index: 3;
 }
 
-body.dark-mode .container-food_pedidos>.left>.list>div.new::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 100% !important;
-  width: 100% !important;
-  opacity: 1 !important;
-  background: transparent !important;
-  background-color: transparent !important;
+body.dark-mode .container-food_pedidos>.left>main>.now>.list>div.new::after {
   background-image: linear-gradient(90deg,
       rgba(255, 255, 255, 0) 0,
       rgba(255, 255, 255, 0.1) 20%,
       rgba(255, 255, 255, 0.3) 80%,
       rgba(255, 255, 255, 0)) !important;
-  animation: shimmer 1.5s infinite;
-  will-change: translateX;
-  z-index: 2;
 }
 
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-body.dark-mode .container-food_pedidos>.left>.list>div>.infos>div>.status,
+body.dark-mode .container-food_pedidos>.left>main>div>.list>div>.infos>div>.status,
 body.dark-mode .order-infos>.bottom>.price {
   color: lightgray;
 }
@@ -520,7 +489,7 @@ body.dark-mode #modalAddComplement .tabs>nav>span:hover {
   color: #dbdbdb;
 }
 
-body.dark-mode .container-food_pedidos>.left>.list>div>.infos .timer {
+body.dark-mode .container-food_pedidos>.left>main>div>.list>div>.infos .timer {
   color: lightgray;
 }
 
@@ -880,11 +849,11 @@ body.dark-mode .dashboard>.breadcrumb>h3>span {
   background-color: var(--color-tones-20);
 }
 
-body.dark-mode .container-food_pedidos>.left>.list>div>.infos>div>.info {
+body.dark-mode .container-food_pedidos>.left>main>div>.list>div>.infos>div>.info {
   color: lightgray;
 }
 
-body.dark-mode .container-food_pedidos>.left>.list>div>.infos .total_price {
+body.dark-mode .container-food_pedidos>.left>main>div>.list>div>.infos .total_price {
   font-weight: bold;
 }
 
@@ -937,7 +906,7 @@ body.dark-mode .order-infos .list-items>.list-title {
 }
 
 body.dark-mode .icon-key-value.delivery-type .value,
-body.dark-mode .container-food_pedidos>.left>.list>div>.infos>div>.info>.withdrawal {
+body.dark-mode .container-food_pedidos>.left>main>div>.list>div>.infos>div>.info>.withdrawal {
   color: gold !important;
 }
 
@@ -1069,6 +1038,15 @@ body.dark-mode .modal-schedules .time-input,
 body.dark-mode .modal-schedules .time-input>input,
 body.dark-mode .modal-schedules .radio-checkmark {
   color: white !important;
+}
+
+body.dark-mode .container-food_pedidos>.left.tabs>nav {
+  border-color: #3e3e3e !important;
+}
+
+body.dark-mode .container-food_pedidos>.left.tabs>nav>span>span {
+  background-color: #465847 !important;
+  color: var(--color-tints-60) !important;
 }
 
 @media (max-width: 768px) {
@@ -8903,7 +8881,7 @@ button>.spinner-border {
   backdrop-filter: blur(5px);
 }
 
-.container-food_pedidos>.left>.list>div.none-founded {
+.container-food_pedidos>.left>main>div>.list>div.none-founded {
   display: flex;
   flex-direction: column;
   background-color: transparent !important;
@@ -8916,12 +8894,12 @@ button>.spinner-border {
   pointer-events: none;
 }
 
-.container-food_pedidos>.left>.list>div.none-founded>img {
+.container-food_pedidos>.left>main>div>.list>div.none-founded>img {
   border-radius: 15px;
   overflow: hidden;
 }
 
-.container-food_pedidos>.left>.list>div.none-founded>span {
+.container-food_pedidos>.left>main>div>.list>div.none-founded>span {
   padding: 10px;
   border-radius: 0 0 5px 5px;
 }
@@ -8945,31 +8923,36 @@ button>.spinner-border {
   width: 30%;
   min-width: 300px;
   max-width: 330px;
-  background-color: #efefef;
+  background-color: white;
   box-shadow: 0 0 5px rgb(156 156 156 / 20%);
 }
 
-.container-food_pedidos>.left>.list {
+.container-food_pedidos>.left>main>div>.list {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   scroll-behavior: smooth;
 }
 
-.container-food_pedidos>.left>.list.is_skeleton {
+.container-food_pedidos>.left>main>.scheduled>.list {
+  padding-top: 10px;
+}
+
+.container-food_pedidos>.left>main>div>.list.is_skeleton {
   overflow: hidden !important;
 }
 
-.container-food_pedidos>.left>.list::-webkit-scrollbar {
+.container-food_pedidos>.left>main>div>.list::-webkit-scrollbar {
   width: 4px;
   height: 4px;
 }
 
-.container-food_pedidos>.left>.list::-webkit-scrollbar-thumb:hover {
+.container-food_pedidos>.left>main>div>.list::-webkit-scrollbar-thumb:hover {
   background: gray;
 }
 
-.container-food_pedidos>.left>.list>div {
+.container-food_pedidos>.left>main>div>.list>div {
+  position: relative;
   display: flex;
   background-color: white;
   margin-bottom: 4px;
@@ -8981,7 +8964,7 @@ button>.spinner-border {
   transition: 0.3s ease;
 }
 
-.container-food_pedidos>.left>.list>div>.indicator {
+.container-food_pedidos>.left>main>div>.list>div>.indicator {
   min-width: 60px;
   min-width: 15px;
   display: flex;
@@ -8993,20 +8976,51 @@ button>.spinner-border {
   transition: border-left 0.2s;
 }
 
-.container-food_pedidos>.left>.list>div.active>.indicator {
+.container-food_pedidos>.left>main>.now>.list>div.new::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 100% !important;
+  width: 100% !important;
+  opacity: 1 !important;
+  background-color: transparent !important;
+  background-image: linear-gradient(90deg,
+      rgba(0, 0, 0, 0) 0,
+      rgba(0, 0, 0, 0.05) 20%,
+      rgba(0, 0, 0, 0.1) 80%,
+      rgba(0, 0, 0, 0));
+  animation: shimmer 1.5s infinite;
+  will-change: translateX;
+  z-index: 2;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.container-food_pedidos>.left>main>div>.list>div.active>.indicator {
   border-left: 10px solid transparent;
 }
 
-.container-food_pedidos>.left>.list>div>.indicator>span {
+.container-food_pedidos>.left>main>div>.list>div>.indicator>span {
   margin: 0 5px;
   display: none;
 }
 
-.container-food_pedidos>.left>.list>div>.indicator>span.skeleton {
+.container-food_pedidos>.left>main>div>.list>div>.indicator>span.skeleton {
   width: 60%;
 }
 
-.container-food_pedidos>.left>.list>div>.infos {
+.container-food_pedidos>.left>main>div>.list>div>.infos {
   display: flex;
   flex-direction: row;
   flex: 1;
@@ -9015,11 +9029,11 @@ button>.spinner-border {
   overflow: hidden;
 }
 
-.container-food_pedidos>.left>.list>div>.infos .total_price.skeleton {
+.container-food_pedidos>.left>main>div>.list>div>.infos .total_price.skeleton {
   width: 60%;
 }
 
-.container-food_pedidos>.left>.list>div>.infos>div {
+.container-food_pedidos>.left>main>div>.list>div>.infos>div {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -9027,13 +9041,13 @@ button>.spinner-border {
   padding: 5px 0;
 }
 
-.container-food_pedidos>.left>.list>div>.infos>.left {
+.container-food_pedidos>.left>main>div>.list>div>.infos>.left {
   overflow: hidden;
   min-width: 110px;
   margin-right: 15px;
 }
 
-.container-food_pedidos>.left>.list>div>.infos>.right {
+.container-food_pedidos>.left>main>div>.list>div>.infos>.right {
   flex: 0;
   text-align: end;
   justify-content: space-between;
@@ -9041,104 +9055,104 @@ button>.spinner-border {
   padding: 8px 0;
 }
 
-.container-food_pedidos>.left>.list>div>.infos .timer {
+.container-food_pedidos>.left>main>div>.list>div>.infos .timer {
   white-space: nowrap;
   color: #6b6b6b;
 }
 
-.container-food_pedidos>.left>.list>div>.infos>.timer {
+.container-food_pedidos>.left>main>div>.list>div>.infos>.timer {
   color: gray;
   padding-top: 3px;
 }
 
-.container-food_pedidos>.left>.list>div:hover {
+.container-food_pedidos>.left>main>div>.list>div:hover {
   background-color: rgba(216, 216, 216, 0.3);
 }
 
-.container-food_pedidos>.left>.list>div.refused.active,
+.container-food_pedidos>.left>main>div>.list>div.refused.active,
 #dashboard>.orders>main>div.refused.active>header,
 #dashboard>.orders>main>div.refused.expand>header {
   background-color: rgba(247, 100, 100, 0.3) !important;
 }
 
-.container-food_pedidos>.left>.list>div.waiting.active {
+.container-food_pedidos>.left>main>div>.list>div.waiting.active {
   background-color: rgba(186, 186, 186, 0.3) !important;
 }
 
-.container-food_pedidos>.left>.list>div.wait_production.active {
+.container-food_pedidos>.left>main>div>.list>div.wait_production.active {
   background-color: rgba(247, 154, 100, 0.3) !important;
 }
 
-.container-food_pedidos>.left>.list>div.wait_delivery.active {
+.container-food_pedidos>.left>main>div>.list>div.wait_delivery.active {
   background-color: rgba(248, 198, 89, 0.3) !important;
 }
 
-.container-food_pedidos>.left>.list>div.in_delivery.active {
+.container-food_pedidos>.left>main>div>.list>div.in_delivery.active {
   background-color: rgba(230, 232, 119, 0.3) !important;
 }
 
-.container-food_pedidos>.left>.list>div.finished.active,
+.container-food_pedidos>.left>main>div>.list>div.finished.active,
 #dashboard>.orders>main>div.finished>header.active,
 #dashboard>.orders>main>div.finished.expand>header {
   background-color: rgba(154, 245, 142, 0.3) !important;
 }
 
-.container-food_pedidos>.left>.list>div.refused>.indicator,
+.container-food_pedidos>.left>main>div>.list>div.refused>.indicator,
 #dashboard>.orders>main>div.refused {
   border-color: #f76464;
 }
 
-.container-food_pedidos>.left>.list>div.waiting>.indicator {
+.container-food_pedidos>.left>main>div>.list>div.waiting>.indicator {
   border-color: #808080;
 }
 
-.container-food_pedidos>.left>.list>div.wait_production>.indicator {
+.container-food_pedidos>.left>main>div>.list>div.wait_production>.indicator {
   border-color: #f79a64;
 }
 
-.container-food_pedidos>.left>.list>div.wait_delivery>.indicator {
+.container-food_pedidos>.left>main>div>.list>div.wait_delivery>.indicator {
   border-color: #f8c659;
 }
 
-.container-food_pedidos>.left>.list>div.in_delivery>.indicator {
+.container-food_pedidos>.left>main>div>.list>div.in_delivery>.indicator {
   border-color: #e6e877;
 }
 
-.container-food_pedidos>.left>.list>div.finished>.indicator,
+.container-food_pedidos>.left>main>div>.list>div.finished>.indicator,
 #dashboard>.orders>main>div.finished {
   border-color: #9af58e;
 }
 
-.container-food_pedidos>.left>.list>div.refused>.indicator,
+.container-food_pedidos>.left>main>div>.list>div.refused>.indicator,
 #dashboard>.orders>main>div.refused {
   border-color: #f76464;
 }
 
-.container-food_pedidos>.left>.list>div.waiting .order_id {
+.container-food_pedidos>.left>main>div>.list>div.waiting .order_id {
   color: #b3b3b3;
 }
 
-.container-food_pedidos>.left>.list>div.wait_production .order_id {
+.container-food_pedidos>.left>main>div>.list>div.wait_production .order_id {
   color: #f79a64;
 }
 
-.container-food_pedidos>.left>.list>div.wait_delivery .order_id {
+.container-food_pedidos>.left>main>div>.list>div.wait_delivery .order_id {
   color: #f8c659;
 }
 
-.container-food_pedidos>.left>.list>div.in_delivery .order_id {
+.container-food_pedidos>.left>main>div>.list>div.in_delivery .order_id {
   color: #e6e877;
 }
 
-.container-food_pedidos>.left>.list>div.finished .order_id {
+.container-food_pedidos>.left>main>div>.list>div.finished .order_id {
   color: #9af58e;
 }
 
-.container-food_pedidos>.left>.list>div.refused .order_id {
+.container-food_pedidos>.left>main>div>.list>div.refused .order_id {
   color: #f76464;
 }
 
-.container-food_pedidos>.left>.list>div>.infos>div>.client_name {
+.container-food_pedidos>.left>main>div>.list>div>.infos>div>.client_name {
   font-weight: bold;
   word-break: break-word;
   display: -webkit-box;
@@ -9149,13 +9163,13 @@ button>.spinner-border {
   font-size: 13px;
 }
 
-.container-food_pedidos>.left>.list>div .order_id {
+.container-food_pedidos>.left>main>div>.list>div .order_id {
   color: gray;
   margin: 3px 0;
   width: fit-content;
 }
 
-.container-food_pedidos>.left>.list>div>.infos>div>.info {
+.container-food_pedidos>.left>main>div>.list>div>.infos>div>.info {
   word-break: break-word;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -9166,65 +9180,49 @@ button>.spinner-border {
   font-size: 11px;
 }
 
-.container-food_pedidos>.left>.list>div>.infos>div>.info.skeleton {
+.container-food_pedidos>.left>main>div>.list>div>.infos>div>.info.skeleton {
   width: 90%;
 }
 
-.container-food_pedidos>.left>.list>div>.infos>div>.info>.withdrawal {
+.container-food_pedidos>.left>main>div>.list>div>.infos>div>.info>.withdrawal {
   color: black;
   font-weight: bold;
 }
 
-.container-food_pedidos>.left>header {
-  background-color: white;
+.container-food_pedidos>.left>main>.now>header {
   padding: 10px 5px 5px;
 }
 
-.container-food_pedidos>.left>header>.input-search {
+.container-food_pedidos>.left>main>.now>header>.input-search {
   display: flex;
   padding: 3px 10px;
   border-radius: 50px;
-  background-color: lightgray;
+  background-color: rgba(154, 154, 154, 0.2);
+  align-items: center;
 }
 
-.container-food_pedidos>.left>header>.input-search>input {
+.container-food_pedidos>.left>main>.now>header>.input-search>input {
   border: none;
   background-color: transparent;
   outline: none;
   flex: 1;
 }
 
-.container-food_pedidos>.left>header>.input-search>i {
-  font-size: 18px;
+.container-food_pedidos>.left>main>.now>header>.input-search>i {
+  font-size: 15px;
   cursor: pointer;
+  color: #8e8e8e;
 }
 
-.container-food_pedidos>.left>footer {
-  background-color: white;
-}
-
-.container-food_pedidos>.left>footer>.analytics {
-  display: flex;
-}
-
-.container-food_pedidos>.left>footer>.analytics>div {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 600;
-  padding: 4px 0;
-}
-
-.container-food_pedidos>.left>footer>.status-filter {
+.container-food_pedidos>.left>main>div>footer>.status-filter {
   display: flex;
   justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
-  padding: 10px 2px 5px;
+  padding: 10px 2px;
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div {
+.container-food_pedidos>.left>main>div>footer>.status-filter>div {
   border-radius: 50px;
   padding: 2px 9px;
   margin: 2px;
@@ -9237,51 +9235,51 @@ button>.spinner-border {
   transition: 0.3s ease;
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div.skeleton {
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.skeleton {
   min-width: 40%;
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div.pending {
-  background-color: rgba(226, 226, 226, 0.2);
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.pending {
+  background-color: rgba(154, 154, 154, 0.2);
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div.refused {
-  background-color: rgba(226, 226, 226, 0.2);
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.refused {
+  background-color: rgba(154, 154, 154, 0.2);
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div.waiting {
-  background-color: rgba(226, 226, 226, 0.2);
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.waiting {
+  background-color: rgba(154, 154, 154, 0.2);
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div.wait_production {
-  background-color: rgba(226, 226, 226, 0.2);
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.wait_production {
+  background-color: rgba(154, 154, 154, 0.2);
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div.wait_delivery {
-  background-color: rgba(226, 226, 226, 0.2);
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.wait_delivery {
+  background-color: rgba(154, 154, 154, 0.2);
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div.in_delivery {
-  background-color: rgba(226, 226, 226, 0.2);
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.in_delivery {
+  background-color: rgba(154, 154, 154, 0.2);
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div.finished {
-  background-color: rgba(226, 226, 226, 0.2);
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.finished {
+  background-color: rgba(154, 154, 154, 0.2);
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div:hover,
-.container-food_pedidos>.left>footer>.status-filter>div.selected {
+.container-food_pedidos>.left>main>div>footer>.status-filter>div:hover,
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.selected {
   color: black;
   font-weight: bold;
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div.selected {
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.selected {
   color: black;
   font-weight: bold;
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div.pending:hover,
-.container-food_pedidos>.left>footer>.status-filter>div.pending.selected {
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.pending:hover,
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.pending.selected {
   box-shadow: 0 0 5px #656565ab;
   background-image: linear-gradient(to right,
       #ff9b9b,
@@ -9291,40 +9289,71 @@ button>.spinner-border {
       #b8ffaf);
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div.refused:hover,
-.container-food_pedidos>.left>footer>.status-filter>div.refused.selected {
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.refused:hover,
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.refused.selected {
   background-color: #ff4646;
   box-shadow: 0 0 5px #ff4646;
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div.waiting:hover,
-.container-food_pedidos>.left>footer>.status-filter>div.waiting.selected {
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.waiting:hover,
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.waiting.selected {
   background-color: #c6c6c6;
   box-shadow: 0 0 5px #c6c6c6;
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div.wait_production:hover,
-.container-food_pedidos>.left>footer>.status-filter>div.wait_production.selected {
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.wait_production:hover,
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.wait_production.selected {
   background-color: #ff843d;
   box-shadow: 0 0 5px #ff843d;
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div.wait_delivery:hover,
-.container-food_pedidos>.left>footer>.status-filter>div.wait_delivery.selected {
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.wait_delivery:hover,
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.wait_delivery.selected {
   background-color: #f8c659;
   box-shadow: 0 0 5px #f8c659;
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div.in_delivery:hover,
-.container-food_pedidos>.left>footer>.status-filter>div.in_delivery.selected {
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.in_delivery:hover,
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.in_delivery.selected {
   background-color: #edf046;
   box-shadow: 0 0 5px #edf046;
 }
 
-.container-food_pedidos>.left>footer>.status-filter>div.finished:hover,
-.container-food_pedidos>.left>footer>.status-filter>div.finished.selected {
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.finished:hover,
+.container-food_pedidos>.left>main>div>footer>.status-filter>div.finished.selected {
   background-color: #67f554;
   box-shadow: 0 0 5px #67f554;
+}
+
+.container-food_pedidos>.left.tabs>main {
+  height: 100%;
+}
+
+.container-food_pedidos>.left.tabs>main>div {
+  height: 100%;
+  padding: 0;
+}
+
+.container-food_pedidos>.left.tabs>nav {
+  border-bottom: 1px solid #e8e8e8;
+  padding: 0;
+}
+
+.container-food_pedidos>.left.tabs>nav>span {
+  flex: 1;
+  text-align: center;
+}
+
+.container-food_pedidos>.left.tabs>nav>span>span {
+  margin-left: 5px;
+  border-radius: 50px;
+  padding: 3px 5px;
+  font-size: 11px;
+  background-color: var(--color-tints-80);
+  color: var(--color-shader-10);
+  min-width: 19px;
+  display: inline-block;
+  pointer-events: none;
 }
 
 .order-infos>.infos {
@@ -9459,6 +9488,10 @@ button>.spinner-border {
   flex-wrap: wrap;
   min-width: 250px;
   gap: 15px;
+}
+
+.order-infos>.infos .scheduled {
+  height: fit-content;
 }
 
 .order-infos>.infos .client_info>.client-info.is_skeleton {
@@ -10515,7 +10548,7 @@ button>.spinner-border {
   z-index: 11;
 }
 
-.options-btn:hover>div {
+.options-btn.show>div {
   display: flex;
 }
 

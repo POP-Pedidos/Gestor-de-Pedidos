@@ -181,21 +181,18 @@ ipcMain.on("app:setBackgroundRunning", (event, open) => {
 });
 
 ipcMain.handle("printService:printControlCopy", (event, printer, order, company) => {
-    if (printer?.type === "graphic") return printGraphicControlCopy(printer, order, company);
-    else if (printer?.type === "text") return printRawTextControlCopy(printer, order, company);
-    else return null;
+    if (printer?.type === "text") return printRawTextControlCopy(printer, order, company);
+    else return printGraphicControlCopy(printer, order, company);
 });
 
 ipcMain.handle("printService:printDeliveryCopy", (event, printer, order, company) => {
-    if (printer?.type === "graphic") return printGraphicDeliveryCopy(printer, order, company);
-    else if (printer?.type === "text") return printRawTextDeliveryCopy(printer, order, company);
-    else return null;
+    if (printer?.type === "text") return printRawTextDeliveryCopy(printer, order, company);
+    else return printGraphicDeliveryCopy(printer, order, company);
 });
 
 ipcMain.handle("printService:printProductionCopy", async (event, printer, order, company) => {
-    if (printer?.type === "graphic") return printGraphicProductionCopy(printer, order, company);
-    else if (printer?.type === "text") return printRawTextProductionCopy(printer, order, company);
-    else return null;
+    if (printer?.type === "text") return printRawTextProductionCopy(printer, order, company);
+    else return printGraphicProductionCopy(printer, order, company);
 });
 
 ipcMain.handle("offscreen:generateProductThumbnail", (event, data) => {

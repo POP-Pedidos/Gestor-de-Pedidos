@@ -204,11 +204,15 @@ jQuery(function ($) {
 
 	$(document).on("click", ".tabs>nav>span", function (e) {
 		const index = $(this).index();
+		const $active = $(this).parent().find(">span.active");
+		const $tabs = $(this).parent().parent();
 
-		$(this).parent().find(">span").removeClass("active");
+		if ($active.index() === index) return;
+
+		$active.removeClass("active");
 		$(this).addClass("active");
 
-		$(this).parent().parent().find(">main>*").removeClass("show").eq(index).addClass("show");
+		$tabs.find(">main>*").removeClass("show").eq(index).addClass("show");
 
 		let $indicator = $(this).parent().find(">.indicator");
 		if ($indicator.length == 0) {
@@ -219,6 +223,8 @@ jQuery(function ($) {
 
 		$indicator.css("left", `${e.target.offsetLeft}px`);
 		$indicator.css("width", `${e.target.offsetWidth}px`);
+
+		$tabs.trigger("tab_change", $(this));
 	});
 
 	$.fn.initTabs = function () {
@@ -357,9 +363,30 @@ jQuery(function ($) {
 			params: {
 				status: "opened",
 				limit: 1,
+				scheduled: false
 			}
 		}).then(orders_data => {
-			if (orders.length == 0) orders = orders_data.results;
+			for (const result of orders_data.results) {
+				const exists = orders.findIndex(order => order.id_order === result.id_order);
+
+				if (exists > -1) orders.push(result);
+				else orders[exists] = result;
+			}
+		});
+
+		FetchAPI(`/order`, {
+			params: {
+				status: "opened",
+				limit: 1,
+				scheduled: true
+			}
+		}).then(orders_data => {
+			for (const result of orders_data.results) {
+				const exists = orders.findIndex(order => order.id_order === result.id_order);
+
+				if (exists > -1) orders.push(result);
+				else orders[exists] = result;
+			}
 		});
 	}, 1000);
 
@@ -369,7 +396,10 @@ jQuery(function ($) {
 	setInterval(() => {
 		if (!sessionStorage.token && !localStorage.token) return;
 
-		const has_pendent_accept = !!orders?.find(order => order.status === 0);
+		const has_pendent_accept = !!orders?.find(order => {
+			if (order.status === 0 && !order.scheduledAt) return true;
+			if (order.status === 0 && order.scheduledAt && new Date() - new Date(order.scheduledAt) > 0) return true;
+		});
 
 		if (has_pendent_accept && alert_audio.paused) {
 			taskbar.flashFrame(true);
@@ -402,6 +432,13 @@ function LoadOrderOnElement($element, order, actions = true) {
 					<div class="infos">
 						<span class="name"></span>
 						<span class="phone"></span>
+					</div>
+				</div>
+				<div class="scheduled icon-key-value">
+					<div class="rounded-icon"><i class="far fa-clock"></i></div>
+					<div class="infos">
+						<span class="name">Agendado para</span>
+						<span class="time"></span>
 					</div>
 				</div>
 				<div class="icon-key-value client-address">
@@ -636,6 +673,19 @@ function LoadOrderOnElement($element, order, actions = true) {
 
 	$element.find(".delivery-type").toggle(order.delivery_type === "withdrawal");
 
+	if (!!order.scheduledAt) {
+		const interval = setTimeout(() => {
+			if (!$element.length) clearInterval(interval);
+
+			if (new Date() - new Date(order.scheduledAt) > 0) {
+				$element.find(".actions").show();
+				$element.find(".scheduled").hide();
+			}
+		}, 5000);
+
+		$element.find(".scheduled>.infos>.time").text(new Date(order.scheduledAt).toLocaleDateString("pt-BR", { hour: '2-digit', minute: '2-digit' }));
+	}
+
 	const $list_items = $element.find(".list-items");
 
 	$list_items.empty();
@@ -792,7 +842,7 @@ function LoadOrderOnElement($element, order, actions = true) {
 	$element.find(".history>.step").removeClass("active").removeClass("success").removeClass("refused");
 	$element.find(".history>.step .title").text("");
 	$element.find(".history>.step .date").text("");
-	$element.find(">.infos .actions").show();
+
 	$element.find(">.infos .actions>div>button").removeClass("loading").show();
 
 	const status = order.status > -1 ? order.status : Math.abs(order.status + 1);
@@ -879,6 +929,7 @@ $(document).on("keydown keyup input", ".time-input>input", function (e) {
 
 	if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) return; // 0-9
 	if (e.keyCode === 8 || e.keyCode === 9) return; // backspace | tab
+	if (e.keyCode === 37 || e.keyCode === 39) return; // arrows
 
 	e.preventDefault();
 	if ($(this).val().length > 2) $(this).val($(this).val().slice(0, 2));
@@ -890,4 +941,13 @@ $(document).on("keyup input", ".time-input>input.hours", function (e) {
 
 $(document).on("keydown input", ".time-input>input.minutes", function (e) {
 	if (e.keyCode === 8 && !$(this).val().length) $(this).parent().find("input.hours").focus();
+});
+
+$(document).on("click", ".options-btn", function (e) {
+	e.stopPropagation();
+	$(this).toggleClass("show");
+});
+
+$(document).on("click", function (e) {
+	$(".options-btn.show").removeClass("show");
 });

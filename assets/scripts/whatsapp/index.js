@@ -197,7 +197,7 @@ function SendOrderStatusMessage(order) {
                 }
             }
 
-            if(item.observation) {
+            if (item.observation) {
                 message += `\n _Obs: ${item.observation}_`;
             }
 
@@ -229,12 +229,18 @@ function SendOrderStatusMessage(order) {
         message += `\n*Valor Total*: _${MoneyFormat(order.total)}_`;
 
     } else if (order.status == 1) {
-        message = `\n✅ *SEU PEDIDO FOI CONFIRMADO*, e está aguardando produção!`;
+        if (order.scheduledAt) {
+            message = `\n✅ *SEU PEDIDO AGENDADO FOI CONFIRMADO!*`;
+        } else {
+            message = `\n✅ *SEU PEDIDO FOI CONFIRMADO*, e está aguardando produção!`;
+        }
+
         message += `\n_Acompanhe abaixo o seu pedido_\n`;
 
         message += `\n👤 ${order.name_client}`;
         message += `\n📞 ${order.phone_client}`;
         message += `\n💵 ${payment_name}`;
+        if (order.scheduledAt) message += `\n🕒 ${new Date(order.scheduledAt).toLocaleDateString("pt-BR", { hour: '2-digit', minute: '2-digit' })}`;
 
         if (order.delivery_type === "delivery") {
             message += `\n🏡 _${order_address}_`;
@@ -245,7 +251,7 @@ function SendOrderStatusMessage(order) {
         message += `\n\n*――――――« ITENS »――――――*`;
         AppendItems();
 
-        if(order.observation) {
+        if (order.observation) {
             message += `\n*Observação*: _${order.observation}_\n`;
         }
         message += `\n*―――――――« Total »―――――――*`;
@@ -253,12 +259,12 @@ function SendOrderStatusMessage(order) {
         if (order.discount_coupon) {
             message += `\n*Cupom de desconto*: ${order.discount_coupon.is_percentual ? `${order.discount_coupon.discount}%` : MoneyFormat(order.discount_coupon.discount)} _(${order.discount_coupon.coupon})_`;
         }
-        
+
 
         message += `\n*Taxa de Entrega*: _${MoneyFormat(order.delivery_cost)}_`;
         if (discount > 0) message += `\n*Desconto*: _${MoneyFormat(discount)}_`;
         message += `\n*Valor Total*: _${MoneyFormat(order.total)}_`;
-        if(order.payment_method == 'money' && order.cash_change > 0) message += `\n*Troco para*: _${MoneyFormat(order.cash_change)}_`;
+        if (order.payment_method == 'money' && order.cash_change > 0) message += `\n*Troco para*: _${MoneyFormat(order.cash_change)}_`;
 
         message += `\n\n⚠️ *ATENÇÃO*: Para solicitar alterações no seu pedido nos faça uma ligação para o telefone disponibilizado no site!`
         message += `\n\n_Para acompanhar o seu pedido acesse o link abaixo_`;

@@ -1,30 +1,43 @@
 <div class="container-food_pedidos">
-    <div class="left">
-        <header>
-            <label class="input-search skeleton">
-                <input placeholder="Pesquisar...">
-                <i class="fas fa-search"></i>
-            </label>
-        </header>
-        <div class="list is_skeleton"></div>
-        <footer>
-            <div class="status-filter">
-                <div class="pending selected skeleton">Pendentes</div>
-                <div class="wait_production skeleton">Aguardando produção</div>
-                <div class="wait_delivery skeleton">Aguardando entrega</div>
-                <div class="in_delivery skeleton">Saiu para entrega</div>
-                <div class="finished skeleton">Finalizado</div>
-                <div class="refused skeleton">Recusado</div>
+    <div class="left tabs">
+        <nav>
+            <span class="now">Agora<span></span></span>
+            <span class="scheduled">Agendado<span></span></span>
+        </nav>
+        <main>
+            <div class="now show">
+                <header>
+                    <label class="input-search skeleton">
+                        <input placeholder="Pesquisar...">
+                        <i class="fas fa-search"></i>
+                    </label>
+                </header>
+                <div class="list is_skeleton"></div>
+                <footer>
+                    <div class="status-filter">
+                        <div class="pending selected skeleton">Pendentes</div>
+                        <div class="wait_production skeleton">Aguardando produção</div>
+                        <div class="wait_delivery skeleton">Aguardando entrega</div>
+                        <div class="in_delivery skeleton">Saiu para entrega</div>
+                        <div class="finished skeleton">Finalizado</div>
+                        <div class="refused skeleton">Recusado</div>
+                    </div>
+                </footer>
             </div>
-            <div class="analytics">
-                <div class="orders">
-                    <span class="skeleton">Pedidos: 0</span>
-                </div>
-                <div class="total_price">
-                    <span class="skeleton">Total: R$ 00,00</span>
-                </div>
+            <div class="scheduled">
+                <div class="list is_skeleton"></div>
+                <footer>
+                    <div class="status-filter">
+                        <div class="pending selected skeleton">Pendentes</div>
+                        <div class="wait_production skeleton">Aguardando produção</div>
+                        <div class="wait_delivery skeleton">Aguardando entrega</div>
+                        <div class="in_delivery skeleton">Saiu para entrega</div>
+                        <div class="finished skeleton">Finalizado</div>
+                        <div class="refused skeleton">Recusado</div>
+                    </div>
+                </footer>
             </div>
-        </footer>
+        </main>
     </div>
     <div class="order-infos"></div>
 </div>
