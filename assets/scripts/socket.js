@@ -40,25 +40,22 @@ socket.on('disconnect', function () {
 });
 
 socket.on("new_order", (order) => {
-    orders.push(order);
+    if (window.cur_tab === "pedidos") {
+        if (!!$(".container-food_pedidos>.left").length) FetchAPI(`/order`, {
+            params: { limit: 0 }
+        }).then(orders_data => {
+            $(".container-food_pedidos>.left.tabs>nav>.now>span").text(orders_data.metadata.total_normal);
+            $(".container-food_pedidos>.left.tabs>nav>.scheduled>span").text(orders_data.metadata.total_scheduled);
+        });
 
-    if (!!$(".container-food_pedidos>.left").length) FetchAPI(`/order`, {
-        params: { limit: 0 }
-    }).then(orders_data => {
-        $(".container-food_pedidos>.left .orders>span").text(`Pedidos: ${orders_data.metadata.max}`);
-        $(".container-food_pedidos>.left .total_price>span").text(`Total: ${MoneyFormat(orders_data.metadata.total)}`);
-    });
-
-    if (orders.length == 1 && typeof viewOrder === "function") {
-        const $order = addOrder(order);
-        $order.click();
-    } else {
-        const $order = addOrder(order);
-        $order.insertBefore(".container-food_pedidos>.left>.list>div:first-child");
+        if (orders.length == 1 && typeof viewOrder === "function") {
+            const $order = addOrder(order);
+            $order.click();
+        } else {
+            const $order = addOrder(order);
+            $order.insertBefore(".container-food_pedidos>.left>main>div>.list>div:first-child");
+        }
     }
-
-    taskbar.flashFrame(true);
-    window.focus();
 
     local_api.sockets.broadcast("order", order);
 });

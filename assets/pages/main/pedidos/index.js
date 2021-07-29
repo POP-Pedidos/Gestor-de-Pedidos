@@ -149,16 +149,7 @@ lazy_loading.onHandle = async (state) => {
 
         $skeletons.remove();
 
-        for (const order of orders_data.results || []) {
-            for (const result of orders_data.results) {
-                const exists = orders.findIndex(order => order.id_order === result.id_order);
-
-                if (exists > -1) orders.push(result);
-                else orders[exists] = result;
-            }
-
-            addOrder(order);
-        }
+        for (const order of orders_data.results || []) addOrder(order);
 
         $(".container-food_pedidos>.left.tabs>nav>.now>span").text(orders_data.metadata.total_normal);
         $(".container-food_pedidos>.left.tabs>nav>.scheduled>span").text(orders_data.metadata.total_scheduled);
@@ -198,7 +189,7 @@ lazy_loading.Init();
 
 $(".container-food_pedidos>.tabs").initTabs();
 
-FetchAPI(`/printers`, { instance_check: true, }).then(data => {
+FetchAPI(`/printers`).then(data => {
     printers = data;
     primary_printer = data.find(printer => printer.is_primary);
 });

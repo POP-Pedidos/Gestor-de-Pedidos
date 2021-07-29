@@ -9,7 +9,6 @@ function NewTabInstance() {
 function ChangeTab(for_panel) {
 	$(".content-page").show().empty();
 	$("#whatsappWebView").hide();
-	LoadOrders = undefined;
 
 	$(".page-wrapper .sidebar-wrapper").removeClass("no-transition");
 	$("#loading-wrapper").hide();
@@ -405,6 +404,7 @@ jQuery(function ($) {
 			taskbar.flashFrame(true);
 			tray.setIcon("alert");
 			alert_audio.play();
+			window.focus();
 		} else if (!has_pendent_accept && !alert_audio.paused) {
 			taskbar.flashFrame(false);
 			tray.setIcon("default");

@@ -77,7 +77,7 @@ async function viewOrder(order, transition = true) {
         $(".container-food_pedidos>.order-infos").fadeIn(80);
     }
 
-    const $left = $(".container-food_pedidos>.left");
+    const $left = $(".container-food_pedidos>.left>main>div");
 
     $left.find(`>.list>div`).removeClass("active");
     $left.find(`>.list>[id_order="${order.id_order}"]`).addClass("active");
@@ -367,6 +367,11 @@ function orderIsOnFilters(order) {
 }
 
 function addOrder(order) {
+    const exists = orders.findIndex(_order => _order.id_order === order.id_order);
+
+    if (exists > -1) orders.push(order);
+    else orders[exists] = order;
+
     if (!orderIsOnFilters(order)) return;
 
     const $order = $(`<div>
@@ -429,6 +434,8 @@ function addOrder(order) {
         }, open_orders?.length * 50);
     }
 
+    $(".container-food_pedidos>.left>main>div.show>div.none-founded").remove();
+    
     const $existent = $(`.container-food_pedidos>.left>main>div.show>.list>[id_order="${order.id_order}"]`);
 
     if (!!$existent.length) $existent.replaceWith($order);
