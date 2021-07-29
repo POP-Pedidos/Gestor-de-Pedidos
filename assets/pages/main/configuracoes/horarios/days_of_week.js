@@ -74,7 +74,7 @@ function OpenDaysOfWeekModal(dayOfWeek, focus_id = null) {
     }
 
     $hours_container.empty();
-    $modal.find(">.header>.title>b").text(days_of_week_titles[dayOfWeek]);
+    $modal.find(">div>.header>.title>b").text(days_of_week_titles[dayOfWeek]);
 
     for (const shift of weekday_shifts) {
         const $shift = $(`<div>
