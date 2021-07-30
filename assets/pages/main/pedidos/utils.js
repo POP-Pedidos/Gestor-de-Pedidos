@@ -46,7 +46,6 @@ async function printOrder(order) {
     if (!!company.print_delivery_copy && company.print_delivery_copy === cur_status) {
         await printService.printDeliveryCopy(primary_printer_device, order_data, company);
     }
-
 }
 
 function UpdateOrderStatus(order, new_status) {
@@ -369,8 +368,8 @@ function orderIsOnFilters(order) {
 function addOrder(order) {
     const exists = orders.findIndex(_order => _order.id_order === order.id_order);
 
-    if (exists > -1) orders.push(order);
-    else orders[exists] = order;
+    if (exists > -1) orders[exists] = order;
+    else orders.push(order);
 
     if (!orderIsOnFilters(order)) return;
 
@@ -435,7 +434,7 @@ function addOrder(order) {
     }
 
     $(".container-food_pedidos>.left>main>div.show>div.none-founded").remove();
-    
+
     const $existent = $(`.container-food_pedidos>.left>main>div.show>.list>[id_order="${order.id_order}"]`);
 
     if (!!$existent.length) $existent.replaceWith($order);

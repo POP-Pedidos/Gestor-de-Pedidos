@@ -12,22 +12,22 @@ module.exports = function CreateTray(options = {}) {
     }
 
     function openOrders() {
-        win.webContents.executeJavaScript(`$("a[for_panel=\\"pedidos\\"]").click()`);
+        win.webContents.executeJavaScript(`$("a[for_panel=pedidos]").click()`);
         showAndFocusWindow();
     }
 
     function openProducts() {
-        win.webContents.executeJavaScript(`$("a[for_panel=\\"cadastros_produtos\\"]").click()`);
+        win.webContents.executeJavaScript(`$("a[for_panel=cadastros_produtos]").click()`);
         showAndFocusWindow();
     }
 
     function openCompany() {
-        win.webContents.executeJavaScript(`$("a[for_panel=\\"configuracoes_empresa\\"]").click()`);
+        win.webContents.executeJavaScript(`$("a[for_panel=configuracoes_empresa]").click()`);
         showAndFocusWindow();
     }
 
     function openWhatsApp() {
-        win.webContents.executeJavaScript(`$("a[for_panel=\\"whatsapp\\"]").click()`);
+        win.webContents.executeJavaScript(`$("a[for_panel=whatsapp]").click()`);
         showAndFocusWindow();
     }
 
@@ -37,7 +37,7 @@ module.exports = function CreateTray(options = {}) {
     }
 
     function disconnectWhatsApp() {
-        win.webContents.executeJavaScript(`$("a[for_panel=\\"whatsapp\\"]").click()`);
+        win.webContents.executeJavaScript(`$("a[for_panel=whatsapp]").click()`);
         win.webContents.executeJavaScript(`whatsappWebView.send("logout")`);
         showAndFocusWindow();
     }

@@ -69,6 +69,7 @@
 
     lines.push(`CLIENTE: {fill} ${order.name_client}`);
     lines.push(`DATA IMPRESAO: {fill} ${new Date().toLocaleString()}`);
+    if(order.scheduledAt) lines.push(`AGENDADO PARA: {fill} ${new Date(order.scheduledAt).toLocaleDateString("pt-BR", { hour: '2-digit', minute: '2-digit' })}`);
     
     lines.push(" ");
 

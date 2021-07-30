@@ -3,12 +3,14 @@ $(".content-column.schedules>.tabs").initTabs();
 $("#switch_online").prop("checked", company.online_check >= 1);
 $("#switch_just_time").prop("checked", company.online_check >= 2);
 $("#switch_scheduling").prop("checked", company.use_scheduling);
+$("#switch_shifts").prop("checked", company.use_shifts);
 
 $(".content-column.schedules .only_schedule").toggleClass("disabled", company.online_check < 2);
 $(".content-column.schedules>.tabs>main .section.scheduling-hours").toggleClass("disabled", !company.use_scheduling);
 
 $(".content-column.schedules .online_check>.switch>span").text(company.online_check >= 1 ? "Ativado" : "Desativado");
 $(".content-column.schedules .only_schedule>.switch>span").text(company.online_check >= 2 ? "Ativado" : "Desativado");
+$(".content-column.schedules .use_shifts>.switch>span").text(company.use_shifts ? "Ativado" : "Desativado");
 $(".content-column.schedules .use_scheduling>.switch>span").text(company.use_scheduling ? "Ativado" : "Desativado");
 
 function TimeToMs(time) {

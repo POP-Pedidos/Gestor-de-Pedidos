@@ -3,6 +3,37 @@ $(".content-column.schedules  .opening-hours .days_of_week_calendar .calendar-co
     OpenDaysOfWeekModal($(this).attr("day"));
 });
 
+$("#switch_online,#switch_just_time").on("change", function () {
+    const online_checked = $("#switch_online").is(":checked");
+    const just_checked = $("#switch_just_time").is(":checked");
+
+    const online_check = online_checked ? (just_checked ? 2 : 1) : 0;
+
+    $(".content-column.schedules .only_schedule").toggleClass("disabled", !online_checked);
+
+    $(".content-column.schedules .online_check>.switch>span").text(online_check >= 1 ? "Ativado" : "Desativado");
+    $(".content-column.schedules .only_schedule>.switch>span").text(online_check >= 2 ? "Ativado" : "Desativado");
+
+    $(this).data("fetch")?.abort();
+
+    const promise = FetchAPI("/company", {
+        method: "PUT",
+        body: { online_check }
+    });
+
+    $(this).data("fetch", promise);
+
+    company.online_check = online_check;
+
+    promise.then(company_data => {
+        company = company_data;
+    }).catch(error => {
+        if (!error) return;
+        Swal.fire("Opss...", `Ocorreu um erro ao tentar atualizar as configurações de funcionamento!`, "error");
+        Swal.showValidationMessage(error);
+    });
+});
+
 function FindWeekDaysShiftsConflict(weekday_shifts) {
     const one_day = 24 * 60 * 60 * 1000;
 

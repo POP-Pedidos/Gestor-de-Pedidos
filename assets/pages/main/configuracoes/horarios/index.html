@@ -6,6 +6,7 @@
     <div class="tabs">
         <nav>
             <span class="schedules">Abertura e fechamento</span>
+            <span class="scheduling">Turnos do dia</span>
             <span class="scheduling">Horários e agendamento</span>
             <div class="indicator" style="left: 0px; width: 205px;"></div>
         </nav>
@@ -32,6 +33,98 @@
                                 <div class="custom-switch">
                                     <input type="checkbox" id="switch_just_time">
                                     <label for="switch_just_time">Toggle</label>
+                                </div>
+                                <span>Desativado</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section opening-hours">
+                    <div class="header">Horários de funcionamento</div>
+                    <div class="content days_of_week_calendar">
+                        <div class="header">
+                            <div day="monday">
+                                <span class="title">Segunda</span>
+                                <span class="open-hours">Aberto por 24h</span>
+                            </div>
+                            <div day="tuesday">
+                                <span class="title">Terça</span>
+                                <span class="open-hours">Aberto por 24h</span>
+                            </div>
+                            <div day="wednesday">
+                                <span class="title">Quarta</span>
+                                <span class="open-hours">Aberto por 24h</span>
+                            </div>
+                            <div day="thursday">
+                                <span class="title">Quinta</span>
+                                <span class="open-hours">Aberto por 24h</span>
+                            </div>
+                            <div day="friday">
+                                <span class="title">Sexta</span>
+                                <span class="open-hours">Aberto por 24h</span>
+                            </div>
+                            <div day="saturday">
+                                <span class="title">Sábado</span>
+                                <span class="open-hours">Aberto por 24h</span>
+                            </div>
+                            <div day="sunday">
+                                <span class="title">Domingo</span>
+                                <span class="open-hours closed">Fechado</span>
+                            </div>
+                        </div>
+                        <div class="calendar-content">
+                            <div class="hours-indicator">
+                                <span>0h</span>
+                                <span>2h</span>
+                                <span>4h</span>
+                                <span>6h</span>
+                                <span>8h</span>
+                                <span>10h</span>
+                                <span>12h</span>
+                                <span>14h</span>
+                                <span>16h</span>
+                                <span>18h</span>
+                                <span>20h</span>
+                                <span>22h</span>
+                                <span>24h</span>
+                            </div>
+                            <div class="calendar-content">
+                                <div class="grid-indicators">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                                <div class="day_of_week" day="monday"></div>
+                                <div class="day_of_week" day="tuesday"></div>
+                                <div class="day_of_week" day="wednesday"></div>
+                                <div class="day_of_week" day="thursday"></div>
+                                <div class="day_of_week" day="friday"></div>
+                                <div class="day_of_week" day="saturday"></div>
+                                <div class="day_of_week" day="sunday"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="shifts">
+                <div class="section">
+                    <div class="header">Funcionamento</div>
+                    <div class="content">
+                        <div class="use_shifts toggle-option">
+                            <span class="title">Trabalha com turnos</span>
+                            <span class="description">Esta opção faz com que seja possível um produto estar disponível apenas em certas horas do dia!</span>
+                            <div class="switch">
+                                <div class="custom-switch">
+                                    <input type="checkbox" id="switch_shifts">
+                                    <label for="switch_shifts">Toggle</label>
                                 </div>
                                 <span>Desativado</span>
                             </div>
@@ -144,80 +237,6 @@
                                         <div></div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="section opening-hours">
-                    <div class="header">Horários de funcionamento</div>
-                    <div class="content days_of_week_calendar">
-                        <div class="header">
-                            <div day="monday">
-                                <span class="title">Segunda</span>
-                                <span class="open-hours">Aberto por 24h</span>
-                            </div>
-                            <div day="tuesday">
-                                <span class="title">Terça</span>
-                                <span class="open-hours">Aberto por 24h</span>
-                            </div>
-                            <div day="wednesday">
-                                <span class="title">Quarta</span>
-                                <span class="open-hours">Aberto por 24h</span>
-                            </div>
-                            <div day="thursday">
-                                <span class="title">Quinta</span>
-                                <span class="open-hours">Aberto por 24h</span>
-                            </div>
-                            <div day="friday">
-                                <span class="title">Sexta</span>
-                                <span class="open-hours">Aberto por 24h</span>
-                            </div>
-                            <div day="saturday">
-                                <span class="title">Sábado</span>
-                                <span class="open-hours">Aberto por 24h</span>
-                            </div>
-                            <div day="sunday">
-                                <span class="title">Domingo</span>
-                                <span class="open-hours closed">Fechado</span>
-                            </div>
-                        </div>
-                        <div class="calendar-content">
-                            <div class="hours-indicator">
-                                <span>0h</span>
-                                <span>2h</span>
-                                <span>4h</span>
-                                <span>6h</span>
-                                <span>8h</span>
-                                <span>10h</span>
-                                <span>12h</span>
-                                <span>14h</span>
-                                <span>16h</span>
-                                <span>18h</span>
-                                <span>20h</span>
-                                <span>22h</span>
-                                <span>24h</span>
-                            </div>
-                            <div class="calendar-content">
-                                <div class="grid-indicators">
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                </div>
-                                <div class="day_of_week" day="monday"></div>
-                                <div class="day_of_week" day="tuesday"></div>
-                                <div class="day_of_week" day="wednesday"></div>
-                                <div class="day_of_week" day="thursday"></div>
-                                <div class="day_of_week" day="friday"></div>
-                                <div class="day_of_week" day="saturday"></div>
-                                <div class="day_of_week" day="sunday"></div>
                             </div>
                         </div>
                     </div>

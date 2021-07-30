@@ -149,7 +149,6 @@ ipcMain.on("fs:writeFile", (event, ...args) => {
 
 ipcMain.on("app:openAtLogin", (event) => {
     const options = app.getLoginItemSettings();
-    console.log(options);
     event.returnValue = options.executableWillLaunchAtLogin || options.openAtLogin;
 });
 

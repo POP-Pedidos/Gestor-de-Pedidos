@@ -12,44 +12,31 @@ $(".modal-schedules.shifts .radio-checkmark input").on("change", function () {
     $(".modal-schedules.shifts .time-inputs-container").toggleClass("disabled", $(this).is(":checked") && $(this).val() !== "custom");
 });
 
-$("#switch_online,#switch_just_time").on("change", function () {
-    const online_checked = $("#switch_online").is(":checked");
-    const just_checked = $("#switch_just_time").is(":checked");
+$("#switch_shifts").on("change", function () {
+    const use_shifts = $(this).is(":checked");
 
-    const online_check = online_checked ? (just_checked ? 2 : 1) : 0;
-
-    $(".content-column.schedules .only_schedule").toggleClass("disabled", !online_checked);
-
-    $(".content-column.schedules .online_check>.switch>span").text(online_check >= 1 ? "Ativado" : "Desativado");
-    $(".content-column.schedules .only_schedule>.switch>span").text(online_check >= 2 ? "Ativado" : "Desativado");
+    $(this).parent().parent().find(">span").text(use_shifts ? "Ativado" : "Desativado");
+    $(".content-column.schedules>.tabs>main .section.shifts").toggleClass("disabled", !use_shifts);
 
     $(this).data("fetch")?.abort();
 
     const promise = FetchAPI("/company", {
         method: "PUT",
-        body: { online_check }
+        body: { use_shifts }
     });
 
     $(this).data("fetch", promise);
 
-    company.online_check = online_check;
+    company.use_shifts = use_shifts;
 
     promise.then(company_data => {
         company = company_data;
     }).catch(error => {
         if (!error) return;
-        Swal.fire("Opss...", `Ocorreu um erro ao tentar atualizar as configurações de funcionamento!`, "error");
+        Swal.fire("Opss...", `Ocorreu um erro ao tentar atualizar as configurações de turnos!`, "error");
         Swal.showValidationMessage(error);
     });
 });
-
-function GetTimeInputTime($element, in_ms = false) {
-    const hours = $element.find(">.hours").val();
-    const minutes = $element.find(">.minutes").val();
-
-    if (in_ms) return TimeToMs(`${hours}:${minutes}`);
-    else return `${hours}:${minutes}`;
-}
 
 function FindShiftsConflict(assign_name, assign_data) {
     const one_day = 24 * 60 * 60 * 1000;

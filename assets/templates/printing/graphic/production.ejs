@@ -147,6 +147,14 @@
             text-align: right;
         }
 
+        .name-value-table .name-value-item.reverse-colors {
+            background-color: black;
+            color: white;
+            margin: -3px -4px 0;
+            padding: 3px 4px 3px;
+            border-radius: 3px;
+        }
+
         .name-value-table .name-value-table-group {
             display: flex;
             flex-direction: column;
@@ -316,17 +324,23 @@
                         <%= order.observation %>
                     </span>
                 </div>
-                <% } %>
-                    <div class="name-value-item">
-                        <span class="name">Data da impressão</span>
-                        <span class="value">
-                            <%= new Date().toLocaleString() %>
-                        </span>
-                    </div>
+            <% } %>
+            <% if(order.scheduledAt) { %>
+                <div class="name-value-item reverse-colors">
+                    <span class="name">Agendado para</span>
+                    <span class="value">
+                        <%= new Date(order.scheduledAt).toLocaleDateString("pt-BR", { hour: '2-digit', minute: '2-digit' }) %>
+                    </span>
+                </div>
+            <% } %>
+            <div class="name-value-item">
+                <span class="name">Data da impressão</span>
+                <span class="value">
+                    <%= new Date().toLocaleString() %>
+                </span>
+            </div>
         </div>
-        <span class="website">
-            <%= company.subdomain || "www" %>.poppedidos.com.br
-        </span>
+        <span class="website"><%= company.subdomain || "www" %>.poppedidos.com.br</span>
     </footer>
 </body>
 
