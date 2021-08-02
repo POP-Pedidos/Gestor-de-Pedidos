@@ -142,6 +142,22 @@ function ShowProductEditor(product) {
                 daysOfWeek_data.Saturday,
             ]
 
+            const availability_shifts = [];
+
+            if(dayShifts_data.Morning) availability_shifts.push("morning");
+            if(dayShifts_data.Evening) availability_shifts.push("afternoon");
+            if(dayShifts_data.Night) availability_shifts.push("night");
+
+            const availability_weekdays = [];
+
+            if(daysOfWeek_data.Monday) availability_weekdays.push("monday");
+            if(daysOfWeek_data.Tuesday) availability_weekdays.push("tuesday");
+            if(daysOfWeek_data.Wednesday) availability_weekdays.push("wednesday");
+            if(daysOfWeek_data.Thursday) availability_weekdays.push("thursday");
+            if(daysOfWeek_data.Friday) availability_weekdays.push("friday");
+            if(daysOfWeek_data.Saturday) availability_weekdays.push("saturday");
+            if(daysOfWeek_data.Sunday) availability_weekdays.push("sunday");
+
             const selected_quantity_flavors = $pizza_quantity_flavors.find(">button.selected").map((i, elem) => Number($(elem).text())).get();
 
             $nav.find(">span").removeClass("warning");
@@ -253,6 +269,8 @@ function ShowProductEditor(product) {
                     ...details,
                     availability_dayShifts,
                     availability_daysOfWeek,
+                    availability_shifts,
+                    availability_weekdays,
                     thumbnail: seo_thumbnail || undefined,
                     keywords: (typeof seo.keywords === "string") ? [seo.keywords] : seo.keywords,
                     seo_title: seo.title,
