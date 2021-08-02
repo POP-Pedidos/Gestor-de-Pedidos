@@ -974,7 +974,8 @@ body.dark-mode .content-column.schedules>.tabs>main .section>.header {
   color: #aaacaf !important;
 }
 
-body.dark-mode .content-column.schedules .section>.content>.toggle-option>.switch>span {
+body.dark-mode .content-column.schedules .section>.content>.toggle-option>.switch>span,
+body.dark-mode .content-column.schedules .section>.content>.scheduling_interval>div>span {
   color: #dedede !important;
 }
 
@@ -1047,6 +1048,10 @@ body.dark-mode .container-food_pedidos>.left.tabs>nav {
 body.dark-mode .container-food_pedidos>.left.tabs>nav>span>span {
   background-color: #465847 !important;
   color: var(--color-tints-60) !important;
+}
+
+body.dark-mode .content-column.schedules .section>.content>.scheduling_interval>div>input {
+  color: white;
 }
 
 @media (max-width: 768px) {
@@ -14155,6 +14160,32 @@ td>.switch_enable {
   gap: 20px;
 }
 
+.content-column.schedules .section>.content>.scheduling_interval>div>input {
+  padding: 0 0 3px 0;
+  margin: 0;
+  width: 100px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid gray;
+  margin-right: 15px;
+  outline: none;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.content-column.schedules .section>.content>.scheduling_interval>div {
+  display: flex;
+  align-items: center;
+  margin: auto 0 5px 0;
+}
+
+.content-column.schedules .section>.content>.scheduling_interval>div>input::-webkit-outer-spin-button,
+.content-column.schedules .section>.content>.scheduling_interval>div>input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .content-column.schedules .section>.content>.toggle-option {
   display: flex;
   flex-direction: column;
@@ -14197,7 +14228,8 @@ td>.switch_enable {
   gap: 15px;
 }
 
-.content-column.schedules .section>.content>.toggle-option>.switch>span {
+.content-column.schedules .section>.content>.toggle-option>.switch>span,
+.content-column.schedules .section>.content>.scheduling_interval>div>span {
   font-size: 15px;
   font-weight: bold;
   color: #636363;
