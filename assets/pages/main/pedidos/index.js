@@ -32,7 +32,6 @@ async function SearchForOrder() {
     addOrderInfosSkeleton();
 
     $(".container-food_pedidos>.left>main>div.show>.list").empty().addClass("is_skeleton");
-    orders.splice(0, orders.length);
 
     NewTabInstance();
 
@@ -144,7 +143,6 @@ lazy_loading.onHandle = async (state) => {
         instance_check: true,
         params,
     }).then(async orders_data => {
-        if (!state.max) orders.splice(0, orders.length);
         state.max = orders_data.metadata.max;
 
         $skeletons.remove();

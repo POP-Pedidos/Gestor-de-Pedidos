@@ -1,7 +1,6 @@
 {
   "name": "pop-pedidos",
   "productName": "POP Pedidos",
-  "appId": "poppedidos.com.br",
   "version": "1.4.9",
   "private": true,
   "main": "index.js",
@@ -24,6 +23,7 @@
     "url": "https://github.com/joaovitmac/pop-client.git"
   },
   "build": {
+    "appId": "br.com.poppedidos",
     "publish": [
       "github"
     ],

@@ -368,8 +368,8 @@ jQuery(function ($) {
 			for (const result of orders_data.results) {
 				const exists = orders.findIndex(order => order.id_order === result.id_order);
 
-				if (exists > -1) orders.push(result);
-				else orders[exists] = result;
+				if (exists > -1) orders[exists] = result;
+				else orders.push(result);
 			}
 		});
 
@@ -383,8 +383,8 @@ jQuery(function ($) {
 			for (const result of orders_data.results) {
 				const exists = orders.findIndex(order => order.id_order === result.id_order);
 
-				if (exists > -1) orders.push(result);
-				else orders[exists] = result;
+				if (exists > -1) orders[exists] = result;
+				else orders.push(result);
 			}
 		});
 	}, 1000);
@@ -674,16 +674,9 @@ function LoadOrderOnElement($element, order, actions = true) {
 	$element.find(".delivery-type").toggle(order.delivery_type === "withdrawal");
 
 	if (!!order.scheduledAt) {
-		const interval = setTimeout(() => {
-			if (!$element.length) clearInterval(interval);
-
-			if (new Date() - new Date(order.scheduledAt) > 0) {
-				$element.find(".actions").show();
-				$element.find(".scheduled").hide();
-			}
-		}, 5000);
-
 		$element.find(".scheduled>.infos>.time").text(new Date(order.scheduledAt).toLocaleDateString("pt-BR", { hour: '2-digit', minute: '2-digit' }));
+	} else {
+		$element.find(".scheduled").hide();
 	}
 
 	const $list_items = $element.find(".list-items");
@@ -936,11 +929,14 @@ $(document).on("keydown keyup input", ".time-input>input", function (e) {
 });
 
 $(document).on("keyup input", ".time-input>input.hours", function (e) {
-	if ($(this).val().length >= 2) $(this).parent().find("input.minutes").focus();
+	if (
+		((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) &&
+		$(this).val().length >= 2
+	) $(this).parent().find("input.minutes").focus();
 });
 
 $(document).on("keydown input", ".time-input>input.minutes", function (e) {
-	if (e.keyCode === 8 && !$(this).val().length) $(this).parent().find("input.hours").focus();
+	if (e.keyCode === 8 && $(this).val().length === 0) $(this).parent().find("input.hours").focus();
 });
 
 $(document).on("click", ".options-btn", function (e) {

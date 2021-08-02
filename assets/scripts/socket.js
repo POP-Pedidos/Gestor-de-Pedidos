@@ -57,6 +57,11 @@ socket.on("new_order", (order) => {
         }
     }
 
+    new Notification(order.scheduledAt ? "Novo pedido agendado" : "Novo pedido", {
+        icon: `../../../images/${order.scheduledAt ? "purchase-clock" : "purchase"}.png`,
+        body: `${order.name_client} fez um ${order.scheduledAt ? "pedido agendado" : "pedido"} no valor de ${MoneyFormat(order.total)}`
+    }).onclick = () => $("a[for_panel=pedidos]").click();
+
     local_api.sockets.broadcast("order", order);
 });
 

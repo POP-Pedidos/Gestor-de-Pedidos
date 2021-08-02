@@ -126,7 +126,8 @@
     if(order.cash_change > 0) lines.push(`TROCO: {fill} ${MoneyFormat(order.cash_change - order.total)}`);
     if(!!order.observation) lines.push(`OBS: {fill} ${order.observation}`);
 
-    lines.push(`DATA PEDIDO: {fill} ${new Date(order.createdAt).toLocaleString()}`);
+    if(order.scheduledAt) lines.push(`AGENDADO PARA: {fill} ${new Date(order.scheduledAt).toLocaleDateString("pt-BR", { hour: '2-digit', minute: '2-digit' })}`);
+    lines.push(`DATA PEDIDO: {fill} ${new Date(order.createdAt).toLocaleDateString("pt-BR", { hour: '2-digit', minute: '2-digit' })}`);
     lines.push(`DATA IMPRESAO: {fill} ${new Date().toLocaleString()}`);
 
     lines.push(" ");

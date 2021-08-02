@@ -46,6 +46,8 @@ function AddTask(promise, type, list = task_list) {
 function ResetEditor() {
     $("#product_editor").replaceWith($default_product_editor.clone());
 
+    $("#product_editor>main>.availability>div>form.dayShifts").toggle(company.use_shifts);
+    
     const $category_selector = $("#product_editor select.category_selector");
     const $printers_selector = $("#product_editor select.printers_selector");
     const $seo_keywords = $("#product_editor select.seo_keywords");

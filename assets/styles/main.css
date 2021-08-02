@@ -8498,7 +8498,8 @@ table.dataTable td:last-child {
 #body>div {
   position: relative;
   flex: 1;
-  overflow: auto;
+  overflow: overlay;
+  padding-right: 6px;
   height: calc(100vh - 56px - 29px);
 }
 
@@ -9994,12 +9995,9 @@ button>.spinner-border {
   flex: 1;
   margin: auto;
   display: flex;
+  gap: 15px;
   flex-direction: column;
   justify-content: center;
-}
-
-#product_editor>main>.availability>div>form {
-  margin-bottom: 10px 0;
 }
 
 #product_editor>main>.availability h4 {

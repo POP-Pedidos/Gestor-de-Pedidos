@@ -103,6 +103,12 @@ $(document).on("click", "#change_password", function () {
 updater.on("update-downloaded", () => {
     $(".header-actions .update-available").fadeIn(300);
     console.log("Update downloaded!");
+
+
+    new Notification("Nova atualização", {
+        icon: window.icons.default,
+        body: "A atualização está pronta, clique aqui para instalar"
+    }).onclick = () => updater.installUpdate();
 });
 
 updater.on("checking-for-update", () => {
@@ -119,8 +125,4 @@ updater.on("error", (e, error) => {
 
 updater.on("download-progress", (e, progressObj) => {
     console.log("Update download progress:", progressObj);
-});
-
-updater.on("update-downloaded", () => {
-    console.log("Update downloaded!");
 });
