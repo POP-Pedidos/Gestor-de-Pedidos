@@ -485,7 +485,7 @@ body.dark-mode #modalAddComplement .tabs>nav>span.active {
   color: #ececec;
 }
 
-body.dark-mode #modalAddComplement .tabs>nav>span:hover {
+body.dark-mode .tabs>nav>span:hover {
   color: #dbdbdb;
 }
 
@@ -567,10 +567,6 @@ body.dark-mode #product_editor>header {
 body.dark-mode #product_editor>nav {
   background: #2b2b2b;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-}
-
-body.dark-mode .tabs>nav>span.active {
-  color: white;
 }
 
 body.dark-mode .login-screen {
@@ -952,24 +948,24 @@ body.dark-mode .company-address-editor>div>button.back {
   color: white !important;
 }
 
-body.dark-mode .content-column.schedules>.header>h2 {
+body.dark-mode .content-column>.header>h2 {
   color: #e7eaec !important;
 }
 
-body.dark-mode .content-column.schedules>.header>p {
+body.dark-mode .content-column>.header>p {
   color: #92969a !important;
 }
 
-body.dark-mode .content-column.schedules>.tabs>nav {
+body.dark-mode .content-column>.tabs>nav {
   border-color: #4a4a4a !important;
 }
 
-body.dark-mode .content-column.schedules>.tabs>main {
+body.dark-mode .content-column>.tabs>main {
   border: none !important;
   background-color: #474747 !important;
 }
 
-body.dark-mode .content-column.schedules>.tabs>main .section>.header {
+body.dark-mode .content-column>.tabs>main .section>.header {
   border-color: #525252 !important;
   color: #aaacaf !important;
 }
@@ -1001,7 +997,8 @@ body.dark-mode .days_of_week_calendar>.calendar-content>.calendar-content>.day_o
   color: white !important;
 }
 
-body.dark-mode .modal-schedules>div {
+body.dark-mode .modal-schedules>div,
+body.dark-mode .modal-printers>div {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
   background: #2b2b2b !important;
 }
@@ -1052,6 +1049,11 @@ body.dark-mode .container-food_pedidos>.left.tabs>nav>span>span {
 
 body.dark-mode .content-column.schedules .section>.content>.scheduling_interval>div>input {
   color: white;
+}
+
+body.dark-mode .content-column.printers .section>.content>.copy-status:not(:last-child),
+body.dark-mode .content-column.printers .devices .default-printer {
+  border-color: #525252 !important;
 }
 
 @media (max-width: 768px) {
@@ -6221,7 +6223,7 @@ button:focus {
 
 .btn-light:focus,
 .btn-light.focus {
-  box-shadow: 0 0 0 0.2rem rgba(198, 195, 192, 0.3);
+  box-shadow: none;
   background-color: #eee;
   border-color: #c6c3c0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
@@ -10070,12 +10072,18 @@ button>.spinner-border {
   transition: color 0.3s ease;
 }
 
+.tabs>nav>span>i {
+  margin-right: 8px;
+  font-size: 80%;
+  pointer-events: none;
+}
+
 .tabs>nav>span:hover {
-  color: var(--color-tints-20);
+  color: #242426;
 }
 
 .tabs>nav>span.active {
-  color: #242426;
+  color: var(--color-tints-20);
 }
 
 .tabs>nav>span[hidden] {
@@ -14087,55 +14095,51 @@ td>.switch_enable {
   display: flex;
   justify-content: center;
   padding: 40px;
-}
-
-.content-column.schedules {
-  display: flex;
   flex-direction: column;
   max-width: 1080px;
   margin: 0 auto;
   gap: 20px;
 }
 
-.content-column.schedules>.header>h2 {
+.content-column>.header>h2 {
   color: #525558;
 }
 
-.content-column.schedules>.header>p {
+.content-column>.header>p {
   font-size: 17px;
   color: #7f8f9f;
 }
 
-.content-column.schedules>.tabs {
+.content-column>.tabs {
   width: 100%;
 }
 
-.content-column.schedules>.tabs>nav>.indicator {
+.content-column>.tabs>nav>.indicator {
   background-color: var(--color-tints-20);
 }
 
-.content-column.schedules>.tabs>nav {
+.content-column>.tabs>nav {
   border-bottom: 1px solid #e8e8e8;
   padding: 0;
 }
 
-.content-column.schedules>.tabs>main {
+.content-column>.tabs>main {
   border: 1px solid #e8e8e8;
   border-radius: 4px;
   background-color: white;
   margin-top: 20px;
 }
 
-.content-column.schedules>.tabs>main>* {
+.content-column>.tabs>main>* {
   padding: 0;
 }
 
-.content-column.schedules>.tabs>main .section {
+.content-column>.tabs>main .section {
   display: flex;
   flex-direction: column;
 }
 
-.content-column.schedules>.tabs>main .section>.header {
+.content-column>.tabs>main .section>.header {
   border-bottom: 1px solid #e8e8e8;
   padding: 20px;
   font-size: 13px;
@@ -14144,7 +14148,7 @@ td>.switch_enable {
   font-weight: bold;
 }
 
-.content-column.schedules>.tabs>main .section:not(:first-child)>.header {
+.content-column>.tabs>main .section:not(:first-child)>.header {
   border-top: 1px solid #e8e8e8;
 }
 
@@ -14155,9 +14159,9 @@ td>.switch_enable {
   gap: 20px;
 }
 
-.content-column.schedules .section>.content {
+.content-column .section>.content {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
 }
 
 .content-column.schedules .section>.content>.scheduling_interval>div>input {
@@ -14633,7 +14637,8 @@ td>.switch_enable {
   background-color: rgba(189, 189, 189, 0.1);
 }
 
-.modal-schedules {
+.modal-schedules,
+.modal-printers {
   display: flex;
   position: fixed;
   top: 0;
@@ -14647,12 +14652,13 @@ td>.switch_enable {
   z-index: -1;
   visibility: hidden;
   opacity: 0;
-  z-index: 10000;
+  z-index: 1050;
   pointer-events: none;
   transition: opacity 0.3s ease, visibility 0.3s ease, z-index 0.3s;
 }
 
-.modal-schedules>div {
+.modal-schedules>div,
+.modal-printers>div {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -14667,21 +14673,29 @@ td>.switch_enable {
   transition: transform 0.3s;
 }
 
-.modal-schedules.show {
+.modal-printers>div {
+  width: 400px;
+}
+
+.modal-schedules.show,
+.modal-printers.show {
   visibility: visible;
   opacity: 1;
   pointer-events: all;
 }
 
-.modal-schedules.show>div {
+.modal-schedules.show>div,
+.modal-printers.show>div {
   transform: scale(1) translateY(0px);
 }
 
-.modal-schedules.loading>div {
+.modal-schedules.loading>div,
+.modal-printers.loading>div {
   pointer-events: none;
 }
 
-.modal-schedules>div>.header {
+.modal-schedules>div>.header,
+.modal-printers>div>.header {
   display: flex;
   gap: 20px;
   padding: 20px;
@@ -14689,21 +14703,26 @@ td>.switch_enable {
   justify-content: space-between;
 }
 
-.modal-schedules>div>.header>.title {
+.modal-schedules>div>.header>.title,
+.modal-printers>div>.header>.title {
   font-weight: bold;
   font-size: 17px;
 }
 
-.modal-schedules>div>.header>.title>b {
+.modal-schedules>div>.header>.title>b,
+.modal-printers>div>.header>.title>b {
   border-bottom: 2px solid var(--color-tints-20);
 }
 
-.modal-schedules>div>.header>button {
+.modal-schedules>div>.header>button,
+.modal-printers>div>.header>button {
   border: none;
   background: transparent;
+  padding: 0;
 }
 
-.modal-schedules>div>.header>button>svg {
+.modal-schedules>div>.header>button>svg,
+.modal-printers>div>.header>button>svg {
   width: 24px;
   fill: var(--color-tints-20);
 }
@@ -14713,14 +14732,16 @@ td>.switch_enable {
   padding: 20px;
 }
 
-.modal-schedules>div>.footer {
+.modal-schedules>div>.footer,
+.modal-printers>div>.footer {
   padding: 20px;
   display: flex;
   justify-content: flex-end;
   gap: 20px;
 }
 
-.modal-schedules>div>.footer>.cancel {
+.modal-schedules>div>.footer>.cancel,
+.modal-printers>div>.footer>.cancel {
   border: 1px solid var(--color-tints-20);
   border-radius: 5px;
   background: transparent;
@@ -14729,7 +14750,8 @@ td>.switch_enable {
   color: var(--color-tints-20);
 }
 
-.modal-schedules>div>.footer>.save {
+.modal-schedules>div>.footer>.save,
+.modal-printers>div>.footer>.save {
   border: none;
   background-color: var(--color-tints-20);
   padding: 8px 26px;
@@ -14738,6 +14760,17 @@ td>.switch_enable {
   color: white;
   display: flex;
   position: relative;
+}
+
+.modal-printers>div>.footer>.delete {
+  position: relative;
+  border: 1px solid var(--danger);
+  border-radius: 5px;
+  background: transparent;
+  padding: 8px 16px;
+  font-size: 17px;
+  color: var(--danger);
+  margin-right: auto;
 }
 
 .radio-checkmark {
@@ -15046,4 +15079,307 @@ td>.switch_enable {
 
 .modal-schedules.opening-hours>div>.content>.hours-container>div>button:hover {
   color: rgba(255, 0, 0, 0.5);
+}
+
+.content-column.printers .devices .printers {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-column.printers .devices .printers>.title,
+.content-column.printers .devices .default-printer>.title {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.content-column.printers .devices .printers>.description,
+.content-column.printers .devices .default-printer>.description {
+  font-size: 13px;
+  color: #b3b4b5;
+  margin-bottom: 20px;
+}
+
+.content-column.printers .devices .printers-list {
+  display: flex;
+  gap: 20px;
+}
+
+body.dark-mode .content-column.printers .devices .printers-list>.printer {
+  background-color: #8080804d !important;
+}
+
+body.dark-mode .content-column.printers .devices .printers-list>.printer:hover {
+  background-color: #2b2b2b !important;
+}
+
+body.dark-mode .content-column.printers .devices .printers-list>.printer>.device {
+  color: #bbbbbb !important;
+}
+
+body.dark-mode .content-column.printers .devices .default-printer>div>.dropdown,
+body.dark-mode .content-column.printers .devices .printers-list>.new:hover {
+  background-color: #3c3c3c !important;
+}
+
+body.dark-mode .content-column.printers .devices .default-printer>div>.dropdown>span:hover {
+  background-color: var(--color-shader-20) !important;
+}
+
+.content-column.printers .devices .printers-list>.printer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 150px;
+  height: 150px;
+  background-color: #8080801c;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.content-column.printers .devices .printers-list>.printer:hover {
+  background-color: #d8d8d8;
+}
+
+.content-column.printers .devices .printers-list>.printer:hover>i {
+  opacity: 1;
+}
+
+.content-column.printers .devices .printers-list>.printer>i {
+  opacity: 0;
+  font-size: 20px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  transition: opacity 0.3s ease;
+}
+
+.content-column.printers .devices .printers-list>.printer>img {
+  width: 70px;
+  height: 70px;
+}
+
+.content-column.printers .devices .printers-list>.printer>.name {
+  margin: 10px 0 5px;
+  font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.content-column.printers .devices .printers-list>.printer>.device {
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  color: #9a9a9a;
+}
+
+.content-column.printers .devices .printers-list>.new {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 150px;
+  height: 150px;
+  background-color: #8080801a;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.content-column.printers .devices .printers-list>.new>i {
+  font-size: 58px;
+  color: #868686;
+  margin-bottom: 10px;
+  transition: color 0.2s ease;
+}
+
+.content-column.printers .print>.section>.content {
+  flex-direction: column;
+  gap: 0;
+}
+
+.content-column.printers .devices .printers-list>.new:hover {
+  background-color: #d8d8d8;
+  color: var(--color-primary);
+}
+
+.content-column.printers .devices .printers-list>.new:hover>i {
+  color: var(--color-primary);
+}
+
+.content-column.printers .devices .default-printer {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding: 20px;
+}
+
+.content-column.printers .devices .default-printer>div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 10px;
+  padding: 10px 20px 10px 10px;
+  left: -10px;
+  gap: 15px;
+  user-select: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, left 0.3s ease;
+}
+
+.content-column.printers .devices .default-printer>div:hover,
+.content-column.printers .devices .default-printer>div.show-dropdown {
+  background-color: #8080802c;
+  left: 0;
+}
+
+.content-column.printers .devices .default-printer>div>.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 10px;
+  right: 0;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  margin-top: 3px;
+  max-height: 185px;
+  overflow-y: auto;
+  padding: 5px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-5px);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.content-column.printers .devices .default-printer>div>.dropdown>span {
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+.content-column.printers .devices .default-printer>div>.dropdown>span:hover {
+  background-color: var(--color-tints-60);
+}
+
+.content-column.printers .devices .default-printer>div.show-dropdown>.dropdown {
+  opacity: 1;
+  transform: translateY(0px);
+  visibility: visible;
+  pointer-events: all;
+}
+
+.content-column.printers .devices .default-printer>div>.img>img {
+  display: none;
+}
+
+.content-column.printers .devices .default-printer>div>.img>i {
+  padding: 10px;
+  background-color: #8080804d;
+  border-radius: 5px;
+  font-size: 20px;
+}
+
+.content-column.printers .devices .default-printer>div>.infos {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.content-column.printers .devices .default-printer>div>.infos>.name {
+  font-size: 17px;
+}
+
+.content-column.printers .devices .default-printer>div>.infos>.device {
+  display: none;
+  color: #989898;
+}
+
+.content-column.printers .devices .default-printer>div.selected>.img>img {
+  display: block;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  background-color: #8080804d;
+  border-radius: 5px;
+}
+
+.content-column.printers .devices .default-printer>div.selected>.img>i {
+  display: none;
+}
+
+.content-column.printers .devices .default-printer>div.selected>.infos>.device {
+  display: block;
+}
+
+.content-column.printers .section>.content>.copy-status {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px;
+}
+
+.content-column.printers .section>.content>.copy-status:not(:last-child),
+.content-column.printers .devices .default-printer {
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.content-column.printers .section>.content>.copy-status>.title {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.content-column.printers .section>.content>.copy-status>.description {
+  font-size: 13px;
+  color: #b3b4b5;
+  margin-bottom: 15px;
+}
+
+.content-column.printers .section>.content>.copy-status>.options {
+  display: flex;
+  gap: 20px 40px;
+  flex-wrap: wrap;
+}
+
+.content-column.printers .section>.content>.copy-status>.options>label {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 200px;
+  flex: 1;
+}
+
+.modal-printers>div>.content {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 15px;
+}
+
+.modal-printers>div>.content>.section {
+  display: flex;
+  gap: 20px;
+}
+
+.modal-printers>div>.content>.section>label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.modal-printers>div>.content>.section>label.hidden {
+  visibility: hidden;
 }

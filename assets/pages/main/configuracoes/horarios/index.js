@@ -53,3 +53,11 @@ function GetTimeInputValue($element, in_ms = false) {
 function GetCurrentTimeMs() {
     return (new Date().getHours() * 60 * 60 * 1000) + (new Date().getMinutes() * 60 * 1000);
 }
+
+$(".modal-schedules>div>.header>button.back").on("click", function () {
+    $(".modal-schedules").removeClass("show");
+});
+
+$(".modal-schedules>div>.footer>button.cancel").on("click", function () {
+    $(".modal-schedules").removeClass("show");
+});

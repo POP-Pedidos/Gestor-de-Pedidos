@@ -1,10 +1,7 @@
 async function printOrder(order) {
-    let cur_status;
-    const order_data = { ...order };
+    if (!company.print_options) return;
 
-    if (order.status === 1) cur_status = "wait_production";
-    else if (order.status === 2) cur_status = "wait_delivery";
-    else if (order.status === 10) cur_status = "finished";
+    const order_data = { ...order };
 
     order_data.address = order.delivery_type !== "withdrawal" ? `${order.street_name}, ${order.street_number} - ${order.neighborhood}, ${order.city} - ${order.state}` : null;
     order_data.dt_accept = new Date(order.dt_accept).toISOString();
@@ -14,7 +11,7 @@ async function printOrder(order) {
         device: GetLocalPrinter(primary_printer?.id_printer) || primary_printer?.device,
     };
 
-    if (!!company.print_production_copy && company.print_production_copy === cur_status) {
+    if ((order.scheduledAt ? company.print_options.scheduled_production : company.print_options.production) === order.status) {
         const printer_items = [];
 
         for (const item of order_data.items || []) {
@@ -33,18 +30,18 @@ async function printOrder(order) {
             printer.device = GetLocalPrinter(id_printer) || printer.device;
             order_data.items = printer_items[id_printer];
 
-            await printService.printProductionCopy(printer, order_data, company);
+            await printService.printProductionCopy(printer, order_data, company).catch(console.error);
         }
 
         order_data.items = order.items;
     }
 
-    if (!!company.print_control_copy && company.print_control_copy === cur_status) {
-        await printService.printControlCopy(primary_printer_device, order_data, company);
+    if ((order.scheduledAt ? company.print_options.scheduled_control : company.print_options.control) === order.status) {
+        await printService.printControlCopy(primary_printer_device, order_data, company).catch(console.error);
     }
 
-    if (!!company.print_delivery_copy && company.print_delivery_copy === cur_status) {
-        await printService.printDeliveryCopy(primary_printer_device, order_data, company);
+    if ((order.scheduledAt ? company.print_options.scheduled_delivery : company.print_options.delivery) === order.status) {
+        await printService.printDeliveryCopy(primary_printer_device, order_data, company).catch(console.error);
     }
 }
 
@@ -358,7 +355,7 @@ function orderIsOnFilters(order) {
         if (filter_status === "opened") {
             in_status = order.status >= 0 && order.status < 10;
         } else if (filter_status === "refused") {
-            in_status = order.status < 10;
+            in_status = order.status < 0;
         }
     }
 

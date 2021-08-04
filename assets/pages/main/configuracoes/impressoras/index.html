@@ -1,322 +1,227 @@
-<div class="modal fade" id="modalImpressora" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="basicModalLabel">Adicionar impressora</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="frmImpressora">
-                    <div class="conteudo">
-                        <div class="row">
-                            <div class="col-xl-12 col-lglg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="name">Nome</label>
-                                    <input type="text" class="form-control name" name="name"
-                                        placeholder="Nome para a impressora" required>
+<div class="content-column printers">
+    <div class="header">
+        <h2>Dispositivos de impressão</h2>
+        <p>Escolha e configure como as impressoras devem funcionar</p>
+    </div>
+    <div class="tabs">
+        <nav>
+            <span class="devices"><i class="fas fa-bolt"></i>Dispositivos</span>
+            <span class="print"><i class="fas fa-print"></i>Impressão</span>
+            <div class="indicator" style="left: 0px; width: 141px;"></div>
+        </nav>
+        <main>
+            <div class="devices show">
+                <div class="section">
+                    <div class="header">Dispositivos</div>
+                    <div class="content">
+                        <div class="default-printer">
+                            <span class="title">Impressora padrão</span>
+                            <span class="description">Esta opção define quando as vias devem ser impressas nos pedidos não agendados</span>
+
+                            <div>
+                                <div class="img">
+                                    <img src="../../../images/printer-solid.svg">
+                                    <i class="fas fa-plus"></i>
                                 </div>
-                                <div class="form-group">
-                                    <label for="device">Dispositivo</label>
-                                    <select class="selectpicker device" name="device" required data-container="body" data-size="6" data-dropup-auto="false"></select>
+                                <div class="infos">
+                                    <span class="name"></span>
+                                    <span class="device"></span>
                                 </div>
+                                <div class="dropdown"></div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label>Tipo de impressora</label>
-                                    <select class="selectpicker type" name="type" required data-container="body">
-                                        <option value="graphic">Gráfica</option>
-                                        <option value="text">Texto</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group size">
-                                    <label>Tamanho da bobina</label>
-                                    <select class="selectpicker size" name="size" required data-container="body">
-                                        <option value="58">58mm</option>
-                                        <option value="80">80mm</option>
-                                    </select>
-                                </div>
-                                <div class="form-group columns">
-                                    <label>Quantidade de colunas</label>
-                                    <select class="selectpicker columns" name="size" required data-container="body" data-size="4" data-dropup-auto="false">
-                                        <option value="20">20</option>
-                                        <option value="21">21</option>
-                                        <option value="22">22</option>
-                                        <option value="23">23</option>
-                                        <option value="24">24</option>
-                                        <option value="25">25</option>
-                                        <option value="26">26</option>
-                                        <option value="27">27</option>
-                                        <option value="28">28</option>
-                                        <option value="29">29</option>
-                                        <option value="30">30</option>
-                                        <option value="31">31</option>
-                                        <option value="32">32</option>
-                                        <option value="33">33</option>
-                                        <option value="34">34</option>
-                                        <option value="35">35</option>
-                                        <option value="36">36</option>
-                                        <option value="37">37</option>
-                                        <option value="38">38</option>
-                                        <option value="39">39</option>
-                                        <option value="40">40</option>
-                                        <option value="41">41</option>
-                                        <option value="42">42</option>
-                                        <option value="43">43</option>
-                                        <option value="44">44</option>
-                                        <option value="45">45</option>
-                                        <option value="46">46</option>
-                                        <option value="47">47</option>
-                                        <option value="48">48</option>
-                                        <option value="49">49</option>
-                                        <option value="50">50</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group font_scale">
-                                    <label>Tamanho da fonte</label>
-                                    <select class="selectpicker font_scale" name="font_scale" required data-container="body">
-                                        <option value="0.8">Pequena</option>
-                                        <option value="1" selected>Média</option>
-                                        <option value="1.2">Grande</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group padding">
-                                    <label>Margem lateral</label>
-                                    <select class="selectpicker padding" name="padding" required data-container="body" data-size="4" data-dropup-auto="false">
-                                        <option value="0">Nenhuma</option>
-                                        <option value="5">5%</option>
-                                        <option value="6">6%</option>
-                                        <option value="7">7%</option>
-                                        <option value="8">8%</option>
-                                        <option value="9">9%</option>
-                                        <option value="10">10%</option>
-                                        <option value="15">15%</option>
-                                    </select>
-                                </div>
-                            </div>
+                        <div class="printers">
+                            <span class="title">Impressoras</span>
+                            <span class="description">Esta opção define quando as vias devem ser impressas nos pedidos não agendados</span>
+
+                            <div class="printers-list"></div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Adicionar<div class="spinner-border"></div></button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modalEditImpressora" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="basicModalLabel">Editar impressora</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="frmEditImpressora">
-                    <div class="conteudo">
-                        <div class="row">
-                            <div class="col-xl-12 col-lglg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="name">Nome</label>
-                                    <input type="text" class="form-control name" name="name" placeholder="Nome para a impressora" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="device">Dispositivo</label>
-                                    <select class="selectpicker device" name="device" required data-container="body" data-size="6" data-dropup-auto="false"></select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label>Tipo de impressora</label>
-                                    <select class="selectpicker type" name="type" required data-container="body">
-                                        <option value="graphic">Gráfica</option>
-                                        <option value="text">Texto</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group size">
-                                    <label>Tamanho da bobina</label>
-                                    <select class="selectpicker size" name="size" required data-container="body">
-                                        <option value="58">58mm</option>
-                                        <option value="80">80mm</option>
-                                    </select>
-                                </div>
-                                <div class="form-group columns">
-                                    <label>Quantidade de colunas</label>
-                                    <select class="selectpicker columns" name="size" required data-container="body"
-                                        data-size="4" data-dropup-auto="false">
-                                        <option value="20">20</option>
-                                        <option value="21">21</option>
-                                        <option value="22">22</option>
-                                        <option value="23">23</option>
-                                        <option value="24">24</option>
-                                        <option value="25">25</option>
-                                        <option value="26">26</option>
-                                        <option value="27">27</option>
-                                        <option value="28">28</option>
-                                        <option value="29">29</option>
-                                        <option value="30">30</option>
-                                        <option value="31">31</option>
-                                        <option value="32">32</option>
-                                        <option value="33">33</option>
-                                        <option value="34">34</option>
-                                        <option value="35">35</option>
-                                        <option value="36">36</option>
-                                        <option value="37">37</option>
-                                        <option value="38">38</option>
-                                        <option value="39">39</option>
-                                        <option value="40">40</option>
-                                        <option value="41">41</option>
-                                        <option value="42">42</option>
-                                        <option value="43">43</option>
-                                        <option value="44">44</option>
-                                        <option value="45">45</option>
-                                        <option value="46">46</option>
-                                        <option value="47">47</option>
-                                        <option value="48">48</option>
-                                        <option value="49">49</option>
-                                        <option value="50">50</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group font_scale">
-                                    <label>Tamanho da fonte</label>
-                                    <select class="selectpicker font_scale" name="font_scale" required
-                                        data-container="body">
-                                        <option value="0.8">Pequena</option>
-                                        <option value="1" selected>Média</option>
-                                        <option value="1.2">Grande</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group padding">
-                                    <label>Margem lateral</label>
-                                    <select class="selectpicker padding" name="padding" required data-container="body" data-size="4" data-dropup-auto="false">
-                                        <option value="0">Nenhuma</option>
-                                        <option value="5">5%</option>
-                                        <option value="6">6%</option>
-                                        <option value="7">7%</option>
-                                        <option value="8">8%</option>
-                                        <option value="9">9%</option>
-                                        <option value="10">10%</option>
-                                        <option value="15">15%</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Salvar<div class="spinner-border"></div></button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<!-- Page header start -->
-<div class="page-header">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">Configurações</li>
-        <li class="breadcrumb-item active">Impressoras</li>
-    </ol>
-    <div class="d-flex align-items-center">
-        <i class="fas fa-cog config printers-config-btn"></i>
-        <button id="btnModalImpressora" class="btn btn-success" data-toggle="modal">
-            <i class="fas fa-plus"></i> Adicionar impressora
-        </button>
-    </div>
-</div>
-<!-- Page header end -->
-
-<div class="print-options">
-    <div>
-        <header>
-            <h4>Impressão automática</h4>
-            <button class="close btn btn-danger"><i class="fas fa-times"></i></button>
-        </header>
-        <form>
-            <label>
-                <span>Via controle</span>
-                <select class="selectpicker" name="print_control_copy">
-                    <option value="none" selected>Não imprimir</option>
-                    <option value="wait_production">No Aceite</option>
-                    <option value="wait_delivery">Foi Produzido</option>
-                    <option value="finished">Foi Finalizado</option>
-                </select>
-            </label>
-            <label>
-                <span>Via produção</span>
-                <select class="selectpicker" name="print_production_copy">
-                    <option value="none" selected>Não imprimir</option>
-                    <option value="wait_production">No Aceite</option>
-                </select>
-            </label>
-            <label>
-                <span>Via entrega</span>
-                <select class="selectpicker" name="print_delivery_copy">
-                    <option value="none" selected>Não imprimir</option>
-                    <option value="wait_production">No Aceite</option>
-                    <option value="wait_delivery">Foi Produzido</option>
-                    <option value="finished">Foi Finalizado</option>
-                </select>
-            </label>
-        </form>
-    </div>
-</div>
-
-<!-- Main container start -->
-<div class="main-container">
-
-    <!-- Row starts -->
-    <div class="row gutters">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-            <div class="table-container">
-                <div class="table-responsive">
-                    <table id="table-configuracoes-impressoras" class="table custom-table">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Dispositivo</th>
-                                <th style="width: 1%;">Principal</th>
-                                <th style="width: 1%;">Ação</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
                 </div>
             </div>
-        </div>
-        <!-- Main container end -->
-
+            <div class="print">
+                <div class="section">
+                    <div class="header">Impressão automática</div>
+                    <form class="content">
+                        <div class="copy-status unscheduled">
+                            <span class="title">Pedidos não agendados</span>
+                            <span class="description">Esta opção define quando as vias devem ser impressas nos pedidos não agendados</span>
+                            <div class="options">
+                                <label>
+                                    <span>Via controle</span>
+                                    <select class="selectpicker control" name="control">
+                                        <option value="" selected>Não imprimir</option>
+                                        <option value="1">Aceito</option>
+                                        <option value="2">Produzido</option>
+                                        <option value="10">Finalizado</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    <span>Via produção</span>
+                                    <select class="selectpicker production" name="production">
+                                        <option value="" selected>Não imprimir</option>
+                                        <option value="1">Aceito</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    <span>Via entrega</span>
+                                    <select class="selectpicker delivery" name="delivery">
+                                        <option value="" selected>Não imprimir</option>
+                                        <option value="1">Aceito</option>
+                                        <option value="2">Produzido</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="copy-status scheduled">
+                            <span class="title">Pedidos agendados</span>
+                            <span class="description">Esta opção define quando as vias devem ser impressas nos pedidos agendados</span>
+                            <div class="options">
+                                <label>
+                                    <span>Via controle</span>
+                                    <select class="selectpicker control" name="scheduled_control">
+                                        <option value="" selected>Não imprimir</option>
+                                        <option value="1">Aceito</option>
+                                        <option value="2">Produzido</option>
+                                        <option value="10">Finalizado</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    <span>Via produção</span>
+                                    <select class="selectpicker production" name="scheduled_production">
+                                        <option value="" selected>Não imprimir</option>
+                                        <option value="1">Aceito</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    <span>Via entrega</span>
+                                    <select class="selectpicker delivery" name="scheduled_delivery">
+                                        <option value="" selected>Não imprimir</option>
+                                        <option value="1">Aceito</option>
+                                        <option value="2">Produzido</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
     </div>
 </div>
-<!-- Page content end -->
 
-<script src="../configuracoes/impressoras/config.js"></script>
+<div class="modal-printers">
+    <div>
+        <div class="header">
+            <span class="title">Configurar impressora</span>
+            <button class="back">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path>
+                </svg>
+            </button>
+        </div>
+        <form class="content">
+            <div class="section">
+                <label>
+                    <span>Nome</span>
+                    <input type="text" class="form-control" name="name" placeholder="Nome para a impressora" required>
+                </label>
+            </div>
+            <div class="section">
+                <label class="device">
+                    <span>Dispositivo</span>
+                    <select class="selectpicker" name="device" required data-container="body" data-size="6" data-dropup-auto="false"></select>
+                </label>
+            </div>
+            <div class="section">
+                <label>
+                    <span>Tipo</span>
+                    <select class="selectpicker" name="type" required data-container="body">
+                        <option value="graphic">Gráfica</option>
+                        <option value="text">Texto</option>
+                    </select>
+                </label>
+                <label class="size">
+                    <span>Tamanho da bobina</span>
+                    <select class="selectpicker" name="size" required data-container="body">
+                        <option value="58">58mm</option>
+                        <option value="80">80mm</option>
+                    </select>
+                </label>
+                <label class="columns">
+                    <span>Quantidade de colunas</span>
+                    <select class="selectpicker" name="size" required data-container="body" data-size="4" data-dropup-auto="false">
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                        <option value="32">32</option>
+                        <option value="33">33</option>
+                        <option value="34">34</option>
+                        <option value="35">35</option>
+                        <option value="36">36</option>
+                        <option value="37">37</option>
+                        <option value="38">38</option>
+                        <option value="39">39</option>
+                        <option value="40">40</option>
+                        <option value="41">41</option>
+                        <option value="42">42</option>
+                        <option value="43">43</option>
+                        <option value="44">44</option>
+                        <option value="45">45</option>
+                        <option value="46">46</option>
+                        <option value="47">47</option>
+                        <option value="48">48</option>
+                        <option value="49">49</option>
+                        <option value="50">50</option>
+                    </select>
+                </label>
+            </div>
+            <div class="section">
+                <label class="font_scale">
+                    <span>Tamanho da fonte</span>
+                    <select class="selectpicker" name="font_scale" required data-container="body">
+                        <option value="0.8">Pequena</option>
+                        <option value="1" selected>Normal</option>
+                        <option value="1.2">Grande</option>
+                    </select>
+                </label>
+                <label class="padding">
+                    <span>Margem lateral</span>
+                    <select class="selectpicker" name="padding" required data-container="body" data-size="4" data-dropup-auto="false">
+                        <option value="0">Nenhuma</option>
+                        <option value="5">5%</option>
+                        <option value="6">6%</option>
+                        <option value="7">7%</option>
+                        <option value="8">8%</option>
+                        <option value="9">9%</option>
+                        <option value="10">10%</option>
+                        <option value="15">15%</option>
+                    </select>
+                </label>
+            </div>
+            <button type="submit" hidden></button>
+        </form>
+        <div class="footer">
+            <button class="delete">
+                <span class="spinner-border"></span> Remover
+            </button>
+            <button class="cancel">Cancelar</button>
+            <button class="save">
+                <span class="spinner-border"></span> Salvar
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="../configuracoes/impressoras/automatic_print.js"></script>
+<script src="../configuracoes/impressoras/devices.js"></script>
 <script src="../configuracoes/impressoras/index.js"></script>

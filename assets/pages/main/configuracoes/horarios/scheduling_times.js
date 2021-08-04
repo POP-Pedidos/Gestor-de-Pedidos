@@ -2,14 +2,6 @@ $(".content-column.schedules  .scheduling-hours .days_of_week_calendar .calendar
     OpenSchedulingTimesModal($(this).attr("day"));
 });
 
-$(".modal-schedules>div>.header>button.back").on("click", function () {
-    $(".modal-schedules").removeClass("show");
-});
-
-$(".modal-schedules>div>.footer>button.cancel").on("click", function () {
-    $(".modal-schedules").removeClass("show");
-});
-
 $("#switch_scheduling").on("change", function () {
     const use_scheduling = $(this).is(":checked");
 
