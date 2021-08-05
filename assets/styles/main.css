@@ -14161,6 +14161,9 @@ td>.switch_enable {
 
 .content-column .section>.content {
   display: flex;
+}
+
+.content-column.printers .section>.content {
   flex-direction: column;
 }
 
