@@ -5,10 +5,10 @@
     </div>
     <div class="tabs">
         <nav>
-            <span class="schedules">Abertura e fechamento</span>
-            <span class="scheduling">Turnos do dia</span>
-            <span class="scheduling">Horários e agendamento</span>
-            <div class="indicator" style="left: 0px; width: 205px;"></div>
+            <span class="schedules"><i class="fas fa-user-clock"></i>Abertura e fechamento</span>
+            <span class="scheduling"><i class="fas fa-hourglass-half"></i>Turnos do dia</span>
+            <span class="scheduling"><i class="fas fa-calendar"></i>Horários e agendamento</span>
+            <div class="indicator" style="left: 0px; width: 232px;"></div>
         </nav>
         <main>
             <div class="schedules show">
@@ -120,7 +120,7 @@
                     <div class="content">
                         <div class="use_shifts toggle-option">
                             <span class="title">Trabalha com turnos</span>
-                            <span class="description">Esta opção faz com que seja possível um produto estar disponível apenas em certas horas do dia!</span>
+                            <span class="description">Esta opção faz com que seja possível um produto estar disponível apenas em certas horas do dia</span>
                             <div class="switch">
                                 <div class="custom-switch">
                                     <input type="checkbox" id="switch_shifts">
@@ -248,13 +248,21 @@
                     <div class="content">
                         <div class="use_scheduling toggle-option">
                             <span class="title">Trabalha com agendamentos</span>
-                            <span class="description">Esta opção faz com que seus clientes possa agendar o pedido de entrega ou retirada!</span>
+                            <span class="description">Esta opção faz com que seus clientes possa agendar o pedido de entrega ou retirada</span>
                             <div class="switch">
                                 <div class="custom-switch">
                                     <input type="checkbox" id="switch_scheduling">
                                     <label for="switch_scheduling">Toggle</label>
                                 </div>
                                 <span>Desativado</span>
+                            </div>
+                        </div>
+                        <div class="scheduling_interval toggle-option">
+                            <span class="title">Intervalo</span>
+                            <span class="description">Esta opção define qual será o intervalo mínimo em minutos entre o horário atual e o próximo horário de agendamento</span>
+                            <div>
+                                <input id="scheduling_interval" type="number" placeholder="0" min="0"/>
+                                <span>Minutos</span>
                             </div>
                         </div>
                     </div>

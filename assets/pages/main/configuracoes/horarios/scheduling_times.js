@@ -2,20 +2,12 @@ $(".content-column.schedules  .scheduling-hours .days_of_week_calendar .calendar
     OpenSchedulingTimesModal($(this).attr("day"));
 });
 
-$(".modal-schedules>div>.header>button.back").on("click", function () {
-    $(".modal-schedules").removeClass("show");
-});
-
-$(".modal-schedules>div>.footer>button.cancel").on("click", function () {
-    $(".modal-schedules").removeClass("show");
-});
-
 $("#switch_scheduling").on("change", function () {
     const use_scheduling = $(this).is(":checked");
 
     $(this).parent().parent().find(">span").text(use_scheduling ? "Ativado" : "Desativado");
     $(".content-column.schedules>.tabs>main .section.scheduling-hours").toggleClass("disabled", !use_scheduling);
-    
+
     $(this).data("fetch")?.abort();
 
     const promise = FetchAPI("/company", {
@@ -32,6 +24,35 @@ $("#switch_scheduling").on("change", function () {
     }).catch(error => {
         if (!error) return;
         Swal.fire("Opss...", `Ocorreu um erro ao tentar atualizar as configurações de funcionamento!`, "error");
+        Swal.showValidationMessage(error);
+    });
+});
+
+$('#scheduling_interval').keydown(function (e) {
+    if (e.keyCode === 190 || e.keyCode === 110 || e.keyCode === 188) {
+        e.preventDefault();
+    }
+});
+
+$("#scheduling_interval").on("change", function () {
+    const scheduling_interval = Number($(this).val()) * 60000;
+
+    $(this).data("fetch")?.abort();
+
+    const promise = FetchAPI("/company", {
+        method: "PUT",
+        body: { scheduling_interval }
+    });
+
+    $(this).data("fetch", promise);
+
+    company.scheduling_interval = scheduling_interval;
+
+    promise.then(company_data => {
+        company = company_data;
+    }).catch(error => {
+        if (!error) return;
+        Swal.fire("Opss...", `Ocorreu um erro ao tentar atualizar o intervalo de agendamento!`, "error");
         Swal.showValidationMessage(error);
     });
 });
