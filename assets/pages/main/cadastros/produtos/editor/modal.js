@@ -100,7 +100,8 @@ function AddItemToComplementEditor(item) {
             </div>
         </div>
         <div class="actions">
-            <button class="delete"><i class="fas fa-trash"></i></button>
+            <button class="delete"><i class="fas fa-trash"></i></button><br/>
+            <button class="enabled"><i class="${item.enabled ? `fas fa-thumbs-down` : `fas fa-thumbs-up`}" style="color: ${item.enabled ? `#fa6565` : `green`}"></i></button>
         </div>
     </div>`);
 
@@ -143,6 +144,20 @@ function AddItemToComplementEditor(item) {
         $item.remove();
 
         group_items.splice(group_items.findIndex(item => item === group_item), 1);
+    });
+
+    $item.find(".actions>.enabled").click(function () {
+        for (const _item of group_items) {
+            if (_item === group_item) {
+                if (_item.enabled) {
+                    _item.enabled = false;
+                    $item.find(".actions>.enabled").html(`<i class="fas fa-thumbs-up" style="color: green;"></i>`);
+                } else {
+                    _item.enabled = true;
+                    $item.find(".actions>.enabled").html(`<i class="fas fa-thumbs-down" style="color: #fa6565;"></i>`);
+                }
+            }
+        }
     });
 
     $(".modal").scrollTop($(".modal")[0].scrollHeight);
@@ -219,7 +234,7 @@ function ShowComplementGroupEditor(group) {
             const existent_item = item.id_item ? group?.items?.find(_item => _item.id_item === item.id_item) : null;
 
             if (existent_item) {
-                const modificated = item.name != existent_item.name || item.description != existent_item.description || item.price != existent_item.price;
+                const modificated = item.name != existent_item.name || item.description != existent_item.description || item.price != existent_item.price || item.enabled != existent_item.enabled;
 
                 if (modificated) form_data.group_task.AddTask(function () {
                     return FetchAPI(`/product/${this.product.id_product}/complement/${this.complement_group.id_group}/item/${item.id_item}`, {
