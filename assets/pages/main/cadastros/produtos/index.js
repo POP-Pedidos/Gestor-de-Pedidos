@@ -352,7 +352,7 @@ lazy_loading.onHandle = async (state) => {
     if (state.category_offset === 0 && state.product_offset === 0) {
         FetchAPI(`/company/${company.id_company}/product`, {
             instance_check: true,
-            params: { limit: 0 }
+            params: { limit: 0, ignore_unavailable: false }
         }).then(data => {
             $(".product-list-container>.max-results").text(data.metadata.max > 0 ? `${data.metadata.max} resultado${!!data.metadata.max ? "s" : ""}` : "Nenhum resultado");
         }).finally(() => {
@@ -382,6 +382,7 @@ lazy_loading.onHandle = async (state) => {
         FetchAPI(`/company/${company.id_company}/product`, {
             instance_check: true,
             params,
+            ignore_unavailable: false,
         }).then(data => {
             state.max_products = data.metadata.max;
             $(".product-list-container>.max-results").text(`${state.max_products} resultado${state.max_products > 1 ? "s" : ""}`);
@@ -412,6 +413,7 @@ lazy_loading.onHandle = async (state) => {
                     include_disabled: true,
                     offset: state.category_offset,
                     limit: 100,
+                    ignore_unavailable: true,
                 }
             }).then(data => {
                 state.max_categories = data.metadata.max;
@@ -450,12 +452,13 @@ lazy_loading.onHandle = async (state) => {
             };
 
             let skeleton_index = 0;
-
+            console.log(cur_category.id_category);
             FetchAPI(`/company/${company.id_company}/product`, {
                 instance_check: true,
                 params,
+                ignore_unavailable: false,
             }).then(data => {
-
+                
                 const products = data.results;
 
                 for (const product of products) {

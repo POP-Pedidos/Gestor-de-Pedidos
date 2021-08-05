@@ -11141,6 +11141,10 @@ button>.spinner-border {
   color: #fa6565;
 }
 
+#modalAddComplement .complements_list>.item>.actions>button.enabled:hover {
+  color: #fa6565;
+}
+
 .quantity_selector {
   position: relative;
   height: 42px;
