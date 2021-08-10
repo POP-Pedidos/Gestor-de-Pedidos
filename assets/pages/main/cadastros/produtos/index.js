@@ -452,7 +452,7 @@ lazy_loading.onHandle = async (state) => {
             };
 
             let skeleton_index = 0;
-            console.log(cur_category.id_category);
+
             FetchAPI(`/company/${company.id_company}/product`, {
                 instance_check: true,
                 params,

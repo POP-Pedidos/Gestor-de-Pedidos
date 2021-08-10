@@ -80,6 +80,8 @@ function LoadDashboard() {
     }).finally(() => {
         RemoveDashSkeleton();
     });
+
+    lazy_loading.trigger();
 }
 
 function AddOrderSkeleton() {

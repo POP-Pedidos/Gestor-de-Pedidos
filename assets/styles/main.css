@@ -541,7 +541,7 @@ body.dark-mode .page-wrapper .sidebar-wrapper .sidebar-menu ul li a.current-page
 }
 
 body.dark-mode .page-wrapper .sidebar-wrapper .sidebar-menu ul li a,
-body.dark-mode .page-wrapper .sidebar-wrapper .sidebar-menu ul li a i {
+body.dark-mode .page-wrapper .sidebar-wrapper .sidebar-menu ul li a i:first-child {
   color: #dcdcdc;
 }
 
@@ -555,7 +555,7 @@ body.dark-mode .page-wrapper .sidebar-wrapper .sidebar-menu ul li a.current-page
   background: linear-gradient(to right, var(--color-tones-20), transparent) !important;
 }
 
-body.dark-mode .page-wrapper .sidebar-wrapper .sidebar-menu ul li a:hover i {
+body.dark-mode .page-wrapper .sidebar-wrapper .sidebar-menu ul li a:hover i:first-child {
   color: white;
 }
 
@@ -1726,7 +1726,7 @@ ul.header-tasks:last-child {
   transition: all 0.5s ease-in-out;
 }
 
-.page-wrapper .sidebar-wrapper .sidebar-menu ul li a i {
+.page-wrapper .sidebar-wrapper .sidebar-menu ul li a i:first-child {
   margin-right: 7px;
   font-size: 1.2rem;
   color: #727176;
@@ -1796,11 +1796,24 @@ ul.header-tasks:last-child {
   color: black;
 }
 
+.page-wrapper .sidebar-wrapper .sidebar-menu ul li>a>i.info {
+  display: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  color: #bbbbbb;
+  left: 20px;
+  top: -4px;
+  font-size: 17px;
+  transform: none !important;
+}
+
 .page-wrapper .sidebar-wrapper .sidebar-menu ul li>a>i.alert {
   display: none;
   margin: 0;
+  padding: 0;
   position: relative;
-  color: gold !important;
+  color: gold;
   left: 20px;
   top: -4px;
   font-size: 17px;
@@ -14574,6 +14587,17 @@ td>.switch_enable {
   color: white;
   padding: 5px 5px 2px 7px;
   z-index: 2;
+}
+
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.time-marker.unavailable {
+  border-bottom: 3px solid #b33b3b;
+  background-color: #b33b3b;
+  color: #941818;
+}
+
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.time-marker.unavailable:hover {
+  border-color: #8e3232;
+  color: white;
 }
 
 .days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.marker>span {

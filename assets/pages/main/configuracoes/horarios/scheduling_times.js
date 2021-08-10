@@ -35,7 +35,12 @@ $('#scheduling_interval').keydown(function (e) {
 });
 
 $("#scheduling_interval").on("change", function () {
-    const scheduling_interval = Number($(this).val()) * 60000;
+    let scheduling_interval = Number($(this).val());
+
+    if (scheduling_interval > 10080) {
+        $(this).val(10080);
+        scheduling_interval = 10080;
+    }
 
     $(this).data("fetch")?.abort();
 
@@ -270,6 +275,15 @@ function OpenSchedulingTimesModal(dayOfWeek, focus_id = null) {
     $modal.addClass("show");
 }
 
+function SchedulingTimeIsAvailableOnCompanyTimes(scheduling) {
+    for (const weekday_shift of company.weekday_shifts) {
+        if (weekday_shift.weekday !== scheduling.weekday) continue;
+        if (weekday_shift.start <= scheduling.time && weekday_shift.end >= scheduling.time) return true;
+    }
+
+    return false;
+}
+
 function LoadSchedulingTimes() {
     $(".scheduling-hours .days_of_week_calendar .calendar-content>.day_of_week").empty();
 
@@ -298,6 +312,8 @@ function LoadSchedulingTimes() {
         $cur_time.css({
             top: `${scale * GetCurrentTimeMs()}%`,
         });
+
+        $time.toggleClass("unavailable", !SchedulingTimeIsAvailableOnCompanyTimes(scheduling));
 
         $time.on("click", function (e) {
             e.stopPropagation();

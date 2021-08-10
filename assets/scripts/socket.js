@@ -55,6 +55,8 @@ socket.on("new_order", (order) => {
             const $order = addOrder(order);
             $order.insertBefore(".container-food_pedidos>.left>main>div>.list>div:first-child");
         }
+    } else {
+        orders.push(order);
     }
 
     new Notification(order.scheduledAt ? "Novo pedido agendado" : "Novo pedido", {

@@ -47,7 +47,7 @@ function ResetEditor() {
     $("#product_editor").replaceWith($default_product_editor.clone());
 
     $("#product_editor>main>.availability>div>form.dayShifts").toggle(company.use_shifts);
-    
+
     const $category_selector = $("#product_editor select.category_selector");
     const $printers_selector = $("#product_editor select.printers_selector");
     const $seo_keywords = $("#product_editor select.seo_keywords");
@@ -149,18 +149,24 @@ function LoadProduct(product) {
     $("#product_editor select.category_selector").selectpicker("val", product.id_category);
     if (product.id_printer > 0) $("#product_editor select.printers_selector").selectpicker("val", product.id_printer);
 
-    for (const dayShift in product.availability_dayShifts) {
-        const checked = product.availability_dayShifts[dayShift];
+    $(`#product_editor .availability .dayShifts>.list>div`).removeClass("selected");
+    $(`#product_editor .availability .dayShifts>.list>div>input`).prop("checked", false);
 
-        $(`#product_editor .availability .dayShifts>.list>div`).eq(dayShift).toggleClass("selected", checked)
-            .find("input").prop("checked", checked);
+    for (const shift of product.availability_shifts) {
+        const $input = $(`#product_editor .availability .dayShifts>.list>div>input[name="${shift}"]`);
+
+        $input.parent().addClass("selected");
+        $input.prop("checked", true);
     }
 
-    for (const daysOfWeek in product.availability_daysOfWeek) {
-        const checked = product.availability_daysOfWeek[daysOfWeek];
+    $(`#product_editor .availability .daysOfWeek>.list>div`).removeClass("selected");
+    $(`#product_editor .availability .daysOfWeek>.list>div>input`).prop("checked", false);
 
-        $(`#product_editor .availability .daysOfWeek>.list>div`).eq(daysOfWeek).toggleClass("selected", checked)
-            .find("input").prop("checked", checked);
+    for (const weekday of product.availability_weekdays) {
+        const $input = $(`#product_editor .availability .daysOfWeek>.list>div>input[name="${weekday}"]`);
+
+        $input.parent().addClass("selected");
+        $input.prop("checked", true);
     }
 
     if (product.thumbnail) LoadThumbnail(product.thumbnail);
