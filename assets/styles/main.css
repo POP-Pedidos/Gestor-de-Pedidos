@@ -758,7 +758,8 @@ body.dark-mode #dashboard>.orders {
   background-color: #484848;
 }
 
-body.dark-mode .max-results {
+body.dark-mode .max-results,
+body.dark-mode #dashboard>.orders>header>.analytics>div {
   color: lightgray;
 }
 
@@ -12951,7 +12952,27 @@ td>.switch_enable {
   margin-left: 20px;
 }
 
-#dashboard>.orders>header>.max-results {
+#dashboard>.orders>header>.analytics {
+  display: flex;
+  gap: 2px 20px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+#dashboard>.orders>header>.analytics>div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#dashboard>.orders>header>.analytics>div>img {
+  width: 20px;
+  border-radius: 4px;
+}
+
+#dashboard>.orders>header>.analytics>.max-results {
   margin: 0;
 }
 
@@ -15206,6 +15227,7 @@ body.dark-mode .content-column.printers .devices .default-printer>div>.dropdown>
   font-size: 11px;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: center;
   max-width: 100%;
   color: #9a9a9a;
 }
