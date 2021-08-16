@@ -411,9 +411,9 @@ lazy_loading.onHandle = async (state) => {
                 instance_check: true,
                 params: {
                     include_disabled: true,
+                    ignore_unavailable: false,
                     offset: state.category_offset,
                     limit: 100,
-                    ignore_unavailable: true,
                 }
             }).then(data => {
                 state.max_categories = data.metadata.max;
