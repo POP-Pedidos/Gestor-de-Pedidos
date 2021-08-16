@@ -103,7 +103,7 @@ function AddItemToComplementEditor(item) {
         
         <div class="actions">
             <div class="custom-switch enable">
-                <input type="checkbox" id="${switch_id}">
+                <input type="checkbox" id="${switch_id}" checked>
                 <label for="${switch_id}">Toggle</label>
             </div>
             <button class="delete"><i class="fas fa-trash"></i></button><br/>
