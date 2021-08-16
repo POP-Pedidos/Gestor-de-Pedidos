@@ -75,6 +75,7 @@ function ShowCreatePrinterModal() {
             AddLocalPrinter(new_printer.id_printer, new_printer.device);
 
             LoadPrinters();
+            LoadDefaultPrinter();
             $(".modal-printers").removeClass("show");
         }).catch(error => {
             if (error == "already_exists") Swal.fire("Opss...", `Já existe uma impressora com o nome "${form_data.name}"!`, "error");
@@ -90,6 +91,8 @@ function ShowCreatePrinterModal() {
 }
 
 function LoadDefaultPrinter() {
+    primary_printer = printers.find(printer => !!printer.is_primary);
+
     const $default_printer = $(".content-column.printers .devices .default-printer>div");
     const $dropdown = $default_printer.find(">.dropdown");
     const $name = $default_printer.find(".infos>.name");
@@ -170,6 +173,9 @@ function LoadPrinters() {
             const $save_btn = $modal.find("button.save");
             const $delete_btn = $modal.find("button.delete");
 
+            $form[0].reset();
+            $delete_btn.show();
+
             $modal.find(">.header>.title").html(`Impressora <b></b>`);
             $modal.find(">.header>.title>b").text(printer.name);
 
@@ -193,7 +199,7 @@ function LoadPrinters() {
             $modal.find("select[name=font_scale]").selectpicker("refresh").val(printer.font_scale).selectpicker("refresh");
             $modal.find("select[name=padding]").selectpicker("refresh").val(printer.padding).selectpicker("refresh");
 
-            $delete_btn.off("submit").on("click", function () {
+            $delete_btn.off("click").on("click", function () {
                 $delete_btn.addClass("loading");
                 $modal.addClass("loading");
 
@@ -205,6 +211,7 @@ function LoadPrinters() {
                     RemoveLocalPrinter(printer.id_printer);
 
                     LoadPrinters();
+                    LoadDefaultPrinter();
                     $(".modal-printers").removeClass("show");
                 }).catch(error => {
                     if (error === "in_use") Swal.fire("Opss...", `A impressora <b>${printer.name}</b> não pode ser apagada pois está sendo usado por um produto!`, "error");
@@ -230,6 +237,7 @@ function LoadPrinters() {
                 }).then(new_printer => {
                     Object.assign(printer, new_printer);
                     LoadPrinters();
+                    LoadDefaultPrinter();
                     $(".modal-printers").removeClass("show");
                 }).catch(error => {
                     if (error == "already_exists") Swal.fire("Opss...", `Já existe uma impressora com o nome "${form_data.name}"!`, "error");

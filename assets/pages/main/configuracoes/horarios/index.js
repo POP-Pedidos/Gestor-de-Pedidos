@@ -4,9 +4,9 @@ $("#switch_online").prop("checked", company.online_check >= 1);
 $("#switch_just_time").prop("checked", company.online_check >= 2);
 $("#switch_scheduling").prop("checked", company.use_scheduling);
 $("#switch_shifts").prop("checked", company.use_shifts);
-$("#scheduling_interval").val(company.scheduling_interval / 60000);
+$("#scheduling_interval").val(company.scheduling_interval);
 
-$(".content-column.schedules .only_schedule").toggleClass("disabled", company.online_check < 2);
+$(".content-column.schedules .only_schedule").toggleClass("disabled", company.online_check < 1);
 $(".content-column.schedules>.tabs>main .section.scheduling-hours").toggleClass("disabled", !company.use_scheduling);
 
 $(".content-column.schedules .online_check>.switch>span").text(company.online_check >= 1 ? "Ativado" : "Desativado");

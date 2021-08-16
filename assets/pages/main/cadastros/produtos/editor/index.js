@@ -95,7 +95,7 @@ function ShowProductEditor(product) {
 
     $("#product_editor .flavors_selectors>button").click(function (e) {
         e.preventDefault();
-        
+
         $(this).toggleClass("selected");
 
         $(this).parent().find(">button")[0].setCustomValidity("");
@@ -126,37 +126,21 @@ function ShowProductEditor(product) {
             const dayShifts_data = $("#product_editor>main .availability form.dayShifts").serializeFormJSON();
             const daysOfWeek_data = $("#product_editor>main .availability form.daysOfWeek").serializeFormJSON();
 
-            const availability_dayShifts = [
-                dayShifts_data.Morning,
-                dayShifts_data.Evening,
-                dayShifts_data.Night
-            ]
-
-            const availability_daysOfWeek = [
-                daysOfWeek_data.Sunday,
-                daysOfWeek_data.Monday,
-                daysOfWeek_data.Tuesday,
-                daysOfWeek_data.Wednesday,
-                daysOfWeek_data.Thursday,
-                daysOfWeek_data.Friday,
-                daysOfWeek_data.Saturday,
-            ]
-
             const availability_shifts = [];
 
-            if(dayShifts_data.Morning) availability_shifts.push("morning");
-            if(dayShifts_data.Evening) availability_shifts.push("afternoon");
-            if(dayShifts_data.Night) availability_shifts.push("night");
+            if (dayShifts_data.morning) availability_shifts.push("morning");
+            if (dayShifts_data.afternoon) availability_shifts.push("afternoon");
+            if (dayShifts_data.night) availability_shifts.push("night");
 
             const availability_weekdays = [];
 
-            if(daysOfWeek_data.Monday) availability_weekdays.push("monday");
-            if(daysOfWeek_data.Tuesday) availability_weekdays.push("tuesday");
-            if(daysOfWeek_data.Wednesday) availability_weekdays.push("wednesday");
-            if(daysOfWeek_data.Thursday) availability_weekdays.push("thursday");
-            if(daysOfWeek_data.Friday) availability_weekdays.push("friday");
-            if(daysOfWeek_data.Saturday) availability_weekdays.push("saturday");
-            if(daysOfWeek_data.Sunday) availability_weekdays.push("sunday");
+            if (daysOfWeek_data.monday) availability_weekdays.push("monday");
+            if (daysOfWeek_data.tuesday) availability_weekdays.push("tuesday");
+            if (daysOfWeek_data.wednesday) availability_weekdays.push("wednesday");
+            if (daysOfWeek_data.thursday) availability_weekdays.push("thursday");
+            if (daysOfWeek_data.friday) availability_weekdays.push("friday");
+            if (daysOfWeek_data.saturday) availability_weekdays.push("saturday");
+            if (daysOfWeek_data.sunday) availability_weekdays.push("sunday");
 
             const selected_quantity_flavors = $pizza_quantity_flavors.find(">button.selected").map((i, elem) => Number($(elem).text())).get();
 
@@ -188,13 +172,13 @@ function ShowProductEditor(product) {
 
             details.id_printer = details.id_printer > 0 ? details.id_printer : null;
 
-            if (!Object.values(availability_dayShifts).some(val => !!val)) {
+            if (availability_shifts.length === 0) {
                 $tab_availability.addClass("warning").click();
                 Swal.fire("Opss...", "O seu produto tem que ser vendido pelo menos em um turno do dia!", "warning");
                 return;
             }
 
-            if (!Object.values(availability_daysOfWeek).some(val => !!val)) {
+            if (availability_weekdays.length === 0) {
                 $tab_availability.addClass("warning").click();
                 Swal.fire("Opss...", "O seu produto tem que ser vendido pelo menos em um dia da semana!", "warning");
                 return;
@@ -267,8 +251,6 @@ function ShowProductEditor(product) {
                 method: product ? "PUT" : "POST",
                 body: {
                     ...details,
-                    availability_dayShifts,
-                    availability_daysOfWeek,
                     availability_shifts,
                     availability_weekdays,
                     thumbnail: seo_thumbnail || undefined,
@@ -445,7 +427,7 @@ function ShowProductEditor(product) {
                 if (product && product.id_category !== new_data.id_category) {
                     $(`.product-list>section[id_category="${product.id_category}"]>main>div[id_product="${new_data.id_product}"]`).remove();
                 }
-                
+
                 let $section = $(`.product-list>section[id_category="${new_data.id_category}"]`);
                 if ($section.length > 0) AddProduct($section, new_data);
                 else {

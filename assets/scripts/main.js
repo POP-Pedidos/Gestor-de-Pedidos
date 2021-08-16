@@ -400,6 +400,10 @@ jQuery(function ($) {
 			if (order.status === 0 && order.scheduledAt && new Date() - new Date(order.scheduledAt) > 0) return true;
 		});
 
+		const has_pendent_scheduled = !!orders?.find(order => {
+			if (order.status === 0 && order.scheduledAt) return true;
+		});
+
 		if (has_pendent_accept && alert_audio.paused) {
 			taskbar.flashFrame(true);
 			tray.setIcon("alert");
@@ -413,6 +417,7 @@ jQuery(function ($) {
 		}
 
 		$(".page-wrapper .sidebar-wrapper .sidebar-menu ul li>a>i.alert").toggle(has_pendent_accept);
+		$(".page-wrapper .sidebar-wrapper .sidebar-menu ul li>a>i.info").toggle(!has_pendent_accept && has_pendent_scheduled);
 	}, 300);
 });
 

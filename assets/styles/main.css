@@ -541,7 +541,7 @@ body.dark-mode .page-wrapper .sidebar-wrapper .sidebar-menu ul li a.current-page
 }
 
 body.dark-mode .page-wrapper .sidebar-wrapper .sidebar-menu ul li a,
-body.dark-mode .page-wrapper .sidebar-wrapper .sidebar-menu ul li a i {
+body.dark-mode .page-wrapper .sidebar-wrapper .sidebar-menu ul li a i:first-child {
   color: #dcdcdc;
 }
 
@@ -555,7 +555,7 @@ body.dark-mode .page-wrapper .sidebar-wrapper .sidebar-menu ul li a.current-page
   background: linear-gradient(to right, var(--color-tones-20), transparent) !important;
 }
 
-body.dark-mode .page-wrapper .sidebar-wrapper .sidebar-menu ul li a:hover i {
+body.dark-mode .page-wrapper .sidebar-wrapper .sidebar-menu ul li a:hover i:first-child {
   color: white;
 }
 
@@ -758,7 +758,8 @@ body.dark-mode #dashboard>.orders {
   background-color: #484848;
 }
 
-body.dark-mode .max-results {
+body.dark-mode .max-results,
+body.dark-mode #dashboard>.orders>header>.analytics>div {
   color: lightgray;
 }
 
@@ -1726,7 +1727,7 @@ ul.header-tasks:last-child {
   transition: all 0.5s ease-in-out;
 }
 
-.page-wrapper .sidebar-wrapper .sidebar-menu ul li a i {
+.page-wrapper .sidebar-wrapper .sidebar-menu ul li a i:first-child {
   margin-right: 7px;
   font-size: 1.2rem;
   color: #727176;
@@ -1796,11 +1797,24 @@ ul.header-tasks:last-child {
   color: black;
 }
 
+.page-wrapper .sidebar-wrapper .sidebar-menu ul li>a>i.info {
+  display: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  color: #bbbbbb;
+  left: 20px;
+  top: -4px;
+  font-size: 17px;
+  transform: none !important;
+}
+
 .page-wrapper .sidebar-wrapper .sidebar-menu ul li>a>i.alert {
   display: none;
   margin: 0;
+  padding: 0;
   position: relative;
-  color: gold !important;
+  color: gold;
   left: 20px;
   top: -4px;
   font-size: 17px;
@@ -12938,7 +12952,27 @@ td>.switch_enable {
   margin-left: 20px;
 }
 
-#dashboard>.orders>header>.max-results {
+#dashboard>.orders>header>.analytics {
+  display: flex;
+  gap: 2px 20px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+#dashboard>.orders>header>.analytics>div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#dashboard>.orders>header>.analytics>div>img {
+  width: 20px;
+  border-radius: 4px;
+}
+
+#dashboard>.orders>header>.analytics>.max-results {
   margin: 0;
 }
 
@@ -14165,6 +14199,9 @@ td>.switch_enable {
 
 .content-column .section>.content {
   display: flex;
+}
+
+.content-column.printers .section>.content {
   flex-direction: column;
 }
 
@@ -14247,6 +14284,7 @@ td>.switch_enable {
 .content-column.schedules .section.shifts>.content {
   flex-direction: column;
   padding: 20px;
+  gap: 15px;
 }
 
 .content-column.schedules .section.shifts>.content>div {
@@ -14573,6 +14611,17 @@ td>.switch_enable {
   z-index: 2;
 }
 
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.time-marker.unavailable {
+  border-bottom: 3px solid #b33b3b;
+  background-color: #b33b3b;
+  color: #941818;
+}
+
+.days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.time-marker.unavailable:hover {
+  border-color: #8e3232;
+  color: white;
+}
+
 .days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.marker>span {
   position: absolute;
   color: #50a773;
@@ -14600,7 +14649,7 @@ td>.switch_enable {
   transform: translateY(-4px);
   border-left: 2px solid #5db33b;
   border-right: 2px solid #5db33b;
-  cursor: row-resize;
+  /* cursor: row-resize; */
 }
 
 .days_of_week_calendar>.calendar-content>.calendar-content>.day_of_week>.marker::after {
@@ -14614,7 +14663,7 @@ td>.switch_enable {
   transform: translateY(4px);
   border-left: 2px solid #5db33b;
   border-right: 2px solid #5db33b;
-  cursor: row-resize;
+  /* cursor: row-resize; */
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -15050,20 +15099,12 @@ td>.switch_enable {
 
 
 .modal-schedules.opening-hours>div>.content>.hours-container>div.focus {
-  animation: hours-container-focus 1s;
+  animation: hours-container-focus 1s 0.2s;
 }
 
 @keyframes hours-container-focus {
-  from {
-    background-color: #f7f7f7;
-  }
-
   50% {
-    background-color: var(--color-tints-60);
-  }
-
-  to {
-    background-color: #f7f7f7;
+    box-shadow: 0 0 0 3px var(--color-tints-20) inset;
   }
 }
 
@@ -15179,6 +15220,7 @@ body.dark-mode .content-column.printers .devices .default-printer>div>.dropdown>
   font-size: 11px;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: center;
   max-width: 100%;
   color: #9a9a9a;
 }
@@ -15258,6 +15300,7 @@ body.dark-mode .content-column.printers .devices .default-printer>div>.dropdown>
   flex-direction: column;
   z-index: 50;
   margin-top: 3px;
+  min-width: fit-content;
   max-height: 185px;
   overflow-y: auto;
   padding: 5px;
@@ -15272,6 +15315,7 @@ body.dark-mode .content-column.printers .devices .default-printer>div>.dropdown>
   padding: 10px 15px;
   font-size: 14px;
   border-radius: 8px;
+  white-space: nowrap;
 }
 
 .content-column.printers .devices .default-printer>div>.dropdown>span:hover {

@@ -80,6 +80,14 @@ function LoadDashboard() {
     }).finally(() => {
         RemoveDashSkeleton();
     });
+
+    const $analytics = $(".dashboard-results-container .orders>header>.analytics");
+    $analytics.find(">.max-results").addClass("skeleton");
+    $analytics.find(">div").addClass("skeleton");
+
+    lazy_loading.Reset({
+        state: true,
+    });
 }
 
 function AddOrderSkeleton() {
@@ -624,6 +632,10 @@ function SearchForOrder() {
     $(".dashboard-results-container .orders>main").empty();
     $(".dashboard-results-container .orders>header>.max-results").empty();
 
+    const $analytics = $(".dashboard-results-container .orders>header>.analytics");
+    $analytics.find(">.max-results").addClass("skeleton");
+    $analytics.find(">div").addClass("skeleton");
+    
     lazy_loading.Reset({
         state: true,
     });
@@ -670,6 +682,7 @@ lazy_loading.onHandle = (state) => {
     state.isLoading = true;
 
     const $skeletons = AddOrderSkeletons(state.offset, state.max, state.page_limit);
+    const $analytics = $(".dashboard-results-container .orders>header>.analytics");
 
     state.request = FetchAPI(`/order`, {
         instance_check: true,
@@ -681,13 +694,19 @@ lazy_loading.onHandle = (state) => {
             order: "createdAt DESC",
             start_date: $(".filter-date.start>input").val(),
             end_date: $(".filter-date.end>input").val(),
+            payment_analytics: true
         }
     });
 
     state.request.then(orders_data => {
         state.max = orders_data.metadata.max;
 
-        $(".dashboard-results-container .orders>header>.max-results").text(`${state.max} resultado${state.max > 1 ? "s" : ""}`)
+        $analytics.show();
+        $analytics.find(">.max-results").removeClass("skeleton").text(`${state.max} resultado${state.max > 1 ? "s" : ""}`)
+        $analytics.find(">div").removeClass("skeleton");
+        $analytics.find(">.money>span").text(MoneyFormat(orders_data.analytics.money || 0));
+        $analytics.find(">.credit>span").text(MoneyFormat(orders_data.analytics.credit || 0));
+        $analytics.find(">.debit>span").text(MoneyFormat(orders_data.analytics.debit || 0));
 
         $skeletons.remove();
 
@@ -697,6 +716,7 @@ lazy_loading.onHandle = (state) => {
 
         if (state.max === 0) $(".dashboard-results-container .orders>main").html(`<img src="../../../images/order.svg"/>`);
     }).catch(error => {
+        $analytics.hide();
         $(".dashboard-results-container .orders>main").html(`<img src="../../../images/order.svg"/>`);
 
         Swal.fire("Opss...", "Ocorreu um erro ao tentar carregar os pedidos na dashboard!", "error");

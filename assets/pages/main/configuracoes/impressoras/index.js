@@ -6,7 +6,6 @@ $("#loading-wrapper-content").css("display", "flex").show();
 
 FetchAPI(`/printers`, { instance_check: true }).then(printers_data => {
     printers = printers_data;
-    primary_printer = printers.find(printer => !!printer.is_primary);
 
     LoadPrinters();
     LoadDefaultPrinter();
