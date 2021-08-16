@@ -99,9 +99,16 @@ function AddItemToComplementEditor(item) {
                 <small>0/120</small>
             </div>
         </div>
+        
         <div class="actions">
+            <div class="switch_enable skeleton">
+                <input type="checkbox" ${item.enabled ? `checked ` : ""}hidden>
+                <div class="indicator"></div>
+                <span class="off">Pausar</span>
+                <span class="on">Ativado</span>
+            </div>
             <button class="delete"><i class="fas fa-trash"></i></button><br/>
-            <button class="enabled"><i class="${item.enabled ? `fas fa-thumbs-down` : `fas fa-thumbs-up`}" style="color: ${item.enabled ? `#fa6565` : `green`}"></i></button>
+            <!--<button class="enabled"><i class="${item.enabled ? `fas fa-thumbs-down` : `fas fa-thumbs-up`}" style="color: ${item.enabled ? `#fa6565` : `green`}"></i></button>-->
         </div>
     </div>`);
 
@@ -110,6 +117,8 @@ function AddItemToComplementEditor(item) {
         $item.find(".price").val(item.price);
         $item.find(".desc").val(item.description);
     }
+
+    $item.find(".switch_enable").initSwitchEnable();
 
     const group_item = {
         ...item,
@@ -144,6 +153,20 @@ function AddItemToComplementEditor(item) {
         $item.remove();
 
         group_items.splice(group_items.findIndex(item => item === group_item), 1);
+    });
+
+    $item.find(".switch_enable>input").change(function () {
+        const $this = $(this);
+        const enabled = $this.prop("checked");
+        for (const _item of group_items) {
+            if (_item === group_item) {
+                if (_item.enabled) {
+                    _item.enabled = enabled;
+                } else {
+                    _item.enabled = enabled;
+                }
+            }
+        }
     });
 
     $item.find(".actions>.enabled").click(function () {
