@@ -172,7 +172,7 @@ function ShowProductEditor(product) {
 
             details.id_printer = details.id_printer > 0 ? details.id_printer : null;
 
-            if (availability_shifts.length === 0) {
+            if (company.use_shifts && availability_shifts.length === 0) {
                 $tab_availability.addClass("warning").click();
                 Swal.fire("Opss...", "O seu produto tem que ser vendido pelo menos em um turno do dia!", "warning");
                 return;
