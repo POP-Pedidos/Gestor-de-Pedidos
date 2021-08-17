@@ -635,7 +635,7 @@ function SearchForOrder() {
     const $analytics = $(".dashboard-results-container .orders>header>.analytics");
     $analytics.find(">.max-results").addClass("skeleton");
     $analytics.find(">div").addClass("skeleton");
-    
+
     lazy_loading.Reset({
         state: true,
     });
@@ -648,8 +648,8 @@ function SearchForOrder() {
 
     if (days > 31) min_date = new Date(max_date - (31 * 24 * 60 * 60 * 1000));
 
-    const min = min_date.toISOString().split("T")[0];
-    const max = max_date.toISOString().split("T")[0];
+    const min = FormatSimpleDate(min_date);
+    const max = FormatSimpleDate(max_date);
 
     $(".filter-date.start>input").val(min).attr("min", min).attr("max", max);
     $(".filter-date.end>input").val(max).attr("min", min).attr("max", max);

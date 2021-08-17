@@ -16,6 +16,31 @@ function AddAuditSkeleton() {
     return $skeleton;
 }
 
+function GetShiftName(value) {
+    if (value === "morning") return "Manhã";
+    else if (value === "afternoon") return "Tarde";
+    else if (value === "night") return "Noite";
+    else return "Indefinido";
+}
+
+function GetDayOfWeekName(value) {
+    if (value === "monday") return "Segunda";
+    else if (value === "tuesday") return "Terça";
+    else if (value === "wednesday") return "Quarta";
+    else if (value === "thursday") return "Quinta";
+    else if (value === "friday") return "Sexta";
+    else if (value === "saturday") return "Sábado";
+    else if (value === "sunday") return "Domingo";
+    else return "Indefinido";
+}
+
+function MsToTimeString(time_ms = 0) {
+    const hours = Math.floor((time_ms / (1000 * 60 * 60)) % 24.1);
+    const minutes = Math.floor((time_ms / (1000 * 60)) % 60);
+
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+}
+
 function addAudit(audit) {
     try {
         const $audit = $(`<section>
@@ -75,8 +100,18 @@ function addAudit(audit) {
                             delivery_min: change => `<b>${audit.username}</b> alterou o preço mínimo elegível para entrega de <b>${MoneyFormat(change.old_value || 0)}</b> para <b>${MoneyFormat(change.new_value || 0)}</b>`,
                             website_primary_color: change => `<b>${audit.username}</b> alterou a cor primária do site de <b><font color="#${change.old_value}">${change.old_value}</font></b> para <b><font color="#${change.new_value}">${change.new_value}</font></b>`,
                             website_main_bg: change => `<b>${audit.username}</b> alterou a imagem de fundo do site`,
-                            online_check: change => `<b>${audit.username}</b> <b>${change.new_value ? "ativou" : "desativou"}</b> a função abrir estabelecimento pelo gestor`,
-                            use_discount_coupon: change => `<b>${audit.username}</b> <b>${change.new_value ? "ativou" : "desativou"}</b> os cupons de desconto`,
+                            online_check: change => {
+                                if (change.new_value === 2 && change.old_value === 3) return `<b>${audit.username}</b> desativou a opção abrir estabelecimento apenas nos horários de atendimento`;
+                                else if (change.new_value === 3 && change.old_value === 2) return `<b>${audit.username}</b> ativou a opção abrir estabelecimento apenas nos horários de atendimento`;
+                                else return `<b>${audit.username}</b> ${change.new_value ? "ativou" : "desativou"} a função abrir estabelecimento pelo gestor`
+                            },
+                            use_discount_coupon: change => `<b>${audit.username}</b> ${change.new_value ? "ativou" : "desativou"} os cupons de desconto`,
+
+                            scheduling_interval: change => `<b>${audit.username}</b> alterou o intervalo para agendamentos ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                            show_unavailable_products: change => `<b>${audit.username}</b> ${change.new_value ? "ativou" : "desativou"} a opção "Exibe produtos indisponíveis no cardápio`,
+                            use_shifts: change => `<b>${audit.username}</b> ${change.new_value ? "ativou" : "desativou"} a opção "Trabalha com turnos`,
+                            use_scheduling: change => `<b>${audit.username}</b> ${change.new_value ? "ativou" : "desativou"} a opção "Trabalha com agendamento`,
+
                             morning_shift_open: change => `<b>${audit.username}</b> alterou a hora de abertura do turno da <b>manhã</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                             morning_shift_close: change => `<b>${audit.username}</b> alterou a hora de fechamento do turno da <b>manhã</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                             afternoon_shift_open: change => `<b>${audit.username}</b> alterou a hora de abertura do turno da <b>tarde</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
@@ -129,6 +164,17 @@ function addAudit(audit) {
                             website_primary_color: change => `Mudou a cor primária do site de <b><font color="#${change.old_value}">${change.old_value}</font></b> para <b><font color="#${change.new_value}">${change.new_value}</font></b>`,
                             website_main_bg: change => `Mudou a imagem de fundo do site`,
                             online_check: change => `Abrir o estabelecimento pelo gestor foi <b>${change.new_value ? "ativado" : "desativado"}</b>`,
+                            online_check: change => {
+                                if (change.new_value === 2 && change.old_value === 3) return `Abrir estabelecimento apenas nos horários de atendimento foi <b>desativado</b>`;
+                                else if (change.new_value === 3 && change.old_value === 2) return `Abrir estabelecimento apenas nos horários de atendimento foi <b>ativado</b>`;
+                                else return `Abrir o estabelecimento pelo gestor foi <b>${change.new_value ? "ativado" : "desativado"}</b>`
+                            },
+
+                            scheduling_interval: change => `Mudou o intervalo para agendamentos ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                            show_unavailable_products: change => `${change.new_value ? "Ativou" : "Desativou"} a opção "Exibe produtos indisponíveis no cardápio`,
+                            use_shifts: change => `${change.new_value ? "Ativou" : "Desativou"} a opção "Trabalha com turnos`,
+                            use_scheduling: change => `${change.new_value ? "Ativou" : "Desativou"} a opção "Trabalha com agendamento`,
+
                             use_discount_coupon: change => `<b>${change.new_value ? "Ativou" : "Desativou"}</b> os cupons de desconto`,
                             morning_shift_open: change => `Mudou a hora de abertura do turno da <b>manhã</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                             morning_shift_close: change => `Mudou a hora de fechamento do turno da <b>manhã</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
@@ -234,38 +280,68 @@ function addAudit(audit) {
                     };
                 },
             },
-            company_time: {
+            shifts: {
                 UPDATE: audit => {
-                    function GetDayOfWeekName(value) {
-                        if (value === "Monday") return "Segunda";
-                        else if (value === "Tuesday") return "Terça";
-                        else if (value === "Wednesday") return "Quarta";
-                        else if (value === "Thursday") return "Quinta";
-                        else if (value === "Friday") return "Sexta";
-                        else if (value === "Saturday") return "Sábado";
-                        else if (value === "Sunday") return "Domingo";
-                        else return "Indefinido";
-                    }
-
                     if (audit.changes.length == 1) {
                         const messages = {
-                            open: change => `O usuário <b>${audit.username}</b> alterou o horário <b>${GetDayOfWeekName(audit.additional.dayOfWeek || audit.additional.name)}</b> para <b>${change.new_value ? "aberto" : "fechado"}</b>`,
-                            opens: change => `O usuário <b>${audit.username}</b> alterou o horário de abertura <b>${GetDayOfWeekName(audit.additional.dayOfWeek || audit.additional.name)}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
-                            closes: change => `O usuário <b>${audit.username}</b> alterou o horário de fechamento <b>${GetDayOfWeekName(audit.additional.dayOfWeek || audit.additional.name)}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                            start: change => `O usuário <b>${audit.username}</b> alterou o horário de abertura do turno <b>${GetShiftName(audit.additional.name)}</b> de  <b>${MsToTimeString(change.old_value)}</b> para <b>${MsToTimeString(change.new_value)}</b>`,
+                            end: change => `O usuário <b>${audit.username}</b> alterou o horário de fechamento do turno <b>${GetShiftName(audit.additional.name)}</b> de <b>${MsToTimeString(change.old_value)}</b> para <b>${MsToTimeString(change.new_value)}</b>`,
                         }
 
                         const change = audit.changes[0];
 
                         return {
                             icon: "list",
-                            title: messages[change.key]?.(change) || `O usuário <b>${audit.username}</b> alterou o horário <b>${GetDayOfWeekName(audit.additional.dayOfWeek || audit.additional.name)}</b>`,
+                            title: messages[change.key]?.(change) || `O usuário <b>${audit.username}</b> alterou o turno <b>${GetShiftName(audit.additional.name)}</b>`,
                             items: []
                         };
                     } else {
                         const messages = {
-                            open: change => `Horário <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> alterado para <b>${change.new_value ? "aberto" : "fechado"}</b>`,
-                            opens: change => `Horário de abertura <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> alterado ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
-                            closes: change => `Horário de fechamento <b>${GetDayOfWeekName(audit.additional.dayOfWeek)}</b> alterado ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
+                            opens: change => `Horário de abertura <b>${GetShiftName(audit.additional.name)}</b> alterado de <b>${MsToTimeString(change.old_value)}</b> para <b>${MsToTimeString(change.new_value)}</b>`,
+                            closes: change => `Horário de fechamento <b>${GetShiftName(audit.additional.name)}</b> alterado de <b>${MsToTimeString(change.old_value)}</b> para <b>${MsToTimeString(change.new_value)}</b>`,
+                        }
+
+                        return {
+                            icon: "list",
+                            title: `O usuário <b>${audit.username}</b> fez ${audit.changes?.length || ""} alteraç${audit.changes?.length ? "ões" : "ão"} no turno <b>${GetShiftName(audit.additional.name)}</b>`,
+                            items: audit.changes.map(change => messages[change.key]?.(change))
+                        };
+                    }
+                },
+                CREATE: audit => {
+                    return {
+                        icon: "list",
+                        title: `O usuário <b>${audit.username}</b> adicionou um horário do dia da semana <b>${GetShiftName(audit.additional.weekday)}</b>`,
+                        items: []
+                    };
+                },
+                DELETE: audit => {
+                    return {
+                        icon: "list",
+                        title: `O usuário <b>${audit.username}</b> removeu um horário do dia da semana <b>${GetShiftName(audit.additional.weekday)}</b>`,
+                        items: []
+                    };
+                },
+            },
+            weekday_shifts: {
+                UPDATE: audit => {
+                    if (audit.changes.length == 1) {
+                        const messages = {
+                            start: change => `O usuário <b>${audit.username}</b> alterou um horário de abertura do dia da semana <b>${GetDayOfWeekName(audit.additional.weekday)}</b> de  <b>${MsToTimeString(change.old_value)}</b> para <b>${MsToTimeString(change.new_value)}</b>`,
+                            end: change => `O usuário <b>${audit.username}</b> alterou um horário de fechamento do dia da semana <b>${GetDayOfWeekName(audit.additional.weekday)}</b> de <b>${MsToTimeString(change.old_value)}</b> para <b>${MsToTimeString(change.new_value)}</b>`,
+                        }
+
+                        const change = audit.changes[0];
+
+                        return {
+                            icon: "list",
+                            title: messages[change.key]?.(change) || `O usuário <b>${audit.username}</b> alterou um horário do dia da semana <b>${GetDayOfWeekName(audit.additional.weekday)}</b>`,
+                            items: []
+                        };
+                    } else {
+                        const messages = {
+                            opens: change => `Horário de abertura <b>${GetDayOfWeekName(audit.additional.weekday)}</b> alterado de <b>${MsToTimeString(change.old_value)}</b> para <b>${MsToTimeString(change.new_value)}</b>`,
+                            closes: change => `Horário de fechamento <b>${GetDayOfWeekName(audit.additional.weekday)}</b> alterado de <b>${MsToTimeString(change.old_value)}</b> para <b>${MsToTimeString(change.new_value)}</b>`,
                         }
 
                         return {
@@ -274,6 +350,45 @@ function addAudit(audit) {
                             items: audit.changes.map(change => messages[change.key]?.(change))
                         };
                     }
+                },
+                CREATE: audit => {
+                    return {
+                        icon: "list",
+                        title: `O usuário <b>${audit.username}</b> adicionou um horário do dia da semana <b>${GetDayOfWeekName(audit.additional.weekday)}</b>`,
+                        items: []
+                    };
+                },
+                DELETE: audit => {
+                    return {
+                        icon: "list",
+                        title: `O usuário <b>${audit.username}</b> removeu um horário do dia da semana <b>${GetDayOfWeekName(audit.additional.weekday)}</b>`,
+                        items: []
+                    };
+                },
+            },
+            scheduling_times: {
+                UPDATE: audit => {
+                    const change = audit.changes[0];
+
+                    return {
+                        icon: "list",
+                        title: `O usuário <b>${audit.username}</b> alterou o horário de agendamento <b>${MsToTimeString(audit.additional.time)}</b> do dia da semana <b>${GetDayOfWeekName(audit.additional.weekday)}</b> para <b>${MsToTimeString(change.new_value)}</b>`,
+                        items: []
+                    }
+                },
+                CREATE: audit => {
+                    return {
+                        icon: "list",
+                        title: `O usuário <b>${audit.username}</b> adicionou o horário de agendamento <b>${MsToTimeString(audit.additional.time)}</b> no dia da semana <b>${GetDayOfWeekName(audit.additional.weekday)}</b>`,
+                        items: []
+                    }
+                },
+                DELETE: audit => {
+                    return {
+                        icon: "list",
+                        title: `O usuário <b>${audit.username}</b> removeu o horário de agendamento <b>${MsToTimeString(audit.additional.time)}</b> no dia da semana <b>${GetDayOfWeekName(audit.additional.weekday)}</b>`,
+                        items: []
+                    };
                 },
             },
             category: {
@@ -337,7 +452,7 @@ function addAudit(audit) {
                             limit: change => `O usuário <b>${audit.username}</b> alterou o limite de usos do cupom de desconto <b>${audit.additional.coupon}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                             min_price: change => `O usuário <b>${audit.username}</b> alterou o preço mínimo elegível do cupom de desconto <b>${audit.additional.coupon}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
                             in_delivery_cost: change => `O usuário <b>${audit.username}</b> configurou o cupom de desconto desconto <b>${audit.additional.coupon}</b> para <b>${change.new_value ? "não ser" : "ser também"}</b> aplicado ao preço do frete`,
-                            enabled: change => `O usuário <b>${audit.username}</b> <b>${change.new_value ? "ativou" : "desativou"}</b> o cupom de desconto <b>${audit.additional.coupon}</b>`,
+                            enabled: change => `O usuário <b>${audit.username}</b> ${change.new_value ? "ativou" : "desativou"} o cupom de desconto <b>${audit.additional.coupon}</b>`,
                         }
 
                         const change = audit.changes[0];
@@ -504,7 +619,7 @@ function addAudit(audit) {
                 },
                 CREATE: () => {
                     const price_key = audit.changes.find(change => change.key == "price");
-                    
+
                     return {
                         icon: "list",
                         title: `<b>${audit.username}</b> configurou a taxa de entrega do bairro <b>${audit.additional.neighborhood}${audit.additional.city !== company.city ? `, ${audit.additional.city}` : ""}</b>${price_key.old_value ? ` de <b>${MoneyFormat(price_key.old_value)}</b>` : ""} para <b>${MoneyFormat(price_key.new_value)}</b>`,
@@ -747,49 +862,6 @@ function addAudit(audit) {
                     };
                 }
             },
-            time: {
-                UPDATE: audit => {
-                    function GetDayOfWeekName(value = audit.additional.dayOfWeek) {
-                        if (value === "Sunday") return "Domingo";
-                        else if (value === "Monday") return "Segunda-Feira";
-                        else if (value === "Tuesday") return "Terça-Feira";
-                        else if (value === "Wednesday") return "Quarta-Feira";
-                        else if (value === "Thursday") return "Quinta-Feira";
-                        else if (value === "Friday") return "Sexta-Feira";
-                        else if (value === "Saturday") return "Sábado";
-                        else return "Indefinido";
-                    }
-
-                    if (audit.changes.length == 1) {
-                        const messages = {
-                            open: change => `O usuário <b>${audit.username}</b> alterou o dia da semana <b>${GetDayOfWeekName()}</b> para <b>${change.new_value ? "aberto" : "fechado"}</b>`,
-                            opens: change => `O usuário <b>${audit.username}</b> alterou o horário de abertura do dia da semana <b>${GetDayOfWeekName()}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
-                            closes: change => `O usuário <b>${audit.username}</b> alterou o horário de fechamento do dia da semana <b>${GetDayOfWeekName()}</b> ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
-                        }
-
-                        const change = audit.changes[0];
-
-                        return {
-                            icon: "list",
-                            title: messages[change.key]?.(change) || `<b>${audit.username}</b> fez alterações no dia da semana <b>${GetDayOfWeekName()}</b>`,
-                            items: []
-                        };
-                    } else {
-                        const messages = {
-                            open: change => `Mudou de <b>${change.old_value ? "aberto" : "fechado"}</b> para <b>${change.new_value ? "aberto" : "fechado"}</b>`,
-                            opens: change => `Mudou o horário de abertura ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
-                            closes: change => `Mudou o horário de fechamento ${change.old_value ? `de <b>${change.old_value}</b> ` : ""}para <b>${change.new_value}</b>`,
-                        }
-
-                        return {
-                            icon: "clock",
-                            title: `<b>${audit.username}</b> alterou ${audit.changes?.length || ""} dado${audit.changes?.length ? "s" : ""} no dia da semana <b>${GetDayOfWeekName()}</b>`,
-                            items: audit.changes.map(change => messages[change.key]?.(change)),
-                        };
-                    }
-                },
-                CREATE: (...args) => audit_targets.time.UPDATE(...args),
-            },
         }
 
         const audit_target_data = audit_targets[audit.target]?.[audit.action_type]?.(audit);
@@ -882,8 +954,8 @@ $(".filter-options, .filter-date>input").on("change", function (e, value) {
 
     if (days > 31) min_date = new Date(max_date - (31 * 24 * 60 * 60 * 1000));
 
-    const min = min_date.toISOString().split("T")[0];
-    const max = max_date.toISOString().split("T")[0];
+    const min = FormatSimpleDate(min_date);
+    const max = FormatSimpleDate(max_date);
 
     $(".filter-date.start>input").val(min).attr("min", min).attr("max", max);
     $(".filter-date.end>input").val(max).attr("min", min).attr("max", max);

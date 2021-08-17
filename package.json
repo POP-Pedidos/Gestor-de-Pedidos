@@ -1,7 +1,7 @@
 {
   "name": "pop-pedidos",
   "productName": "POP Pedidos",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "private": true,
   "main": "index.js",
   "author": {

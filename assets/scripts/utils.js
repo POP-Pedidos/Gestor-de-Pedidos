@@ -211,6 +211,17 @@ function FormatDate(date, time = true) {
     return final_string;
 }
 
+function FormatSimpleDate(date) {
+    if (!date) return null;
+    date = new Date(date);
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${year}-${month}-${day}`;
+}
+
 function FormatCnpjCpf(cnpjcpf) {
     if (!cnpjcpf || cnpjcpf.length < 5) return cnpjcpf;
 

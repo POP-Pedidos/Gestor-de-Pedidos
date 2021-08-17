@@ -6,6 +6,7 @@ function PrintWindow(win, printer_name) {
             win.webContents.print({
                 deviceName: printerDevice?.name.startsWith("\\\\") ? undefined : printerDevice?.name,
                 silent: !!printerDevice && !printerDevice.name.startsWith("\\\\"),
+                printBackground: true,
                 copies: 1,
             }, (success, failureReason) => {
                 if (success) resolve();
