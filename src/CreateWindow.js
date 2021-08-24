@@ -24,7 +24,7 @@ module.exports = function CreateWindow() {
         show: false,
         hasShadow: true,
         webPreferences: {
-            preload: path.join(__dirname, "../assets/scripts/preload.js"),
+            preload: path.join(__dirname, "./preload.js"),
             nodeIntegration: false,
             contextIsolation: false,
             enableRemoteModule: false,
@@ -69,10 +69,14 @@ module.exports = function CreateWindow() {
     win.webContents.on("did-finish-load", () => {
         RegisterShortcuts(win);
 
-        if (window_store.get("maximized") === true) win.maximize();
-        else win.setSize(window_store.get("width"), window_store.get("height"));
+        if (window_store.get("maximized") !== true) {
+            win.setSize(window_store.get("width"), window_store.get("height"));
+        }
 
-        if (!process.argv.includes("--hidden")) win.show();
+        if (!process.argv.includes("--hidden")) {
+            if (window_store.get("maximized") === true) win.maximize();
+            win.show();
+        }
     });
 
     win.on("maximize", function (e) {
@@ -110,7 +114,7 @@ module.exports = function CreateWindow() {
         window_store.set("height", bounds.height);
     });
 
-    win.loadFile("assets/pages/login/index.html");
+    win.loadURL("http://localhost:88");
 
     return win;
 }

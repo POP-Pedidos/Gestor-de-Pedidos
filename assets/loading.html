@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POP Pedidos</title>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            main {
+                background: #333;
+                color: white;
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            main {
+                background: white;
+                color: black;
+            }
+        }
+
+        main {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 8px;
+            flex-direction: column;
+            gap: 30px;
+            -webkit-app-region: drag;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            user-select: none;
+        }
+
+        #background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            filter: blur(4px);
+            transform: scale(1.1);
+            z-index: 1;
+        }
+
+        #logo {
+            width: 100px;
+            z-index: 2;
+        }
+
+        #spinner {
+            display: inline-block;
+            width: 2rem;
+            height: 2rem;
+            vertical-align: text-bottom;
+            border: .25em solid currentColor;
+            border-right-color: transparent !important;
+            border-radius: 50%;
+            z-index: 2;
+            animation: spinner-border .75s linear infinite
+        }
+
+        @keyframes spinner-border {
+            to {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg)
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <img id="background" src="images/pop-bg.jpg">
+        <img id="logo" src="images/logo.svg">
+        <div id="spinner"></div>
+    </main>
+</body>
+
+</html>

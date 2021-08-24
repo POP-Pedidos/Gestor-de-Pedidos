@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require("electron");
 const CreateWindow = require("./src/CreateWindow");
+const CreateSplashScreen = require("./src/CreateSplashScreen");
 
 global.win = null;
 global.tray = null;
@@ -18,11 +19,27 @@ app.userAgentFallback = app.userAgentFallback.replace(/(POP|Electron).+? /g, "")
 if (!app.requestSingleInstanceLock()) return app.quit();
 
 app.whenReady().then(() => {
-    win = CreateWindow();
+    const splash = CreateSplashScreen();
+
+    splash.webContents.once("did-finish-load", () => {
+        win = CreateWindow();
+
+        splash.once("close", function (e) {
+            win.destroy();
+        });
+
+        win.webContents.once("did-finish-load", () => {
+            splash.destroy();
+        });
+    });
 
     app.on("second-instance", (event, commandLine, workingDirectory) => {
-        win.show();
-        win.focus();
+        if (splash) {
+            splash.focus();
+        } else if (win) {
+            win.show();
+            win.focus();
+        }
     });
 });
 

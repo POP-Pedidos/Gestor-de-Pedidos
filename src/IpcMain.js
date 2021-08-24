@@ -3,7 +3,6 @@ const fs = require("fs");
 const { app, ipcMain, nativeTheme, dialog } = require("electron");
 const { autoUpdater } = require("electron-updater");
 const AutoUpdater = require("./AutoUpdater");
-const { domain, api_url, places_url } = require("../config");
 const offscreen = require("./Offscreen");
 const Store = require("./Store");
 const Icons = require('./Icons');
@@ -21,9 +20,6 @@ const printRawTextProductionCopy = require("./Printer/raw_text/production");
 const theme_store = new Store("dark-mode", { themeSource: "system" });
 const app_store = new Store("app", { backgroundRunning: false });
 
-ipcMain.on("api_url", (event) => event.returnValue = api_url);
-ipcMain.on("places_url", (event) => event.returnValue = places_url);
-ipcMain.on("domain", (event) => event.returnValue = domain);
 ipcMain.on("hostname", (event) => event.returnValue = os.userInfo().username);
 ipcMain.on("icons", (event) => event.returnValue = Icons);
 ipcMain.on("app_name", (event) => event.returnValue = app.getName());

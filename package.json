@@ -28,7 +28,7 @@
       "github"
     ],
     "win": {
-      "icon": "assets/images/logo.png",
+      "icon": "./assets/images/logo.png",
       "target": {
         "target": "nsis",
         "arch": [
