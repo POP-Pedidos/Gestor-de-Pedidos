@@ -1,4 +1,5 @@
 const { app, BrowserWindow, screen, shell, nativeTheme, dialog } = require("electron");
+const { portal_url } = require("../config");
 const path = require("path");
 
 const Store = require("./Store");
@@ -114,7 +115,7 @@ module.exports = function CreateWindow() {
         window_store.set("height", bounds.height);
     });
 
-    win.loadURL("http://localhost:88");
+    win.loadURL(portal_url);
 
     return win;
 }
