@@ -22,6 +22,7 @@ const app_store = new Store("app", { backgroundRunning: false });
 
 ipcMain.on("hostname", (event) => event.returnValue = os.userInfo().username);
 ipcMain.on("icons", (event) => event.returnValue = Icons);
+ipcMain.on("app_path", (event) => event.returnValue = app.getAppPath());
 ipcMain.on("app_name", (event) => event.returnValue = app.getName());
 
 ipcMain.on("printers", (event) => {

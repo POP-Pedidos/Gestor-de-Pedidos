@@ -2,6 +2,7 @@ let { ipcRenderer } = require("electron");
 
 window.hostname = ipcRenderer.sendSync("hostname");
 window.icons = ipcRenderer.sendSync("icons");
+window.app_path = ipcRenderer.sendSync("app_path");
 window.app_name = ipcRenderer.sendSync("app_name");
 
 window.GetPrintersList = () => ipcRenderer.sendSync("printers");
