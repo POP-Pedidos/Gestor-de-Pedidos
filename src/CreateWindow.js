@@ -32,6 +32,7 @@ module.exports = function CreateWindow() {
             backgroundThrottling: false,
             webviewTag: true,
             nativeWindowOpen: true,
+            webSecurity: false
         },
     });
 

@@ -19,7 +19,7 @@ app.userAgentFallback = app.userAgentFallback.replace(/(POP|Electron).+? /g, "")
 if (!app.requestSingleInstanceLock()) return app.quit();
 
 app.whenReady().then(() => {
-    const splash = CreateSplashScreen();
+    let splash = CreateSplashScreen();
 
     splash.webContents.once("did-finish-load", () => {
         win = CreateWindow();
@@ -30,6 +30,7 @@ app.whenReady().then(() => {
 
         win.webContents.once("did-finish-load", () => {
             splash.destroy();
+            splash = null;
         });
     });
 
