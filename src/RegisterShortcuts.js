@@ -6,7 +6,10 @@ module.exports = function CreateShortcuts(win) {
     });
 
     globalShortcut.register("CommandOrControl+Shift+R", () => {
-        if (win.isFocused()) win.webContents.reload();
+        if (win.isFocused()) {
+            win.webContents.session.clearCache();
+            win.webContents.reload();
+        }
     });
 
     globalShortcut.register("Alt+CommandOrControl+Shift+I", () => {
