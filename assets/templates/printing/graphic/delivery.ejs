@@ -250,7 +250,14 @@
                             <%= item.pizza_flavors.length> 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1} x` %>
                             <%= flavor.name %>
                         </td>
-                        <td><%= MoneyFormat(flavor.price, false); %></td>
+                        <% if (item.product.pizza_price_rule === "average") { %>
+                            <td><%= MoneyFormat((flavor.price / total_flavors) * flavor.quantity, false); %></td>
+                        <% } else if (item.product.pizza_price_rule === "biggest_price") { %>
+                            <% const biggest_price = Math.max(...item.pizza_flavors.map(item => item.price)); %>
+                            <td><%= MoneyFormat((biggest_price / total_flavors) * flavor.quantity, false); %></td>
+                        <% } else { %>
+                            <td><%= MoneyFormat(flavor.price * flavor.quantity, false); %></td>
+                        <% } %>
                     </tr>
                     <% } %>
                 <% for (const complement of item.complements || []) { %>
@@ -262,7 +269,7 @@
                                 <%= complement_item.name %>
                             </td>
                             <td>
-                                <%= MoneyFormat(complement_item.price * complement_item.quantity, false); %>
+                                <%= MoneyFormat(complement_item.price * complement_item.quantity * item.quantity, false); %>
                             </td>
                         </tr>
                     <% } %>

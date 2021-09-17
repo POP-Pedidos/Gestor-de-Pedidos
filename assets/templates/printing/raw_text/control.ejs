@@ -84,8 +84,16 @@
             
             for(const flavor of item.pizza_flavors) {
                 const quantity = item.pizza_flavors.length> 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1}x`;
+                let total = flavor.price * flavor.quantity;
 
-                lines.push(` |- ${quantity} ${flavor.name} {fill} ${MoneyFormat(flavor.price, false)}`);
+                if (item.product.pizza_price_rule === "average") {
+                    total = (flavor.price / total_flavors) * flavor.quantity;
+                } else if (item.product.pizza_price_rule === "biggest_price") {
+                    const biggest_price = Math.max(...item.pizza_flavors.map(item => item.price));
+                    total = (biggest_price / total_flavors) * flavor.quantity;
+                }
+
+                lines.push(` |- ${quantity} ${flavor.name} {fill} ${MoneyFormat(total, false)}`);
             } 
         }
 
@@ -95,7 +103,7 @@
             for (const complement_item of complement.items || []) {
                 const quantity = `${complement.required===false ? "+ " : "" }${(company.multiply_complements ? complement_item.quantity * item.quantity : complement_item.quantity) || 1}x`;
 
-                lines.push(` |- ${quantity} ${complement_item.name} {fill} ${MoneyFormat(complement_item.price * complement_item.quantity, false)}`);
+                lines.push(` |- ${quantity} ${complement_item.name} {fill} ${MoneyFormat(complement_item.price * complement_item.quantity * item.quantity, false)}`);
             }
         }
 

@@ -76,7 +76,7 @@
     lines.push(CenterText("ITENS", columns_count, "="));
 
     for(const item of order.items) {
-        lines.push(`${item.quantity}x ${item.product.name} {fill} ${MoneyFormat(item.price * item.quantity, false)}`);
+        lines.push(`${item.quantity}x ${item.product.name}`);
 
         const total_flavors=item.pizza_flavors?.reduce((accumulator, flavor)=> accumulator + flavor.quantity, 0); 
 
@@ -86,7 +86,7 @@
             for(const flavor of item.pizza_flavors) {
                 const quantity = item.pizza_flavors.length> 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1}x`;
 
-                lines.push(` |- ${quantity} ${flavor.name} {fill} ${MoneyFormat(flavor.price, false)}`);
+                lines.push(` |- ${quantity} ${flavor.name}`);
             } 
         }
 
@@ -96,7 +96,7 @@
             for (const complement_item of complement.items || []) {
                 const quantity = `${complement.required===false ? "+ " : "" }${(company.multiply_complements ? complement_item.quantity * item.quantity : complement_item.quantity) || 1}x`;
 
-                lines.push(` |- ${quantity} ${complement_item.name} {fill} ${MoneyFormat(complement_item.price * complement_item.quantity, false)}`);
+                lines.push(` |- ${quantity} ${complement_item.name}}`);
             }
         }
 
