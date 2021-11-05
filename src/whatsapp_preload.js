@@ -1,7 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld("main", {
-    send: (event, ...args) => ipcRenderer.sendToHost(event, ...(args.map(arg => JSON.stringify(arg)))),
+    send: (...args) => ipcRenderer.sendToHost(...args),
     on: (...args) => ipcRenderer.on(...args),
     once: (...args) => ipcRenderer.once(...args),
     Authenticated: () => ipcRenderer.sendToHost("authenticated"),
