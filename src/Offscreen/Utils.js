@@ -14,6 +14,7 @@ function TranslatePaymentMethod(payment_method) {
         "money": "Dinheiro",
         "credit": "Crédito",
         "debit": "Débito",
+        "pix": "PIX",
     }[payment_method];
 }
 
