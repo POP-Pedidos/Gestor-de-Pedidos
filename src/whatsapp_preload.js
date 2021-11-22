@@ -4,6 +4,7 @@ contextBridge.exposeInMainWorld("main", {
     send: (...args) => ipcRenderer.sendToHost(...args),
     on: (...args) => ipcRenderer.on(...args),
     once: (...args) => ipcRenderer.once(...args),
+    off: (...args) => ipcRenderer.off(...args),
     Authenticated: () => ipcRenderer.sendToHost("authenticated"),
 });
 
