@@ -1,6 +1,7 @@
 const os = require("os");
 const uuid = require("uuid");
 const fetch = require("node-fetch");
+const { api_url } = require("../../config");
 
 const Hostname = os.userInfo().username;
 const tokens = [];
@@ -10,7 +11,7 @@ function login(username, password) {
         if (!username) return reject("missing username");
         if (!password) return reject("missing password");
 
-        fetch("https://api.poppedidos.com.br/user/login", {
+        fetch(`${api_url}/user/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json", Hostname },
             body: JSON.stringify({ username, password }),

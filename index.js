@@ -5,6 +5,7 @@ const CreateSplashScreen = require("./src/CreateSplashScreen");
 global.win = null;
 global.tray = null;
 global.local_api = null;
+global.whatsapp_number = null;
 
 require("./src/IpcMain");
 

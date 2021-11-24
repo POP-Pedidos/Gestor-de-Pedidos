@@ -53,6 +53,7 @@ window.printService = {
 }
 
 window.local_api = {
+    setWhatsappNumber: (number) => ipcRenderer.send("local_api:wpp_number", number),
     listen: () => ipcRenderer.send("local_api:listen"),
     close: () => ipcRenderer.send("local_api:close"),
     sockets: {
@@ -80,7 +81,18 @@ window.offscreen = {
     generateCompanyThumbnail: (company) => ipcRenderer.invoke("offscreen:generateCompanyThumbnail", company),
     generateOrdersHTMLReport: (file_path, data) => ipcRenderer.invoke("offscreen:generateOrdersHTMLReport", file_path, data),
 }
+function onSynchronousReply(event_name, callback) {
+    ipcRenderer.on(event_name, async (event, responseChannelId, ...args) => {
+        try {
+            const response = await callback(event, ...args);
+            ipcRenderer.send(responseChannelId, response, null);
+        } catch (error) {
+            ipcRenderer.send(responseChannelId, null, error?.stack || error?.toString() || error);
+        }
+    });
+}
 
 window.whatsapp = {
-    onSendMessage: (callback) => ipcRenderer.on("whatsapp:sendMessage", callback),
+    onSendMessage: (callback) => onSynchronousReply("whatsapp:sendMessage", callback),
+    onSendOrderMessage: (callback) => onSynchronousReply("whatsapp:sendOrderMessage", callback),
 }

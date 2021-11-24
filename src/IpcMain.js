@@ -75,6 +75,10 @@ ipcMain.on("local_api:close", (event) => {
     local_api.close();
 });
 
+ipcMain.on("local_api:wpp_number", (event, number) => {
+    global.whatsapp_number = number;
+});
+
 ipcMain.on("local_api:sockets:broadcast", (event, eventName, eventData) => {
     local_api.socketsBroadcast(eventName, eventData);
 });
