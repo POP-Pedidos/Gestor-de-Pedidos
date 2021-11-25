@@ -13,6 +13,22 @@
             --primary-color: #0cb50c;
             --light-primary-color: #cdfdce;
             --font-color: #333;
+            --color-primary: #0cb50c;
+            --color-shader-10: rgb(11, 163, 11);
+            --color-shader-20: rgb(10, 145, 10);
+            --color-shader-30: rgb(7, 109, 7);
+            --color-shader-40: rgb(5, 72, 5);
+            --color-shader-80: rgb(2, 36, 2);
+            --color-tones-10: rgb(24, 176, 24);
+            --color-tones-20: rgb(35, 170, 35);
+            --color-tones-40: rgb(58, 160, 58);
+            --color-tones-60: rgb(82, 149, 82);
+            --color-tones-80: rgb(93, 144, 93);
+            --color-tints-10: rgb(36, 188, 36);
+            --color-tints-20: rgb(61, 196, 61);
+            --color-tints-40: rgb(109, 211, 109);
+            --color-tints-60: rgb(158, 225, 158);
+            --color-tints-80: rgb(206, 240, 206);
         }
 
         * {
@@ -41,7 +57,7 @@
             height: 60px;
             margin-right: 15px;
             border-radius: 15px;
-            object-fit: contain;
+            object-fit: cover;
         }
 
         body>main {
@@ -109,110 +125,10 @@
             flex-direction: column;
             overflow-x: hidden;
             overflow-y: auto;
-            background: rgba(148, 148, 148, 0.1);
             margin-bottom: 40px;
-            border-radius: 10px;
+            background-color: #8080800d;
+            border: 2px solid #efefef;
         }
-
-        .order-infos .list-items {
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 6px;
-            background: rgba(148, 148, 148, 0.1);
-        }
-
-        .order-infos .list-items>.multiplication-alert {
-            background: rgba(148, 148, 148, 0.1);
-            border-radius: 6px;
-            border: none !important;
-            display: flex;
-            align-items: center;
-            padding: 7px 10px !important;
-            color: #0cb50c;
-        }
-
-        .order-infos .list-items>.multiplication-alert>i {
-            margin-right: 8px;
-            font-size: 14px;
-        }
-
-        .order-infos .list-items>div>header,
-        .order-infos .list-items>div>main>div {
-            display: flex;
-            align-items: center;
-            padding-bottom: 5px;
-            margin-bottom: 5px;
-        }
-
-        .order-infos .list-items>div>main {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .order-infos .list-items>div:not(:last-child) {
-            border-bottom: 1px solid rgba(162, 162, 162, 0.2);
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-        }
-
-        .order-infos .list-items>div>.observation {
-            margin-left: 35px;
-            font-size: 11px;
-            color: goldenrod;
-            position: relative;
-            top: -7px;
-            margin-bottom: 5px;
-            margin-right: 15%;
-            max-height: 40px;
-            overflow-y: auto;
-        }
-
-        .order-infos .list-items>div>header {
-            padding: 5px 0;
-            font-size: 14px;
-        }
-
-        .order-infos .list-items>div>header>.quantity {
-            min-width: 30px;
-            margin-right: 5px;
-            text-align: center;
-        }
-
-        .order-infos .list-items>div>header>.price,
-        .order-infos .list-items>div>main>div>.price {
-            min-width: 40px;
-            margin-left: 10px;
-        }
-
-        .order-infos .list-items>div>header>.name,
-        .order-infos .list-items>div>main>div>.name {
-            flex: 1;
-        }
-
-        .order-infos .list-items>div>main>div {
-            margin-left: 35px;
-            border-bottom: 1px solid rgba(162, 162, 162, 0.2);
-        }
-
-        .order-infos .list-items>div>main>div:last-child {
-            border-bottom: 0;
-        }
-
-        .order-infos .list-items>div>main>div>.quantity {
-            min-width: 25px;
-            margin-right: 10px;
-        }
-
-        .order-infos .list-items.is_multiplication>div>main>div>.quantity {
-            color: #0cb50c;
-        }
-
-        .order-infos .list-items>div>header>.name {
-            font-weight: bold;
-        }
-
 
         .order-infos>.infos {
             flex: 1;
@@ -225,30 +141,16 @@
             display: flex;
             justify-content: space-between;
             padding: 20px;
+            gap: 20px;
         }
 
         .order-infos>.bottom>.left {
-            margin-right: 20%;
             display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
         }
 
-        .order-infos>.bottom>.left>div {
-            display: flex;
-            flex-direction: column;
-            margin-top: 10px;
-        }
-
-        .order-infos>.bottom>.left>div>span {
-            font-weight: bold;
-            margin-bottom: 2px;
-        }
-
-        .order-infos>.bottom>.left>div>div {
-            max-height: 100px;
-            overflow: auto;
-        }
 
         .order-infos>.bottom>.price {
             display: flex;
@@ -287,8 +189,8 @@
         .order-infos>.bottom>.price tr:last-child {
             line-height: 25px;
             font-size: 15px;
-            color: #0cb50c;
-            text-shadow: #96c63d 0 0 10px;
+            color: var(--color-tones-20);
+            text-shadow: var(--color-tints-20) 0 0 10px;
         }
 
         .order-infos>.bottom>.price tr:last-child>td {
@@ -297,61 +199,53 @@
 
         .order-infos>.infos>.info {
             display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .order-infos>.infos .client_info {
             flex: 1;
             display: flex;
-            flex-direction: column;
-            margin-right: 20px;
+            flex-wrap: wrap;
+            min-width: 250px;
+            gap: 15px;
         }
 
-        .order-infos>.infos .client_info>.name {
-            margin-bottom: 3px;
+        .order-infos>.infos .scheduled {
+            height: fit-content;
         }
 
-        .order-infos>.infos .client_info>.client_name {
-            display: flex;
+        .order-infos>.infos .client_info>.client-info.is_skeleton {
+            width: 200px;
+        }
+
+        .order-infos>.infos .client_info>.client-address.is_skeleton {
+            width: 300px;
+        }
+
+        .order-infos>.infos .created_date {
             font-size: 14px;
-            padding: 5px 0;
             font-weight: 600;
-            margin-bottom: 3px;
-        }
-
-        .order-infos>.infos .client_info>.infos-icon {
-            display: flex;
-            align-items: center;
-            color: black;
-            margin-bottom: 3px;
-            max-width: fit-content;
-        }
-
-        .order-infos>.infos .client_info>.infos-icon>i {
-            margin-right: 10px;
-            font-size: 14px;
-        }
-
-        .order-infos>.infos .client_info>.address>a,
-        .order-infos>.infos .client_info>.tell>a {
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .order-infos>.infos .client_info>.address>a:hover,
-        .order-infos>.infos .client_info>.tell>a:hover {
-            color: #96c63d !important;
-            text-shadow: #96c63d 0 0 1px;
-        }
-
-        .order-infos>.infos .client_info>.delivery_type_warning {
-            color: gold;
-            margin-bottom: 10px;
-            font-weight: bold;
         }
 
         .order-infos>.infos .actions {
             display: flex;
             flex-direction: column;
+        }
+
+        .order-infos>.infos .actions>div.integrated {
+            background: rgba(148, 148, 148, 0.1);
+            border-radius: 6px;
+            border: none !important;
+            display: flex;
+            align-items: center;
+            padding: 7px 10px !important;
+            color: gold;
+        }
+
+        .order-infos>.infos .actions>div.integrated>i {
+            margin-right: 8px;
+            font-size: 14px;
         }
 
         .order-infos>.infos .actions>span {
@@ -362,12 +256,14 @@
         }
 
         .order-infos>.infos .actions>div {
-            display: flex;
-            justify-content: flex-end;
+            display: grid;
+            grid-template-rows: auto;
+            grid-template-columns: auto auto auto;
+            grid-gap: 5px;
         }
 
-        .order-infos>.infos .actions>div>button {
-            margin: 0 5px;
+        .order-infos>.infos .actions button.whatsapp>i {
+            font-size: 18px;
         }
 
         .order-infos>.infos>.history {
@@ -425,8 +321,8 @@
         }
 
         .order-infos>.infos>.history>.step.success>.icon {
-            background-color: #96c63d;
-            box-shadow: #96c63d 0 0 10px;
+            background-color: var(--color-tints-20);
+            box-shadow: var(--color-tints-20) 0 0 10px;
         }
 
         .order-infos>.infos>.history>.step.refused>.icon {
@@ -435,7 +331,7 @@
         }
 
         .order-infos>.infos>.history>.step.success+.step.active>.trace-line {
-            background: linear-gradient(to right, #96c63d, #a7a7a7);
+            background: linear-gradient(to right, var(--color-tints-20), #a7a7a7);
         }
 
         .order-infos>.infos>.history>.step.refused>.icon {
@@ -451,11 +347,11 @@
         }
 
         .order-infos>.infos>.history>.step.success+.step.refused>.trace-line {
-            background: linear-gradient(to right, #96c63d, #a7a7a7 50%) !important
+            background: linear-gradient(to right, var(--color-tints-20), #a7a7a7 50%) !important;
         }
 
         .order-infos>.infos>.history>.step.success+.step.refused>.trace-line::before {
-            box-shadow: #96c63d 0 0 2px !important;
+            box-shadow: var(--color-tints-20) 0 0 2px !important;
         }
 
         .order-infos>.infos>.history>.step.refused>.trace-line::before {
@@ -465,7 +361,7 @@
             height: 4px;
             left: 0;
             right: 50%;
-            box-shadow: #96c63d 0 0 4px;
+            box-shadow: var(--color-tints-20) 0 0 4px;
         }
 
         .order-infos>.infos>.history>.step.success+.step.active>.trace-line::before {
@@ -475,18 +371,18 @@
             height: 4px;
             left: 0;
             right: 50%;
-            background: #96c63d;
-            box-shadow: #96c63d 0 0 5px;
+            background: var(--color-tints-20);
+            box-shadow: var(--color-tints-20) 0 0 5px;
         }
 
         .order-infos>.infos>.history>.step.success+.step.active:last-child>.trace-line::before {
             background: transparent !important;
-            box-shadow: #96c63d 0 0 2px;
+            box-shadow: var(--color-tints-20) 0 0 2px;
         }
 
         .order-infos>.infos>.history>.step.success>.trace-line {
-            background-color: #96c63d;
-            box-shadow: #96c63d 0 0 5px;
+            background-color: var(--color-tints-20);
+            box-shadow: var(--color-tints-20) 0 0 5px;
         }
 
         .order-infos>.infos>.history>.step>.infos {
@@ -507,6 +403,201 @@
             color: gray;
             margin-top: 3px;
         }
+
+        .order-infos>.infos .icon-key-value.client-address {
+            min-width: fit-content;
+        }
+
+        .order-infos .list-items {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 6px;
+            cursor: default;
+            background: rgba(166, 212, 170, 0.1);
+        }
+
+        .order-infos .list-items>.multiplication-alert {
+            background: rgba(148, 148, 148, 0.1);
+            border-radius: 6px;
+            border: none !important;
+            display: flex;
+            align-items: center;
+            padding: 7px 10px !important;
+            color: var(--color-tones-20);
+        }
+
+        .order-infos .list-items>.multiplication-alert>i {
+            margin-right: 8px;
+            font-size: 14px;
+        }
+
+        .order-infos .list-items>.multiplication-alert {
+            background: rgba(148, 148, 148, 0.1);
+            border-radius: 6px;
+            border: none !important;
+            display: flex;
+            align-items: center;
+            padding: 7px 10px !important;
+            color: var(--color-tones-20);
+        }
+
+        .order-infos .list-items>.multiplication-alert>i {
+            margin-right: 8px;
+            font-size: 14px;
+        }
+
+        .order-infos .list-items>.list-title {
+            display: flex;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            gap: 15px;
+            margin-right: 4px;
+            border-bottom: 1px solid rgba(162, 162, 162, 0.2);
+            padding-bottom: 10px;
+            color: var(--color-tones-20);
+        }
+
+        .order-infos .list-items>.list-title>.name {
+            flex: 1;
+        }
+
+        .order-infos .list-items>div>header,
+        .order-infos .list-items>div>main>div {
+            display: flex;
+            align-items: center;
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+        }
+
+        .order-infos .list-items>div>main {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .order-infos .list-items>div:not(:last-child) {
+            border-bottom: 1px dashed rgba(162, 162, 162, 0.2);
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+        }
+
+        .order-infos .list-items>div>.observation {
+            margin-left: 35px;
+            font-size: 11px;
+            color: goldenrod;
+            position: relative;
+            top: -7px;
+            margin-bottom: 5px;
+            margin-right: 15%;
+            max-height: 40px;
+            overflow-y: auto;
+        }
+
+        .order-infos .list-items>div>header {
+            padding: 5px 0;
+            font-size: 14px;
+        }
+
+        .order-infos .list-items>div>header>.quantity {
+            min-width: 30px;
+            margin-right: 5px;
+            text-align: center;
+        }
+
+        .order-infos .list-items>div>header>.price,
+        .order-infos .list-items>div>main>div>.price {
+            min-width: 40px;
+            margin-left: 10px;
+            text-align: right;
+        }
+
+        .order-infos .list-items>div>header>.name,
+        .order-infos .list-items>div>main>div>.name {
+            flex: 1;
+        }
+
+        .order-infos .list-items>div>main>div {
+            margin-left: 35px;
+            border-bottom: 1px dotted rgba(162, 162, 162, 0.2);
+        }
+
+        .order-infos .list-items>div>main>div:last-child {
+            border-bottom: 0;
+        }
+
+        .order-infos .list-items>div>main>div>.quantity {
+            min-width: 25px;
+            margin-right: 10px;
+        }
+
+        .order-infos .list-items.is_multiplication>div>main>div>.quantity {
+            color: var(--color-tones-20);
+        }
+
+        .order-infos .list-items>div>header>.name {
+            font-weight: bold;
+        }
+
+        .icon-key-value {
+            display: flex;
+            align-items: center;
+            border-radius: 6px;
+            background: rgba(147, 185, 150, 0.1);
+            padding: 10px 15px 10px;
+        }
+
+        .icon-key-value>.rounded-icon {
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+            border-radius: 50%;
+            background-color: var(--color-tints-80);
+            color: var(--color-shader-10);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .icon-key-value>.infos {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-left: 15px;
+            gap: 3px;
+        }
+
+        .icon-key-value>.infos>.title {
+            font-size: 12px;
+            color: #6b6b6b;
+            white-space: nowrap;
+            width: fit-content;
+        }
+
+        .icon-key-value>.infos>.name {
+            font-size: 14px;
+            font-weight: 700;
+            width: fit-content;
+        }
+
+        .icon-key-value.delivery-type .value {
+            color: black;
+        }
+
+        .icon-key-value>span {
+            font-weight: bold;
+        }
+
+        .icon-key-value>.infos {
+            max-height: 100px;
+            overflow: auto;
+        }
+
+        .order-print-options,
+        .order-infos .mobile-header {
+            display: none;
+        }
     </style>
 </head>
 
@@ -514,7 +605,7 @@
     <main>
         <header>
             <div class="presentation">
-                <img id="img" src="https://cdn.poppedidos.com.br/company/0c1e83ac-76ab-474a-a02f-30a079ec1a21_small.png">
+                <img id="img" src="<%= company.image?.medium  || `${api_url}/static/images/pop-black-icon.jpg` %>">
                 <div class="infos">
                     <h2>Relatório de pedidos</h2>
                     <span><b id="orders_count">0</b> pedidos</span>
@@ -565,123 +656,167 @@
             return money_str;
         }
 
+        function isElectron() { return true; }
+
+
         function LoadOrderOnElement($element, order, actions = true) {
-            const $order_infos = $(`<div class="infos">
-		<div class="info">
-			<div class="client_info">
-				<a class="indicator" target="_blank"></a>
-				<span class="client_name"></span>
-				<div class="address infos-icon">
-					<i class="fas fa-map-marker-alt"></i>
-					<a target="_blank"></a>
-				</div>
-				<span class="delivery_type_warning"></span>
-				<div class="tell infos-icon">
-					<i class="fas fa-phone-alt"></i>
-					<span></span>
-				</div>
-			</div>
-			<div class="actions">
-				<div>
-					<button type="button" class="btn btn-success accept">
-						<span>Aceitar</span>
-						<div class="spinner-border"></div>
-					</button>
-					<button type="button" class="btn btn-danger refuse">
-						<span>Recusar</span>
-					</button>
-					<button type="button" class="btn btn-secondary print">
-						<span>Impressão</span>
-					</button>
-				</div>
-			</div>
-		</div>
-		<div class="history">
-			<div class="step accept">
-				<div class="trace-line"></div>
-				<div class="icon">
-					<i class="fas fa-check"></i>
-				</div>
-				<div class="infos">
-					<span class="title"></span>
-					<span class="date"></span>
-				</div>
-			</div>
-			<div class="step production">
-				<div class="trace-line"></div>
-				<div class="icon">
-					<i class="fas fa-box"></i>
-				</div>
-				<div class="infos">
-					<span class="title"></span>
-					<span class="date"></span>
-				</div>
-			</div>
-			<div class="step delivery">
-				<div class="trace-line"></div>
-				<div class="icon">
-					<i class="fas fa-forward"></i>
-				</div>
-				<div class="infos">
-					<span class="title"></span>
-					<span class="date"></span>
-				</div>
-			</div>
-		</div>
-		<div class="list-items"></div>
-	</div>
-	<div class="bottom">
-		<div class="left">
-			<div class="payment-method">
-				<span><i class="far fa-credit-card"></i> Método de pagamento</span>
-				<div></div>
-			</div>
-			<div class="cash-change">
-				<span><i class="fas fa-wallet"></i> Troco para</span>
-				<div></div>
-			</div>
-			<div class="discount-coupon">
-				<span><i class="fas fa-tag"></i> Cupom de desconto</span>
-				<div></div>
-			</div>
-			<div class="observations">
-				<span><i class="fas fa-info-circle"></i> Observações</span>
-				<div></div>
-			</div>
-			<div class="complement">
-				<span><i class="fas fa-info-circle"></i> Complemento do endereço</span>
-				<div></div>
-			</div>
-			<div class="reference">
-				<span><i class="fas fa-info-circle"></i> Referencia</span>
-				<div></div>
-			</div>
-		</div>
-		<div class="price">
-			<table>
-				<tr>
-					<th>Subtotal</th>
-					<td class="subtotal"></td>
-				</tr>
-				<tr class="discount">
-					<th>Desconto</th>
-					<td class="discount"></td>
-				</tr>
-				<tr>
-					<th>Taxa de entrega</th>
-					<td class="frete"></td>
-				</tr>
-				<tr class="coupon_discount">
-					<th>Cupom de desconto</th>
-					<td class="coupon_discount"></td>
-				</tr>
-				<tr>
-					<th>Total</th>
-					<td class="total"></td>
-				</tr>
-			</table>
-		</div>
-	</div>`);
+            const $order_infos = $(`
+            <div class="mobile-header">
+                <button class="back">
+                    <i class="fas fa-angle-left"></i>
+                    Voltar
+                </button>
+            </div>
+            <div class="infos">
+                <div class="info">
+                    <div class="client_info">
+                        <div class="icon-key-value order-identifier">
+                            <div class="rounded-icon"><i class="fas fa-pizza-slice"></i></div>
+                            <div class="infos">
+                                <span class="title">Pedido</span>
+                                <a class="value" target="_blank"></a>
+                            </div>
+                        </div>
+                        <div class="icon-key-value client-info">
+                            <div class="rounded-icon"><i class="fas fa-user"></i></div>
+                            <div class="infos">
+                                <span class="name"></span>
+                                <span class="phone"></span>
+                            </div>
+                        </div>
+                        <div class="scheduled icon-key-value">
+                            <div class="rounded-icon"><i class="far fa-clock"></i></div>
+                            <div class="infos">
+                                <span class="name">Agendado para</span>
+                                <span class="time"></span>
+                            </div>
+                        </div>
+                        <div class="icon-key-value client-address">
+                            <div class="rounded-icon"><i class="fas fa-motorcycle"></i></div>
+                            <div class="infos">
+                                <span class="title">Endereço</span>
+                                <a class="address" target="_blank"></a>
+                                <span class="complement"></span>
+                                <span class="reference"></span>
+                            </div>
+                        </div>
+                        <div class="icon-key-value delivery-type">
+                            <div class="rounded-icon"><i class="fas fa-motorcycle"></i></div>
+                            <div class="infos">
+                                <span class="title">Tipo</span>
+                                <span class="value">Retirada</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <div>
+                            <button type="button" class="btn btn-success accept">
+                                <span>Aceitar</span>
+                                <div class="spinner-border"></div>
+                            </button>
+                            <button type="button" class="btn btn-danger refuse">
+                                <span>Recusar</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary print">
+                                <span>Impressão</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary whatsapp">
+                                <i class="fab fa-whatsapp"></i>
+                                <span>Mensagem</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="history">
+                    <div class="step accept">
+                        <div class="trace-line"></div>
+                        <div class="icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="infos">
+                            <span class="title"></span>
+                            <span class="date"></span>
+                        </div>
+                    </div>
+                    <div class="step production">
+                        <div class="trace-line"></div>
+                        <div class="icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="infos">
+                            <span class="title"></span>
+                            <span class="date"></span>
+                        </div>
+                    </div>
+                    <div class="step delivery">
+                        <div class="trace-line"></div>
+                        <div class="icon">
+                            <i class="fas fa-forward"></i>
+                        </div>
+                        <div class="infos">
+                            <span class="title"></span>
+                            <span class="date"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-items"></div>
+            </div>
+            <div class="bottom">
+                <div class="left">
+                    <div class="icon-key-value payment-method">
+                        <div class="rounded-icon"><i class="far fa-credit-card"></i></div>
+                        <div class="infos">
+                            <span class="title">Pagamento</span>
+                            <span class="value"></span>
+                        </div>
+                    </div>
+                    <div class="icon-key-value cash-change">
+                        <div class="rounded-icon"><i class="fas fa-dollar-sign"></i></div>
+                        <div class="infos">
+                            <span class="title">Troco para</span>
+                            <span class="value"></span>
+                        </div>
+                    </div>
+                    <div class="icon-key-value discount-coupon">
+                        <div class="rounded-icon"><i class="fas fa-tag"></i></div>
+                        <div class="infos">
+                            <span class="title">Cupom de desconto</span>
+                            <span class="value"></span>
+                        </div>
+                    </div>
+                    <div class="icon-key-value observations">
+                        <div class="rounded-icon"><i class="fas fa-info-circle"></i></div>
+                        <div class="infos">
+                            <span class="title">Observações</span>
+                            <span class="value"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="price">
+                    <table>
+                        <tr>
+                            <th>Subtotal</th>
+                            <td class="subtotal"></td>
+                        </tr>
+                        <tr class="discount">
+                            <th>Desconto</th>
+                            <td class="discount"></td>
+                        </tr>
+                        <tr>
+                            <th>Taxa de entrega</th>
+                            <td class="frete"></td>
+                        </tr>
+                        <tr class="coupon_discount">
+                            <th>Cupom de desconto</th>
+                            <td class="coupon_discount"></td>
+                        </tr>
+                        <tr>
+                            <th>Total</th>
+                            <td class="total"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>`);
 
             let $print_options = $("body>.order-print-options");
 
@@ -690,30 +825,34 @@
             $element.html($order_infos);
 
             $print_options.remove();
-            $print_options = $(`<div class="order-print-options">
-		<div>
-			<header>
-				<h4>Impressão</h4>
-				<button class="close btn btn-danger"><i class="fas fa-times"></i></button>
-			</header>
-			<main>
-				<div value="control">
-					<img src="../../../images/box-analytics.png" />
-					<span>Controle</span>
-				</div>
-				<div value="production">
-					<img src="../../../images/box-todo.png" />
-					<span>Produção</span>
-				</div>
-				<div value="delivery">
-					<img src="../../../images/box-delivery.png" />
-					<span>Entrega</span>
-				</div>
-			</main>
-		</div>
-	</div>`);
 
-            if (order.items.every(item => !item.product.id_printer)) $print_options.find(`[value="production"]`).addClass("disabled");
+            $element.find(">.infos .actions>div>button").removeClass("loading").show();
+            $element.find(">.infos .actions .whatsapp").toggle(!isElectron() && (order.status < 0 || [1, 3, 10].includes(order.status)));
+
+            $print_options = $(`<div class="order-print-options">
+                <div>
+                    <header>
+                        <h4>Impressão</h4>
+                        <button class="close btn btn-danger"><i class="fas fa-times"></i></button>
+                    </header>
+                    <main>
+                        <div value="control">
+                            <img src="/images/box-analytics.png" />
+                            <span>Controle</span>
+                        </div>
+                        <div value="production">
+                            <img src="/images/box-todo.png" />
+                            <span>Produção</span>
+                        </div>
+                        <div value="delivery">
+                            <img src="/images/box-delivery.png" />
+                            <span>Entrega</span>
+                        </div>
+                    </main>
+                </div>
+            </div>`);
+
+            if (order.items.every(item => !item.product.id_printer) && isElectron()) $print_options.find(`[value="production"]`).addClass("disabled");
 
             $print_options.find(".close").on("click", function () {
                 $print_options.fadeOut(300);
@@ -727,6 +866,48 @@
                 e.stopPropagation();
             });
 
+            function printCopy(type, printer_device, order) {
+                if (isElectron()) {
+                    if (type === "control") {
+                        printService.printControlCopy(printer_device, order, company);
+                    } else if (type === "delivery") {
+                        printService.printDeliveryCopy(printer_device, order, company);
+                    } else if (type === "production") {
+                        const printer_items = [];
+
+                        for (const item of order.items || []) {
+                            if (!item.product.id_printer) continue;
+
+                            if (printer_items[item.product.id_printer]) printer_items[item.product.id_printer].push(item);
+                            else printer_items[item.product.id_printer] = [item];
+                        }
+
+                        for (const id_printer in printer_items) {
+                            const printer = {
+                                ...printer_device,
+                                ...printers.find(printer => printer.id_printer == id_printer),
+                            };
+
+                            printer.device = GetLocalPrinter(id_printer) || printer.device;
+                            order.items = printer_items[id_printer];
+
+                            printService.printProductionCopy(printer, order, company);
+                        }
+                    }
+                } else {
+                    $("iframe.printing").remove();
+
+                    const newIframe = document.createElement("iframe");
+                    newIframe.width = 0;
+                    newIframe.height = 0;
+                    newIframe.className = "printing";
+
+                    newIframe.src = `${api_url}/order/${order.secret_id_order}/printing/${type}`;
+
+                    document.body.appendChild(newIframe);
+                }
+            }
+
             $print_options.find("main>div").on("click", function () {
                 const value = $(this).attr("value");
 
@@ -739,32 +920,7 @@
                     device: GetLocalPrinter(primary_printer?.id_printer) || primary_printer?.device,
                 };
 
-                if (value === "control") {
-                    printService.printControlCopy(primary_printer_device, order_data, company);
-                } else if (value === "delivery") {
-                    printService.printDeliveryCopy(primary_printer_device, order_data, company);
-                } else if (value === "production") {
-                    const printer_items = [];
-
-                    for (const item of order_data.items || []) {
-                        if (!item.product.id_printer) continue;
-
-                        if (printer_items[item.product.id_printer]) printer_items[item.product.id_printer].push(item);
-                        else printer_items[item.product.id_printer] = [item];
-                    }
-
-                    for (const id_printer in printer_items) {
-                        const printer = {
-                            ...primary_printer_device,
-                            ...printers.find(printer => printer.id_printer == id_printer),
-                        };
-
-                        printer.device = GetLocalPrinter(id_printer) || printer.device;
-                        order_data.items = printer_items[id_printer];
-
-                        printService.printProductionCopy(printer, order_data, company);
-                    }
-                }
+                printCopy(value, primary_printer_device, order_data);
 
                 $print_options.fadeOut(200);
             });
@@ -775,23 +931,32 @@
 
             $("body").append($print_options);
 
+            if (!isElectron()) $element.find(">.infos .actions .whatsapp").click(function () {
+                SendOrderStatusMessage(order);
+            });
+
             order.address = order.delivery_type !== "withdrawal" ? `${order.street_name}, ${order.street_number} - ${order.neighborhood}, ${order.city} - ${order.state}` : null;
 
-            $element.find(".indicator").text(`#${order.order_company_sequence}`)
+            $element.find(".order-identifier .value").text(`#${order.order_company_sequence}`)
                 .attr("href", `https://${company.subdomain}.${domain}/pedido/${order.secret_id_order}`);
-            $element.find(".client_name").text(order.name_client);
 
-            $element.find(".address>a").text(`${order.address} ${order.suplier || ""}`)
+            $element.find(".client-info .name").text(order.name_client);
+            $element.find(".client-info .phone").text(order.phone_client);
+
+            $element.find(".client-address").toggle(order.delivery_type !== "withdrawal");
+            $element.find(".client-address .address").text(`${order.address} ${order.suplier || ""}`)
                 .attr("href", `https://maps.google.com/maps?q=${order.address}&hl=pt-BR;z=14&amp;output=embed`);
-            $element.find(".address").toggle(order.delivery_type != "withdrawal");
 
-            $element.find(".delivery_type_warning").toggle(order.delivery_type !== "delivery");
+            $element.find(".client-address .complement").text(order.complement)
+            $element.find(".client-address .reference").text(order.reference)
 
-            if (order.delivery_type == "withdrawal") {
-                $element.find(".delivery_type_warning").html(`<i class="fas fa-map-marker-alt"></i> Retirada!`);
+            $element.find(".delivery-type").toggle(order.delivery_type === "withdrawal");
+
+            if (!!order.scheduledAt) {
+                $element.find(".scheduled>.infos>.time").text(new Date(order.scheduledAt).toLocaleDateString("pt-BR", { hour: '2-digit', minute: '2-digit' }));
+            } else {
+                $element.find(".scheduled").hide();
             }
-
-            $element.find(".tell>span").text(order.phone_client);
 
             const $list_items = $element.find(".list-items");
 
@@ -799,11 +964,17 @@
 
             $list_items.toggleClass("is_multiplication", company.multiply_complements);
 
+            $list_items.append(`<header class="list-title">
+                <span class="quantity">Qtde</span>
+                <span class="name">Produto</span>
+                <span class="total">Subtotal (R$)</span>
+            </header>`);
+
             if (company.multiply_complements && (order.items.some(item => item.complements?.length > 0) || order.items.some(item => item.pizza_flavors?.length > 1))) {
                 $list_items.append(`<div class="multiplication-alert">
-			<i class="fas fa-exclamation-triangle"></i>
-			<span>Os sabores e complementos estão sendo multiplicados!</span>
-		</div>`);
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Os sabores e complementos estão sendo multiplicados!</span>
+                </div>`);
             }
 
             for (const item of order.items || []) {
@@ -811,28 +982,29 @@
                     product,
                     complements,
                     pizza_flavors,
+                    pizza_price_rule,
                 } = item;
 
                 if (!product) continue;
 
                 const $product = $(`
-            <div>
-                <header>
-                    <span class="quantity"></span>
-                    <span class="name">
-                        <span></span>
-                        <small></small>
-                    </span>
-                    <span class="price"></span>
-                </header>
-            </div>
-        `);
+                    <div>
+                        <header>
+                            <span class="quantity"></span>
+                            <span class="name">
+                                <span></span>
+                                <small></small>
+                            </span>
+                            <span class="price"></span>
+                        </header>
+                    </div>
+                `);
 
                 if (item.observation) {
                     const $observation = $(`<div class="observation">
-                <span class="title">Observação:</span>
-                <span class="text">Nenhum</span>
-            </div>`);
+                        <span class="title">Observação:</span>
+                        <span class="text">Nenhum</span>
+                    </div>`);
 
                     $observation.find(".text").text(item.observation);
 
@@ -841,19 +1013,31 @@
 
                 const $main = $("<main>");
 
-                const total_flavors = item.pizza_flavors.reduce((accumulator, flavor) => accumulator + flavor.quantity, 0);
-
                 for (const flavor of pizza_flavors || []) {
                     const $optional = $(`<div>
-                <span class="quantity"></span>
-                <span class="name"></span>
-                <span class="price"></span>
-            </div>`);
+                        <span class="quantity"></span>
+                        <span class="name"></span>
+                        <span class="price"></span>
+                    </div>`);
 
-                    $optional.find(".quantity").text(pizza_flavors.length > 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1}x`);
+                    const total_flavors = item.pizza_flavors.reduce((accumulator, flavor) => accumulator + flavor.quantity, 0);
+
+                    $optional.find(".quantity").text(pizza_flavors.length > 1 ? `${flavor.quantity}/${total_flavors}` : `${(company.multiply_complements ? flavor.quantity * item.quantity : flavor.quantity) || 1} x`);
 
                     $optional.find(".name").text(`Sabor ${flavor.name}`);
-                    $optional.find(".price").text(MoneyFormat(flavor.price));
+                    $optional.find(".price").attr("title", `Valor unitário: ${MoneyFormat(flavor.price)}\nValor total: ${MoneyFormat(flavor.price * flavor.quantity)}`);
+
+                    product.pizza_price_rule = pizza_price_rule || product.pizza_price_rule;
+
+                    if (product.pizza_price_rule === "average") {
+                        $optional.find(".price").text(MoneyFormat((flavor.price / total_flavors) * flavor.quantity, false));
+                    } else if (product.pizza_price_rule === "biggest_price") {
+                        const biggest_price = Math.max(...item.pizza_flavors.map(item => item.price));
+
+                        $optional.find(".price").text(MoneyFormat((biggest_price / total_flavors) * flavor.quantity, false));
+                    } else {
+                        $optional.find(".price").text(MoneyFormat(flavor.price * flavor.quantity, false));
+                    }
 
                     $main.append($optional);
                 }
@@ -861,21 +1045,23 @@
                 for (const complement of complements || []) {
                     for (const complement_item of complement.items || []) {
                         const $optional = $(`<div>
-                    <span class="quantity"></span>
-                    <span class="name"></span>
-                    <span class="price"></span>
-                </div>`);
+                            <span class="quantity"></span>
+                            <span class="name"></span>
+                            <span class="price"></span>
+                        </div>`);
 
-                        $optional.find(".quantity").text(`${(company.multiply_complements ? complement_item.quantity * item.quantity : complement_item.quantity) || 1}x`);
+                        $optional.find(".quantity").text(`${complement.required === false ? "+ " : ""}${(company.multiply_complements ? complement_item.quantity * item.quantity : complement_item.quantity) || 1} x`);
 
-                        $optional.find(".name").text(`${complement.name} ${complement_item.name}`);
-                        $optional.find(".price").text(MoneyFormat(complement_item.price));
+                        $optional.find(".name").text(complement_item.name);
+                        $optional.find(".price")
+                            .text(MoneyFormat(complement_item.price * complement_item.quantity * item.quantity, false))
+                            .attr("title", `Valor unitário: ${MoneyFormat(complement_item.price)}\nValor total: ${MoneyFormat(complement_item.price * complement_item.quantity * item.quantity)}`);
 
                         $main.append($optional);
                     }
                 }
 
-                $product.find(".quantity").text(`${item.quantity || 1}x`);
+                $product.find(".quantity").text(`${item.quantity || 1} x`);
 
                 $product.find(".name>span").text(product.name);
 
@@ -886,11 +1072,12 @@
                     if (product.pizza_price_rule === "biggest_price") pizza_price_rule = "Sabor mais caro";
 
                     $product.find(".name>small").text(`(${pizza_price_rule})`);
-                    $product.find(".price").text(product.price > 0 ? MoneyFormat(product.price) : "");
-                } else {
-                    $product.find(".name>small").text("");
-                    $product.find(".price").text(MoneyFormat(product.price));
                 }
+
+                $product.find(".name>small").text("");
+                $product.find(".price")
+                    .text(MoneyFormat(item.price * item.quantity, false))
+                    .attr("title", `Valor unitário: ${MoneyFormat(product.price)}\nValor total: ${MoneyFormat(item.price * item.quantity)}`);
 
                 $product.append($main);
 
@@ -909,32 +1096,27 @@
             $element.find(".price .total").text(MoneyFormat(order.total));
 
             $element.find(".bottom .observations").toggle(!!order.observation);
-            $element.find(".bottom .observations>div").text(order.observation);
+            $element.find(".bottom .observations .value").text(order.observation);
 
-            $element.find(".bottom .complement").toggle(!!order.complement);
-            $element.find(".bottom .complement>div").text(order.complement);
-
-            $element.find(".bottom .reference").toggle(!!order.reference);
-            $element.find(".bottom .reference>div").text(order.reference);
-
-            let text_payment_method = "Dinheiro"
+            let text_payment_method = "Unknown"
+            if (order.payment_method == "money") text_payment_method = "Dinheiro";
             if (order.payment_method == "credit") text_payment_method = "Cartão de crédito";
             if (order.payment_method == "debit") text_payment_method = "Débito";
-            $element.find(".bottom .payment-method>div").text(text_payment_method);
+            if (order.payment_method == "pix") text_payment_method = "PIX";
+
+            $element.find(".bottom .payment-method .value").text(text_payment_method);
 
             $element.find(".bottom .cash-change").toggle(!!order.cash_change);
-            $element.find(".bottom .cash-change>div").text(MoneyFormat(order.cash_change));
+            $element.find(".bottom .cash-change .value").text(MoneyFormat(order.cash_change));
 
             $element.find(".bottom .discount-coupon").toggle(!!order.discount_coupon);
             if (!!order.discount_coupon) {
-                $element.find(".bottom .discount-coupon>div").text(`${order.discount_coupon.coupon} (${order.discount_coupon.is_percentual ? `${order.discount_coupon.discount}%` : MoneyFormat(order.discount_coupon.discount)} OFF)`);
+                $element.find(".bottom .discount-coupon .value").text(`${order.discount_coupon.coupon} (${order.discount_coupon.is_percentual ? `${order.discount_coupon.discount}%` : MoneyFormat(order.discount_coupon.discount)} OFF)`);
             }
 
             $element.find(".history>.step").removeClass("active").removeClass("success").removeClass("refused");
             $element.find(".history>.step .title").text("");
             $element.find(".history>.step .date").text("");
-            $element.find(">.infos .actions").show();
-            $element.find(">.infos .actions>div>button").removeClass("loading").show();
 
             const status = order.status > -1 ? order.status : Math.abs(order.status + 1);
 
@@ -1012,9 +1194,17 @@
                 $element.find(">.infos .actions .refuse").hide();
             }
 
-            if (!actions) $element.find(">.infos .actions").hide();
-        }
+            if (actions && company.integrated) {
+                $element.find(">.infos .actions").html(`<div class="integrated">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Integração ativada!</span>
+                </div>`);
+            }
 
+            if (!actions) {
+                $element.find(">.infos .actions").hide();
+            }
+        }
 
         function DateTimeFormat(date) {
             if (!date) return "";
