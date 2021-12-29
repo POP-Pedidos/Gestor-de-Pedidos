@@ -15,6 +15,7 @@ function TranslatePaymentMethod(payment_method) {
         "credit": "Crédito",
         "debit": "Débito",
         "pix": "PIX",
+        "meal_ticket": "Vale Refeição",
     }[payment_method];
 }
 
