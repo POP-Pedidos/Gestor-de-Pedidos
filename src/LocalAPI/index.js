@@ -10,21 +10,28 @@ const sockets = new Set();
 
 app.use(express.json());
 
+app.use((req, res, next) => {
+    req.localUsername = server.localUsername;
+    next();
+});
+
 require("./Rest")({ server, app, sockets, wss });
 require("./WebSocket")({ server, app, sockets, wss });
 
-function listen(callback) {
-    server.listen(4466, "localhost", callback);
+function listen(username) {
+    server.localUsername = username;
+    if (!server.listening) server.listen(4466, "localhost");
 }
 
-function close(callback) {
+function close() {
     for (const socket of sockets) {
         socket.destroy();
 
         sockets.delete(socket);
     }
 
-    server.close(callback);
+    server.localUsername = null;
+    server.close();
 }
 
 function socketsBroadcast(event, data) {

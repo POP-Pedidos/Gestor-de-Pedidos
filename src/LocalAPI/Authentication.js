@@ -16,12 +16,22 @@ function login(username, password) {
             headers: { "Content-Type": "application/json", Hostname },
             body: JSON.stringify({ username, password }),
         }).then(res => res.json()).then(data => {
-            if (data.success === true) {
-                const token = uuid.v4();
+            if (data.success == false) return reject(data.error);
 
+            fetch(`${api_url}/company`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${data.data.token}`
+                },
+                body: JSON.stringify({ integrated: true }),
+            }).then(res => res.json()).then(data => {
+                win.webContents.send("local_api:integrated");
+                const token = uuid.v4();
                 tokens.push(token);
-                resolve(token);
-            } else reject(data.error);
+
+                resolve({ token, company: data.data });
+            }).catch(reject);
         }).catch(reject);
     });
 }

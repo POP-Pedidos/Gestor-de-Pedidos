@@ -17,6 +17,8 @@ app.setAppUserModelId("br.com.poppedidos");
 app.originalUserAgent = app.userAgentFallback;
 app.userAgentFallback = app.userAgentFallback.replace(/(POP|Electron).+? /g, "");
 
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+
 if (!app.requestSingleInstanceLock()) return app.quit();
 
 app.whenReady().then(() => {

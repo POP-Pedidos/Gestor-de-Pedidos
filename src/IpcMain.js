@@ -67,8 +67,8 @@ ipcMain.on("taskbar:flashFrame", (event, flag) => {
     win.flashFrame(flag);
 });
 
-ipcMain.on("local_api:listen", (event) => {
-    local_api.listen();
+ipcMain.on("local_api:listen", (event, username) => {
+    local_api.listen(username);
 });
 
 ipcMain.on("local_api:close", (event) => {

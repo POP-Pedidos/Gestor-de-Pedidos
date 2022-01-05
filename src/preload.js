@@ -53,8 +53,9 @@ window.printService = {
 }
 
 window.local_api = {
+    onIntegrated: (callback) => ipcRenderer.on("local_api:integrated", callback),
     setWhatsappNumber: (number) => ipcRenderer.send("local_api:wpp_number", number),
-    listen: () => ipcRenderer.send("local_api:listen"),
+    listen: (username) => ipcRenderer.send("local_api:listen", username),
     close: () => ipcRenderer.send("local_api:close"),
     sockets: {
         broadcast: (eventName, eventData) => ipcRenderer.send("local_api:sockets:broadcast", eventName, eventData),
