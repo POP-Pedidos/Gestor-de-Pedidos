@@ -11,18 +11,22 @@ router.post("/message", authenticate, async function (req, res) {
     if (!global.whatsapp_number) return res.status(422).json({ error: "whatsapp not ready" });
 
     const responseChannelId = String(Math.random()).replace(".", "");
-    const responseChannelTimeout = setTimeout(() => {
-        ipcMain.off(responseChannelId);
+    let responseChannelTimeout;
+
+    const responseFunction = (event, response, error) => {
+        clearTimeout(responseChannelTimeout);
+        if (error) res.status(500).json({ error });
+        else res.sendStatus(200);
+    };
+
+    responseChannelTimeout = setTimeout(() => {
+        ipcMain.off(responseChannelId, responseFunction);
         res.status(408).json({ error: "response channel timeout" });
     }, 3000);
 
     win.webContents.send("whatsapp:sendMessage", responseChannelId, number, message);
 
-    ipcMain.once(responseChannelId, (event, response, error) => {
-        clearTimeout(responseChannelTimeout);
-        if (error) res.status(500).json({ error });
-        else res.sendStatus(200);
-    });
+    ipcMain.once(responseChannelId, responseFunction);
 });
 
 router.get("/order/:id_order", authenticate, async function (req, res) {
