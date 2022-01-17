@@ -16,7 +16,6 @@ app.use((req, res, next) => {
 });
 
 require("./Rest")({ server, app, sockets, wss });
-require("./WebSocket")({ server, app, sockets, wss });
 
 function listen(username) {
     server.localUsername = username;
