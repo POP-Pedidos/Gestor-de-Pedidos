@@ -1,6 +1,7 @@
 const http = require("http");
 const express = require("express");
 const WebSocket = require("ws");
+const morgan = require("morgan");
 
 const app = express();
 const server = http.createServer(app);
@@ -9,6 +10,7 @@ const wss = new WebSocket.Server({ server, path: "/" });
 const sockets = new Set();
 
 app.use(express.json());
+app.use(morgan("dev"));
 
 app.use((req, res, next) => {
     req.localUsername = server.localUsername;
