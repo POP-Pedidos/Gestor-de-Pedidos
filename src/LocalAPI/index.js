@@ -20,8 +20,8 @@ app.use((req, res, next) => {
 require("./Rest")({ server, app, sockets, wss });
 
 function listen(username) {
+    if (!server.localUsername) server.listen(4466, "localhost");
     server.localUsername = username;
-    if (!server.listening) server.listen(4466, "localhost");
 }
 
 function close() {
