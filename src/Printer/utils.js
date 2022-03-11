@@ -1,7 +1,8 @@
 function PrintWindow(win, printer_name) {
     return new Promise((resolve, reject) => {
-        function Print() {
-            const printerDevice = win.webContents.getPrinters().find(device => device.name === printer_name);
+        async function Print() {
+            const printers = await win.webContents.getPrintersAsync();
+            const printerDevice = printers.find(device => device.name === printer_name);
 
             win.webContents.print({
                 deviceName: printerDevice?.name.startsWith("\\\\") ? undefined : printerDevice?.name,

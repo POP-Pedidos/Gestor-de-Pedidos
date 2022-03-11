@@ -25,8 +25,9 @@ ipcMain.on("icons", (event) => event.returnValue = Icons);
 ipcMain.on("app_path", (event) => event.returnValue = app.getAppPath());
 ipcMain.on("app_name", (event) => event.returnValue = app.getName());
 
-ipcMain.on("printers", (event) => {
-    event.returnValue = win?.webContents.getPrinters()?.map(printer => printer.name);
+ipcMain.on("printers", async (event) => {
+    const printers = await win.webContents.getPrintersAsync();
+    event.returnValue = printers?.map(printer => printer.name);
 });
 
 ipcMain.on("dark-mode:themeSource", (event) => event.returnValue = nativeTheme.themeSource);
