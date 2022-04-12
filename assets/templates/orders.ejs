@@ -1098,12 +1098,15 @@
             $element.find(".bottom .observations").toggle(!!order.observation);
             $element.find(".bottom .observations .value").text(order.observation);
 
-            let text_payment_method = "Unknown"
-            if (order.payment_method == "money") text_payment_method = "Dinheiro";
-            if (order.payment_method == "credit") text_payment_method = "Cartão de crédito";
-            if (order.payment_method == "debit") text_payment_method = "Débito";
-            if (order.payment_method == "pix") text_payment_method = "PIX";
-            if (order.payment_method == "meal_ticket") text_payment_method = "Vale Refeição";
+            let text_payment_method = {
+                money: "Dinheiro",
+                credit: "Cartão de Crédito",
+                debit: "Cartão de Débito",
+                online_credit: "Cartão de Crédito",
+                online_debit: "Cartão de Débito",
+                pix: "Pix",
+                meal_ticket: "Vale Refeição",
+            }[order.payment_method] || "Unknown";
 
             $element.find(".bottom .payment-method .value").text(text_payment_method);
 
