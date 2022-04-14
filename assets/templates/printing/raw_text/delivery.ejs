@@ -63,7 +63,7 @@
     lines.push(" ");
 
     lines.push(CenterText("VIA DE ENTREGA", columns_count));
-    lines.push(`${company["cpf-cnpj"]} — ${company.phone}`);
+    lines.push(`${company.identity} — ${company.phone}`);
     lines.push(CenterText(`PEDIDO ${order.order_company_sequence}`, columns_count));
 
     lines.push(" ");
