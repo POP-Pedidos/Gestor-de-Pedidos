@@ -16,6 +16,8 @@ function TranslatePaymentMethod(payment_method) {
         "debit": "Débito",
         "pix": "PIX",
         "meal_ticket": "Vale Refeição",
+        "online_debit": "Online (Débito)",
+        "online_credit": "Online (Crédito)",
     }[payment_method];
 }
 

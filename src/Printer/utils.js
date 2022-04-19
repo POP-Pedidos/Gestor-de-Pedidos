@@ -1,12 +1,12 @@
 function PrintWindow(win, printer_name) {
     return new Promise((resolve, reject) => {
         async function Print() {
-            // const printers = await win.webContents.getPrintersAsync();
-            // const printerDevice = printers.find(device => device.name === printer_name);
+            const printers = await win.webContents.getPrintersAsync();
+            const printerDevice = printers.find(device => device.name === printer_name);
 
             win.webContents.print({
-                deviceName: printer_name,
-                silent: !!printer_name,
+                deviceName: printerDevice?.name,
+                silent: !!printerDevice,
                 printBackground: true,
                 copies: 1,
             }, (success, failureReason) => {
