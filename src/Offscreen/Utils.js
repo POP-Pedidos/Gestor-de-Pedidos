@@ -11,13 +11,14 @@ function MoneyFormat(money, is_currency = true, fractionDigits = 2) {
 
 function TranslatePaymentMethod(payment_method) {
     return {
-        "money": "Dinheiro",
-        "credit": "Crédito",
-        "debit": "Débito",
-        "pix": "PIX",
-        "meal_ticket": "Vale Refeição",
-        "online_debit": "Online (Débito)",
-        "online_credit": "Online (Crédito)",
+        money: "Dinheiro",
+		credit: "Cartão de Crédito",
+		debit: "Cartão de Débito",
+		meal_ticket: "Vale Refeição",
+		pix: "Pix",
+		online_credit: "Online (Crédito)",
+		online_debit: "Online (Débito)",
+		online_pix: "Online (Pix)",
     }[payment_method];
 }
 
