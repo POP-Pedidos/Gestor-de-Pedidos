@@ -1,8 +1,6 @@
 name: WhatsApp Update Checker
 
-on:
-  schedule:
-    - cron: "*/1 * * * *"
+on: push
 
 jobs:
   update-check:
