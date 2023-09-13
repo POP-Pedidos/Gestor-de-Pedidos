@@ -15,7 +15,7 @@ elif [ $WPP_CURRENT_VERSION != $WPP_VERSION ]; then
 
     # curl $DISCORD_WEBHOOK_URL -H "Content-Type: application/json" -d '{"content": "$MESSAGE"}'
 
-    echo $WPP_CURRENT_VERSION >> $vars:WPP_VERSION
+    echo "WPP_VERSION=$WPP_CURRENT_VERSION" >> $GITHUB_ENV
 else
     echo "WhatsApp version not changed!"
 fi
