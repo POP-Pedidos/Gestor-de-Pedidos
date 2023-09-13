@@ -1,14 +1,14 @@
 echo "Current WhatsApp Version: $WPP_VERSION"
 
 WPP_CURRENT_VERSION=$( \
-    curl "https://web.whatsapp.com/check-update?version=$WPP_VERSION&platform=web" -H "Accept: application/json" | \
+    curl -s "https://web.whatsapp.com/check-update?version=$WPP_VERSION&platform=web" -H "Accept: application/json" | \
     grep -oP '"currentVersion":"[^"]*"' | \
     cut -d ":" -f2 | tr -d '"' \
 )
 
 if [ ! $WPP_CURRENT_VERSION ]; then
     echo "Cannot get WhatsApp version!"
-elif [ $WPP_CURRENT_VERSION = $WPP_VERSION ]; then
+elif [ $WPP_CURRENT_VERSION != $WPP_VERSION ]; then
     echo "New WhatsApp version detected: $WPP_CURRENT_VERSION"
 
     # MESSAGE=""
