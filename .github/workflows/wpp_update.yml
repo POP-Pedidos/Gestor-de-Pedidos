@@ -1,6 +1,9 @@
 name: WhatsApp Update Checker
 
-on: push
+# on:
+#   schedule:
+#     - cron: "*/15 * * * *"
+# on: push
 
 jobs:
   update-check:
@@ -15,5 +18,4 @@ jobs:
       - name: Run Update Checker
         run: ./update-checker.sh
         env:
-          WPP_VERSION: ${{ env.WPP_VERSION }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
