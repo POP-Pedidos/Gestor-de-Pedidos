@@ -1,0 +1,16 @@
+name: WhatsApp Update Checker
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+
+jobs:
+  update-check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .github
+
+    steps:
+      - name: Run Update Checker
+        run: echo "1.1.1" >> $vars:WPP_VERSION
