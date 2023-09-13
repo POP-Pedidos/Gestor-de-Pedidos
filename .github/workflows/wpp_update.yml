@@ -2,7 +2,7 @@ name: WhatsApp Update Checker
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/15 * * * *"
 
 jobs:
   update-check:
@@ -12,5 +12,10 @@ jobs:
         working-directory: .github
 
     steps:
+      - uses: actions/checkout@v2
+
       - name: Run Update Checker
-        run: echo "1.1.1" >> $vars:WPP_VERSION
+        run: ./update-checker.sh
+        env:
+          WPP_VERSION: ${{ vars.WPP_VERSION }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
